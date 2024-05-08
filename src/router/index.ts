@@ -25,9 +25,14 @@ const router = createRouter({
           component: HomeView
         },
         {
-          path: '/schedule',
-          name: 'schedule',
+          path: '/schedule/list',
+          name: 'scheduleList',
           component: () => import('@/views/schedule/ScheduleView.vue')
+        },
+        {
+          path: '/schedule/record',
+          name: 'scheduleRecord',
+          component: () => import('@/views/schedule/ScheduleRecordView.vue')
         },
         {
           path: '/notification',

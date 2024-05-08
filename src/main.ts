@@ -3,6 +3,7 @@ import '@icon-park/vue-next/styles/index.css';
 import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/display.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
+import '@/assets/el-dark.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'

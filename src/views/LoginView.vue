@@ -9,16 +9,22 @@ import { User } from '@/views/LoginView'
 const systemStore = useSystemStore()
 const router = useRouter()
 
+const loading = ref(false)
+
 const availableOAuth = ref<User.AvailableOAuth[]>([])
 
 const getAvailableOAuth = async () => {
+  loading.value = true
   let oauths = await User.getAvailableOAuth()
   oauths.sort((a, b) => a.type.localeCompare(b.type))
   availableOAuth.value = oauths
+  loading.value = false
 }
 
 const onClickOAuthLogin = async (oauth: string) => {
+  loading.value = true
   let url = await User.getOAuthURL(oauth, router.currentRoute.value.query.redirectURL as string)
+  // loading.value = false
   window.open(url, '_self')
 }
 
@@ -51,15 +57,20 @@ init()
         </div>
         <div class="flex flex-col gap-0 font-mono subpixel-antialiased items-center w-full">
           <div v-for="(item, index) in availableOAuth" :key="item.oauth" class="w-full">
-            <div class="flex items-center justify-between w-full" @click="onClickOAuthLogin(item.oauth)">
-              <div
-                class="cursor-pointer bg-blue-600 text-white rounded-lg p-3 px-6 flex items-center gap-2 w-full justify-center hover:shadow-lg">
-                <github-icon v-if="item.type === 'github'" class="w-4 h-4" />
-                <gitlab-icon v-if="item.type === 'gitlab'" class="w-4 h-4" />
-                <div v-if="item.type === 'github'">{{ $t('signWithGithub').replaceAll('Github', item.oauth) }}</div>
-                <div v-if="item.type === 'gitlab'">{{ $t('signWithGitlab').replaceAll('Gitlab', item.oauth) }}</div>
-              </div>
-            </div>
+            <el-button class="w-full" :icon="item.type === 'github' ? GithubIcon : GitlabIcon" type="primary" size="large"
+                       :disabled="loading" @click="onClickOAuthLogin(item.oauth)">
+              {{ (item.type === 'github' ? $t('signWithGithub') : $t('signWithGitlab')).replaceAll('Github', item.oauth).replaceAll('Gitlab', item.oauth)
+              }}
+            </el-button>
+            <!--            <div class="flex items-center justify-between w-full" @click="onClickOAuthLogin(item.oauth)">-->
+            <!--              <div-->
+            <!--                class="cursor-pointer bg-blue-600 text-white rounded-lg p-3 px-6 flex items-center gap-2 w-full justify-center hover:shadow-lg">-->
+            <!--                <github-icon v-if="item.type === 'github'" class="w-4 h-4" />-->
+            <!--                <gitlab-icon v-if="item.type === 'gitlab'" class="w-4 h-4" />-->
+            <!--                <div v-if="item.type === 'github'">{{ $t('signWithGithub').replaceAll('Github', item.oauth) }}</div>-->
+            <!--                <div v-if="item.type === 'gitlab'">{{ $t('signWithGitlab').replaceAll('Gitlab', item.oauth) }}</div>-->
+            <!--              </div>-->
+            <!--            </div>-->
             <div v-if="index !== availableOAuth.length - 1" class="text-sm text-gray-500 text-center py-1">OR</div>
           </div>
         </div>

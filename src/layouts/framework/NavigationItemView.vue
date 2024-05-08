@@ -10,7 +10,8 @@ const currentPath = ref(router.currentRoute.value.fullPath)
 watchEffect(() => {
   currentPath.value = router.currentRoute.value.fullPath
 })
-defineProps({
+
+const props = defineProps({
   item: {
     type: Object as () => SystemModels.Navigation,
     required: true
@@ -20,6 +21,13 @@ defineProps({
     default: false
   }
 })
+
+const item = ref(props.item)
+
+const find = item.value.children?.find((i) => i.path === currentPath.value)
+if (find) {
+  item.value.expand = true
+}
 
 const haveChildren = (item: SystemModels.Navigation) => {
   return item.children && item.children.length > 0
@@ -53,6 +61,7 @@ const onClickNavigation = (item: SystemModels.Navigation) => {
       </div>
     </div>
   </ColorView>
+
   <div v-if="item.expand" class="pl-7">
     <div v-for="child in item.children" :key="child.title">
       <NavigationItemView :item="child" :is-children="true" />

@@ -2,11 +2,17 @@
 import { Dashboard } from '@/views/dashboard/DashboardView'
 import { ref } from 'vue'
 import { LinkThree } from '@icon-park/vue-next'
+import numeral from 'numeral'
 
 const statistics = ref<Dashboard.StatisticItem[]>([])
 
 const init = async () => {
   statistics.value = await Dashboard.getStatistics()
+}
+
+function isNumber(value: string): boolean {
+  const numberRegex = /^[0-9]+$/;
+  return numberRegex.test(value);
 }
 
 init()
@@ -37,7 +43,7 @@ init()
             <img :src="item.icon" alt="" />
           </div>
           <div class="flex flex-col gap-2">
-            <div class="text-5xl font-medium text-blue-500 dark:text-red-200">{{ item.count }}</div>
+            <div class="text-5xl font-medium text-blue-500 dark:text-red-200">{{ isNumber(item.count) ? numeral(item.count).format('0.[00]a') : item.count }}</div>
             <div class="text-gray-500 dark:text-slate-400">{{ $t(item.name) }}</div>
           </div>
         </div>

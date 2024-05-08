@@ -10,6 +10,8 @@
     "dashboard": "Dashboard",
     "setting": "Setting",
     "schedule": "Schedule",
+    "scheduleList": "Schedule List",
+    "scheduleRecord": "Schedule Record",
     "notification": "Notification",
     "scm": "Code Management",
     "pipeline": "Pipeline",
@@ -22,6 +24,7 @@
   "cancel": "Cancel",
   "confirmLogout": "Are you sure you want to log out?",
   "confirmDelete": "Are you sure you want to delete?",
+  "unknown": "Unknown",
   "schedule": {
     "id": "ID",
     "title": "Title",
@@ -34,8 +37,16 @@
     "params": "Params",
     "executor": "Executor",
     "createdAt": "createdAt",
+    "execAt": "execAt",
+    "endAt": "endAt",
+    "costTime": "Cost Time",
     "editTitle": "Edit",
-    "detailTitle": "Detail"
+    "detailTitle": "Detail",
+    "cronError": "Cron syntax error",
+    "status": "Status",
+    "statusError": "Error",
+    "statusRunning": "Running",
+    "statusSuccess": "Success"
   },
   "table": {
     "emptyText": "No Data",
