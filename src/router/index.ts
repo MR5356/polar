@@ -35,6 +35,11 @@ const router = createRouter({
           component: () => import('@/views/schedule/ScheduleRecordView.vue')
         },
         {
+          path: '/pipeline',
+          name: 'pipeline',
+          component: () => import('@/views/pipeline/workflow/WorkFlowView.vue')
+        },
+        {
           path: '/notification',
           name: 'notification',
           component: HomeView

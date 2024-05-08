@@ -63,5 +63,11 @@
   },
   "404": {
     "message": "Page not found"
+  },
+  "pipeline": {
+    "workflow": {
+      "start": "Start",
+      "end": "End"
+    }
   }
 }

@@ -13,6 +13,8 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@antv/g6": "^4.8.24",
+    "@antv/matrix-util": "^3.0.4",
     "@icon-park/vue-next": "^1.4.2",
     "ant-design-vue": "4.x",
     "axios": "^1.6.8",

@@ -3,6 +3,7 @@ import { Dashboard } from '@/views/dashboard/DashboardView'
 import { ref } from 'vue'
 import { LinkThree } from '@icon-park/vue-next'
 import numeral from 'numeral'
+import moment from 'moment'
 
 const statistics = ref<Dashboard.StatisticItem[]>([])
 
@@ -26,9 +27,11 @@ init()
       <div class="flex items-center justify-between">
         <div class="flex flex-col gap-2">
           <div class="text-3xl font-medium text-slate-700 dark:text-red-200">{{ $t('navigation.dashboard') }}</div>
-          <div class="text-xs text-gray-500">Good day for you</div>
+          <div class="text-xs text-gray-500" v-html="moment().format('[<span class=\'text-green-500 dark:text-green-400 font-bold pr-2\'>]ddd[.</span>] YYYY-MM-DD')"></div>
         </div>
       </div>
+
+      <!-- Welcome -->
 
       <!-- statistics -->
       <div class="grid grid-cols-3 gap-8">
