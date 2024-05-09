@@ -37,7 +37,13 @@ const router = createRouter({
         {
           path: '/pipeline',
           name: 'pipeline',
-          component: () => import('@/views/pipeline/workflow/WorkFlowView.vue')
+          children: [
+            {
+              path: 'detail',
+              name: 'pipelineDetail',
+              component: () => import('@/views/pipeline/PipelineDetailView.vue')
+            }
+          ]
         },
         {
           path: '/notification',

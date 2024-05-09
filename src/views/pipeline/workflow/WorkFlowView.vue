@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, h, type PropType } from 'vue'
+import { AutoFocus, Aiming, Clear } from '@icon-park/vue-next'
 import G6 from '@antv/g6'
 import {
   _extends,
+  colors,
   type ModelConfigWithStatus, nodeEdgeExtraAttrs,
   nodeShapeExtraAttrs,
   nodeTextExtraAttrs
@@ -10,6 +12,15 @@ import {
 import { transform } from '@antv/matrix-util/lib/ext'
 
 const mountNode = ref()
+let graph = null
+const data = defineModel('data', { type: Object, required: true })
+
+const props = defineProps({
+  onClickNode: {
+    type: Function as PropType<((item: ModelConfigWithStatus) => void)>,
+    required: true
+  }
+})
 
 G6.registerNode('node', {
   draw: function drawShape(cfg: ModelConfigWithStatus, group) {
@@ -22,19 +33,22 @@ G6.registerNode('node', {
         height: 28,
         radius: 14,
         fill: 'transparent',
+        cursor: 'pointer',
         fillOpacity: 1
       }, nodeShapeExtraAttrs[cfg.status])
     })
+
     if (cfg.status === 'running') {
       const loading = group.addShape('circle', {
         attrs: {
           cx: 0,
           cy: 0,
-          r: 10,
+          r: 8,
           fill: 'transparent',
           stroke: '#31B275',
+          cursor: 'pointer',
           lineWidth: 3,
-          lineDash: [10, 5]
+          lineDash: [8, 2]
         },
         name: 'loading-animation',
         draggable: true
@@ -62,6 +76,7 @@ G6.registerNode('node', {
           y: 0,
           textAlign: 'center',
           textBaseline: 'middle',
+          cursor: 'pointer',
           text: cfg.label,
           fill: 'white',
           fontWeight: 'bold',
@@ -79,7 +94,7 @@ G6.registerNode('node', {
         textAlign: 'center',
         textBaseline: 'middle',
         text: cfg.label,
-        fill: 'black',
+        fill: '#5B6880',
         fontWeight: 'bold',
         fontSize: 12
       }, {}),
@@ -91,12 +106,18 @@ G6.registerNode('node', {
   // 设置状态
   setState: function setState(name, value, item) {
     const group = item.getContainer()
-    const shape = group.get('children')[0] // 顺序根据 draw 时确定
-    if (name === 'selected') {
+    const shape = group.get('children')[0]
+    if (name === 'hover' && !item.getStates().includes('click')) {
       if (value) {
-        shape.attr('fill', '#F6C277')
+        shape.attr('fill', item?._cfg.originStyle?.fill + '99')
       } else {
-        shape.attr('fill', '#FFD591')
+        shape.attr('fill', item?._cfg.originStyle?.fill || 'transparent')
+      }
+    } else if (name === 'click') {
+      if (value) {
+        shape.attr('fill', colors.hover)
+      } else {
+        shape.attr('fill', item?._cfg.originStyle?.fill || 'transparent')
       }
     }
   },
@@ -124,148 +145,42 @@ G6.registerEdge('edge', {
     // 为了更好的展示效果, 对称贝塞尔曲线需要连到箭头根部
     return group.addShape('path', {
       attrs: _extends({
-        path: [['M', startPoint.x, startPoint.y], ['Q', controlPoint.x + 8, controlPoint.y, centerPoint.x, centerPoint.y], ['T', endPoint.x - 8, endPoint.y], ['L', endPoint.x, endPoint.y]],
+        path: [['M', startPoint.x + 2, startPoint.y], ['Q', controlPoint.x + 8, controlPoint.y, centerPoint.x, centerPoint.y], ['T', endPoint.x - 24, endPoint.y], ['L', endPoint.x - 8, endPoint.y]],
         fill: 'transparent',
         stroke: '#5B8FF9',
         strokeOffset: 5,
         lineWidth: 4,
         endArrow: {
-          path: 'M 0,0 L 10,-5 L 10,5 Z',
+          path: 'M 0,0 L 10,-5 L 10,5 Z'
         }
       }, nodeEdgeExtraAttrs[cfg.status]),
       name: 'path-shape'
     })
-  },
+  }
 })
 
-const data = ref({
-  nodes: [
-    {
-      id: 'node1',
-      label: 'node1',
-      status: 'begin',
-    },
-    {
-      id: 'node2',
-      label: 'node2',
-      status: 'success'
-    },
-    {
-      id: 'node3',
-      label: 'node3',
-      status: 'success'
-    },
-    {
-      id: 'node4',
-      label: 'node4',
-      status: 'success'
-    },
-    {
-      id: 'node5',
-      label: 'node5',
-      status: 'fail'
-    },
-    {
-      id: 'node6',
-      label: 'node6',
-      status: 'running'
-    },
-    {
-      id: 'node7',
-      label: 'node7',
-      status: 'waiting'
-    },
-    {
-      id: 'node8',
-      label: 'node8',
-      status: 'running'
-    },
-    {
-      id: 'node9',
-      label: 'node9',
-      status: 'waiting'
-    },
-    {
-      id: 'node10',
-      label: 'node10',
-      status: 'waiting'
-    }
-  ],
-  edges: [
-    {
-      source: 'node1',
-      target: 'node2',
-      status: 'success'
-    },
-    {
-      source: 'node2',
-      target: 'node3',
-      status: 'success'
-    },
-    {
-      source: 'node2',
-      target: 'node4',
-      status: 'success'
-    },
-    {
-      source: 'node2',
-      target: 'node5',
-      status: 'fail'
-    },
-    {
-      source: 'node2',
-      target: 'node6',
-      status: 'success'
-    },
-    {
-      source: 'node5',
-      target: 'node7',
-      status: 'waiting'
-    },
-    {
-      source: 'node4',
-      target: 'node7',
-      status: 'waiting'
-    },
-    {
-      source: 'node3',
-      target: 'node8',
-      status: 'waiting'
-    },
-    {
-      source: 'node6',
-      target: 'node7',
-      status: 'waiting'
-    },
-    {
-      source: 'node7',
-      target: 'node9',
-      status: 'waiting'
-    },
-    {
-      source: 'node8',
-      target: 'node9',
-      status: 'waiting'
-    },
-    {
-      source: 'node9',
-      target: 'node10',
-      status: 'waiting'
-    }
-  ]
-})
+onMounted(async () => {
+  const minimap = new G6.Minimap({
+    size: [100, 100],
+    className: 'g6-minimap',
+    type: 'delegate'
+  })
 
-onMounted(() => {
-  const graph = new G6.Graph({
+  graph = new G6.Graph({
     container: mountNode.value, // String | HTMLElement，必须，在 Step 1 中创建的容器 id 或容器本身
     height: mountNode.value.height,
     width: mountNode.value.width,
+    plugins: [minimap],
+    fitView: true,
+    fitCenter: true,
     layout: {
       type: 'dagre',
-      rankdir: 'LR'
+      rankdir: 'LR',
+      align: 'UL',
+      nodesep: 20
     },
     modes: {
-      default: ['drag-canvas']
+      default: ['drag-canvas', 'zoom-canvas']
     },
     defaultNode: {
       type: 'node',
@@ -282,22 +197,81 @@ onMounted(() => {
     defaultEdge: {
       type: 'edge',
       style: {
-        lineWidth: 4,
+        lineWidth: 4
       }
     }
   })
 
   graph.data(data.value)
   graph.render()
+
+  graph.on('node:mouseenter', function(evt: any) {
+    const node = evt.item
+    const model = node.getModel()
+    model.oriLabel = model.label
+    graph.setItemState(node, 'hover', true)
+  })
+  graph.on('node:mouseleave', function(evt: any) {
+    const node = evt.item
+    graph.setItemState(node, 'hover', false)
+  })
+
+  graph.on('node:click', (e) => {
+    // 先将所有当前是 click 状态的节点置为非 click 状态
+    const clickNodes = graph.findAllByState('node', 'click')
+    clickNodes.forEach((cn) => {
+      graph.setItemState(cn, 'click', false)
+    })
+    const nodeItem = e.item // 获取被点击的节点元素对象
+    graph.setItemState(nodeItem, 'click', true) // 设置当前节点的 click 状态为 true
+    props.onClickNode(nodeItem.getModel())
+  })
 })
 
+const clearClickState = () => {
+  const clickNodes = graph.findAllByState('node', 'click')
+  clickNodes.forEach((cn) => {
+    graph.setItemState(cn, 'click', false)
+  })
+}
 
+const fitView = () => {
+  graph.fitView()
+}
+
+const fitCenter = () => {
+  graph.fitCenter()
+}
 </script>
 
 <template>
-  <div class="h-[600px] w-[100%]" ref="mountNode"></div>
+  <div class="relative h-[100%] w-[100%]" ref="mountNode">
+    <div class="absolute bottom-1 right-1 flex items-center gap-2">
+      <a-tooltip placement="topRight">
+        <template #title>{{ $t('pipeline.workflow.fitView') }}</template>
+        <a-button class="text-slate-500 opacity-80 border-slate-500 border-[1px]" :icon="h(AutoFocus)" type="text"
+                  @click="fitView"></a-button>
+      </a-tooltip>
+      <a-tooltip placement="topRight">
+        <template #title>{{ $t('pipeline.workflow.fitCenter') }}</template>
+        <a-button class="text-slate-500 opacity-80 border-slate-500 border-[1px]" :icon="h(Aiming)" type="text"
+                  @click="fitCenter"></a-button>
+      </a-tooltip>
+      <a-tooltip placement="topRight">
+        <template #title>{{ $t('pipeline.workflow.clearClickState') }}</template>
+        <a-button class="text-slate-500 opacity-80 border-slate-500 border-[1px]" :icon="h(Clear)" type="text"
+                  @click="clearClickState"></a-button>
+      </a-tooltip>
+    </div>
+  </div>
 </template>
 
-<style scoped>
-
+<style>
+.g6-minimap {
+  position: absolute;
+  left: 0.25rem;
+  bottom: 0.25rem;
+  border-radius: 0.5rem;
+  background: rgba(0, 0, 0, 0.1);
+}
 </style>

@@ -67,7 +67,10 @@
   "pipeline": {
     "workflow": {
       "start": "开始",
-      "end": "结束"
+      "end": "结束",
+      "fitView": "适应视图大小",
+      "fitCenter": "移到视图中心",
+      "clearClickState": "清除选中状态"
     }
   }
 }

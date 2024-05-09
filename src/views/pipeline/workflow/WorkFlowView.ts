@@ -14,48 +14,58 @@ export const _extends = Object.assign || function(target: any, ...sources: any[]
   return target;
 };
 
+export enum colors {
+  begin = '#31B275',
+  end = '#31B275',
+  success = '#64BB87',
+  running = '#E5E5E5',
+  waiting = '#aaacb9',
+  fail = '#CF2227',
+  hover = '#9BC5F0'
+}
+
 export const nodeShapeExtraAttrs = {
   begin: {
-    stroke: '#31B275',
-    fill: '#31B275',
+    stroke: colors.begin,
+    fill: colors.begin,
   },
   end: {
-    stroke: '#31B275',
-    fill: '#31B275'
+    stroke: colors.end,
+    fill: colors.end
   },
   success: {
-    stroke: '#31B275',
-    fill: '#31B275'
+    stroke: colors.success,
+    fill: colors.success
   },
   running: {
-    fill: 'rgba(255, 255, 255, 0.5)'
+    fill: colors.running
   },
   waiting: {
-    fill: '#aaacb9'
+    fill: colors.waiting
   },
   fail: {
-    fill: '#CF2227'
+    fill: colors.fail
   }
 }
 
 export const nodeEdgeExtraAttrs = {
   begin: {
-    stroke: '#31B275',
+    stroke: colors.success,
   },
   end: {
-    stroke: '#31B275',
+    stroke: colors.success,
   },
   success: {
-    stroke: '#31B275',
+    stroke: colors.success,
   },
   running: {
-    stroke: 'rgba(255, 255, 255, 0.5)',
+    stroke: colors.running,
   },
   waiting: {
-    stroke: '#aaacb9',
+    stroke: colors.waiting,
   },
   fail: {
-    stroke: '#CF2227',
+    stroke: colors.fail,
   }
 }
 

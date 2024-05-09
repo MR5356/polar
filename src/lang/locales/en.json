@@ -67,7 +67,10 @@
   "pipeline": {
     "workflow": {
       "start": "Start",
-      "end": "End"
+      "end": "End",
+      "fitView": "Fit View Size",
+      "fitCenter": "Fit Center",
+      "clearClickState": "Clear Click State"
     }
   }
 }
