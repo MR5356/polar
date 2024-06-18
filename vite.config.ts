@@ -7,6 +7,7 @@ import VueDevTools from 'vite-plugin-vue-devtools'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -28,7 +29,12 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()]
     }),
     Components({
-      resolvers: [ElementPlusResolver()]
+      resolvers: [
+        ElementPlusResolver(),
+        AntDesignVueResolver({
+          importStyle: false // css in js
+        })
+      ]
     })
   ],
   resolve: {
@@ -37,9 +43,10 @@ export default defineConfig({
     }
   },
   server: {
+    port: 80,
     proxy: {
       '/api': {
-        target: 'http://localhost/api',
+        target: 'http://localhost:8080/api',
         changeOrigin: true,
         ws: true,
         rewrite: (path) => path.replace(/^\/api/, '')

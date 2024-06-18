@@ -25,9 +25,35 @@ const router = createRouter({
           component: HomeView
         },
         {
-          path: '/schedule',
-          name: 'schedule',
+          path: '/schedule/list',
+          name: 'scheduleList',
           component: () => import('@/views/schedule/ScheduleView.vue')
+        },
+        {
+          path: '/schedule/record',
+          name: 'scheduleRecord',
+          component: () => import('@/views/schedule/ScheduleRecordView.vue')
+        },
+        {
+          path: '/pipeline',
+          name: 'pipeline',
+          children: [
+            {
+              path: '',
+              name: 'pipelineList',
+              component: () => import('@/views/pipeline/PipelineListView.vue')
+            },
+            {
+              path: 'new',
+              name: 'pipelineNew',
+              component: () => import('@/views/pipeline/PipelineNewView.vue')
+            },
+            {
+              path: ':id',
+              name: 'pipelineDetail',
+              component: () => import('@/views/pipeline/PipelineDetailView.vue')
+            }
+          ]
         },
         {
           path: '/notification',

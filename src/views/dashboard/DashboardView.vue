@@ -2,11 +2,18 @@
 import { Dashboard } from '@/views/dashboard/DashboardView'
 import { ref } from 'vue'
 import { LinkThree } from '@icon-park/vue-next'
+import numeral from 'numeral'
+import moment from 'moment'
 
 const statistics = ref<Dashboard.StatisticItem[]>([])
 
 const init = async () => {
   statistics.value = await Dashboard.getStatistics()
+}
+
+function isNumber(value: string): boolean {
+  const numberRegex = /^[0-9]+$/;
+  return numberRegex.test(value);
 }
 
 init()
@@ -20,9 +27,11 @@ init()
       <div class="flex items-center justify-between">
         <div class="flex flex-col gap-2">
           <div class="text-3xl font-medium text-slate-700 dark:text-red-200">{{ $t('navigation.dashboard') }}</div>
-          <div class="text-xs text-gray-500">Good day for you</div>
+          <div class="text-xs text-gray-500" v-html="moment().format('[<span class=\'text-green-500 dark:text-green-400 font-bold pr-2\'>]ddd[.</span>] YYYY-MM-DD')"></div>
         </div>
       </div>
+
+      <!-- Welcome -->
 
       <!-- statistics -->
       <div class="grid grid-cols-3 gap-8">
@@ -37,7 +46,7 @@ init()
             <img :src="item.icon" alt="" />
           </div>
           <div class="flex flex-col gap-2">
-            <div class="text-5xl font-medium text-blue-500 dark:text-red-200">{{ item.count }}</div>
+            <div class="text-5xl font-medium text-blue-500 dark:text-red-200">{{ isNumber(item.count) ? numeral(item.count).format('0.[00]a') : item.count }}</div>
             <div class="text-gray-500 dark:text-slate-400">{{ $t(item.name) }}</div>
           </div>
         </div>

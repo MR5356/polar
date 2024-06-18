@@ -10,6 +10,8 @@
     "dashboard": "工作台",
     "setting": "系统设置",
     "schedule": "计划任务",
+    "scheduleList": "计划任务列表",
+    "scheduleRecord": "计划任务记录",
     "notification": "通知设置",
     "scm": "代码管理",
     "pipeline": "流水线",
@@ -22,6 +24,7 @@
   "cancel": "取消",
   "confirmLogout": "确定退出登录吗?",
   "confirmDelete": "确定删除吗?",
+  "unknown": "未知",
   "schedule": {
     "id": "ID",
     "title": "名称",
@@ -34,8 +37,16 @@
     "params": "参数",
     "executor": "执行器",
     "createdAt": "创建时间",
+    "execAt": "执行时间",
+    "endAt": "结束时间",
+    "costTime": "任务耗时",
     "editTitle": "编辑",
-    "detailTitle": "查看"
+    "detailTitle": "查看",
+    "cronError": "定时表达式错误",
+    "status": "状态",
+    "statusError": "运行失败",
+    "statusRunning": "运行中",
+    "statusSuccess": "运行成功"
   },
   "table": {
     "emptyText": "没有数据",
@@ -52,5 +63,21 @@
   },
   "404": {
     "message": "明明记得藏财宝的地方就在这片海滩<br />怎么一下子消失得无影无踪<br /><br />还是换个地方继续寻找吧"
+  },
+  "pipeline": {
+    "workflow": {
+      "start": "开始",
+      "end": "结束",
+      "fitView": "适应视图大小",
+      "fitCenter": "移到视图中心",
+      "clearClickState": "清除选中状态"
+    },
+    "table": {
+      "title": "名称",
+      "owner": "拥有者",
+      "createdAt": "创建时间",
+      "updatedAt": "更新时间",
+      "preview": "预览"
+    }
   }
 }

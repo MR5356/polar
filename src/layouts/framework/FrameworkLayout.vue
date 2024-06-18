@@ -10,6 +10,7 @@ import { locales } from '@/lang/i18n'
 import { User } from '@/views/LoginView'
 import { Logout, Avatar } from '@icon-park/vue-next'
 import { ElMessageBox } from 'element-plus'
+import TabbarView from '@/layouts/framework/TabbarView.vue'
 
 const { locale, t } = useI18n()
 const systemStore = useSystemStore()
@@ -134,6 +135,9 @@ setLanguage()
       </div>
     </el-aside>
     <el-container class="transition duration-300 ease-in-out bg-opacity-20 bg-indigo-200 dark:bg-slate-800">
+<!--      <el-header>-->
+<!--        <TabbarView />-->
+<!--      </el-header>-->
       <el-main class="relative">
         <RouterView />
       </el-main>
@@ -146,5 +150,9 @@ setLanguage()
 :deep(.el-main),
 :deep(.el-aside) {
   padding: 0;
+}
+
+:deep(.el-header) {
+  height: fit-content;
 }
 </style>

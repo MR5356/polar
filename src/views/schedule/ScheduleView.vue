@@ -1,14 +1,15 @@
 <script setup lang="ts">
 
 import TableView, { type TableColumn } from '@/components/TableView.vue'
-import { ref, watch } from 'vue'
+import { ref, watch, h } from 'vue'
 import { useSystemStore } from '@/stores/system'
 import { useI18n } from 'vue-i18n'
 import cronstrue from 'cronstrue/i18n'
 import moment from 'moment'
 import { Schedule } from '@/views/schedule/ScheduleView'
 import type { Pager } from '@/utils/request'
-import { ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import withLoading from '@/utils/loading'
 
 const systemStore = useSystemStore()
 const { t } = useI18n()
@@ -18,7 +19,6 @@ const search = ref('')
 const currentItem = ref<Schedule.ScheduleItem | null>(null)
 const showDrawer = ref(false)
 const drawerMode = ref<'edit' | 'detail'>('edit')
-const loading = ref(false)
 
 const executors = ref<Schedule.Executor[]>([])
 const rawData = ref<Pager<Schedule.ScheduleItem>>({
@@ -31,8 +31,13 @@ const formatData = () => {
   data.value = []
   rawData.value.data.forEach((item) => {
     let newItem = JSON.parse(JSON.stringify(item))
-    newItem.cronString = cronstrue.toString(newItem.cronString, { locale: systemStore.language })
-    newItem.enabled = t('schedule.' + newItem.enabled)
+    try {
+      newItem.cronString = cronstrue.toString(newItem.cronString, { locale: systemStore.language })
+    } catch (e) {
+      console.log(e)
+      newItem.cronString = t('schedule.cronError')
+    }
+    // newItem.enabled = t('schedule.' + newItem.enabled)
     newItem.createdAt = moment(newItem.createdAt).format('YYYY-MM-DD HH:mm:ss')
     newItem.executor = executors.value.find((item) => item.name === newItem.executor).displayName
     data.value.push(newItem)
@@ -40,11 +45,13 @@ const formatData = () => {
 }
 
 const listSchedule = async () => {
-  loading.value = true
-  executors.value = await Schedule.getExecutors()
-  rawData.value = await Schedule.pageSchedule(rawData.value.current, rawData.value.size)
-  formatData()
-  loading.value = false
+  await withLoading(async () => {
+    executors.value = await Schedule.getExecutors()
+    const temp = await Schedule.pageSchedule(rawData.value.current, rawData.value.size)
+    temp.data?.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    rawData.value = temp
+    formatData()
+  })
 }
 
 listSchedule()
@@ -61,7 +68,42 @@ const columns = ref<TableColumn[]>([
     label: 'schedule.title',
     fixed: true,
     align: 'left',
-    width: 150
+    width: 150,
+    formatter(row, column, cellValue, index) {
+      if (row.enabled) {
+        return h('div', {
+          class: 'flex gap-2 items-center'
+        }, [
+          h('span', {
+            class: 'relative flex h-3 w-3 items-center justify-center'
+          }, [
+            h('span', {
+              class: 'animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75'
+            }),
+            h('span', {
+              class: 'relative inline-flex rounded-full h-3 w-3 bg-green-500'
+            })
+          ]),
+          h('span', { class: 'text-sm' }, cellValue)
+        ])
+      } else {
+        return h('div', {
+          class: 'flex gap-2 items-center'
+        }, [
+          h('span', {
+            class: 'relative flex h-3 w-3'
+          }, [
+            h('span', {
+              class: 'absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75'
+            }),
+            h('span', {
+              class: 'relative inline-flex rounded-full h-3 w-3 bg-red-500'
+            })
+          ]),
+          h('span', { class: 'text-sm' }, cellValue)
+        ])
+      }
+    }
   },
   {
     field: 'cronString',
@@ -75,12 +117,37 @@ const columns = ref<TableColumn[]>([
     align: 'left',
     width: 150
   },
-  {
-    field: 'enabled',
-    label: 'schedule.enabled',
-    align: 'left',
-    width: 88
-  },
+  // {
+  //   field: 'enabled',
+  //   label: 'schedule.enabled',
+  //   align: 'left',
+  //   width: 88,
+  //   formatter(row, column, cellValue, index) {
+  //     if (row.enabled) {
+  //       return h('span', {
+  //         class: 'relative flex h-3 w-3 items-center justify-center'
+  //       }, [
+  //         h('span', {
+  //           class: 'animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75'
+  //         }),
+  //         h('span', {
+  //           class: 'relative inline-flex rounded-full h-3 w-3 bg-green-500'
+  //         })
+  //       ])
+  //     } else {
+  //       return h('span', {
+  //         class: 'relative flex h-3 w-3'
+  //       }, [
+  //         h('span', {
+  //           class: 'absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75'
+  //         }),
+  //         h('span', {
+  //           class: 'relative inline-flex rounded-full h-3 w-3 bg-red-500'
+  //         })
+  //       ])
+  //     }
+  //   },
+  // },
   {
     field: 'desc',
     label: 'schedule.desc',
@@ -102,7 +169,25 @@ const columns = ref<TableColumn[]>([
 const multipleSelection = ref<any[]>([])
 const handleSelectionChange = (val: any[]) => {
   multipleSelection.value = val
-  console.log(multipleSelection.value)
+}
+
+const handleBatchDelete = async () => {
+  ElMessageBox.confirm(t('confirmDelete'), t('tips'), {
+    confirmButtonText: t('confirm'),
+    cancelButtonText: t('cancel')
+  }).then(async () => {
+    await withLoading(async () => {
+      await Schedule.batchDeleteSchedule(multipleSelection.value.map((item) => item.id))
+      await listSchedule()
+    })
+  })
+}
+
+const handleBatchEnable = async (enable: boolean) => {
+  await withLoading(async () => {
+    await Schedule.batchSetEnabled(multipleSelection.value.map((item) => item.id), enable)
+    await listSchedule()
+  })
 }
 
 const handleDelete = async (val: Schedule.ScheduleItem) => {
@@ -137,11 +222,19 @@ const onPageChange = async (e) => {
 }
 
 const onUpdateSchedule = async () => {
-  loading.value = true
-  await Schedule.updateSchedule(currentItem.value)
-  loading.value = false
-  showDrawer.value = false
-  await listSchedule()
+  await withLoading(async () => {
+    try {
+      cronstrue.toString(currentItem.value.cronString, { locale: systemStore.language })
+    } catch (e) {
+      console.log(e)
+      ElMessage.error(t('schedule.cronError'))
+      return
+    }
+    await Schedule.updateSchedule(currentItem.value).finally(() => {
+    })
+    showDrawer.value = false
+    await listSchedule()
+  })
 }
 
 const onSearch = () => {
@@ -156,74 +249,87 @@ const onSearch = () => {
       <TableView
         :data="data"
         :columns="columns"
-        selection
+        :selection="true"
         :select-change="handleSelectionChange"
         :handler-delete="handleDelete"
         :handler-edit="handleEdit"
         :handler-detail="handleDetail"
         v-model:search="search"
       >
+        <template #header>
+          <div class="flex justify-between items-center p-2">
+<!--            <div class="border-l-2 border-gray-500 pl-2 text-sm font-bold">{{ $t('navigation.schedule') }}</div>-->
+            <div />
+            <div class="flex items-center gap-0">
+              <el-button type="primary" size="small" :disabled="multipleSelection.length===0" @click="handleBatchEnable(true)">启用</el-button>
+              <el-button size="small" :disabled="multipleSelection.length===0" @click="handleBatchEnable(false)">禁用</el-button>
+              <el-button size="small" :disabled="multipleSelection.length===0" @click="handleBatchDelete">删除</el-button>
+            </div>
+          </div>
+        </template>
+        <template #footer>
+          <el-pagination
+            layout="prev, pager, next"
+            :hide-on-single-page="true"
+            :total="rawData.total"
+            :page-size="rawData.size"
+            @change="onPageChange"
+          />
+        </template>
       </TableView>
-      <el-pagination
-        class="w-full bg-white dark:bg-slate-900"
-        layout="prev, pager, next"
-        :total="rawData.total"
-        :page-size="rawData.size"
-        @change="onPageChange"
-      />
     </div>
-    <transition name="slide-fade" :appear="true">
-      <div v-if="showDrawer" class="min-w-[300px] w-1/3 h-full">
-        <div
-          class="h-full p-4 transition duration-300 ease-in-out text-slate-600 dark:text-slate-400 bg-opacity-40 bg-white dark:bg-slate-900 relative">
-          <div class="font-bold select-none">
-            <span v-if="drawerMode==='edit'">{{ $t('schedule.editTitle') }}</span>
-            <span v-if="drawerMode==='detail'">{{ $t('schedule.detailTitle') }}</span>
-            <el-form
-              label-position="top"
-              label-width="auto"
-              :model="currentItem"
+    <el-drawer v-model="showDrawer" :title="drawerMode==='edit' ? $t('schedule.editTitle') : $t('schedule.detailTitle')"
+               :show-close="true">
+      <div class="font-bold select-none">
+        <el-form
+          label-position="right"
+          label-width="auto"
+          :model="currentItem"
+          size="small"
+        >
+          <el-form-item :label="$t('schedule.title')">
+            <el-input v-model="currentItem.title" :disabled="drawerMode==='detail'" />
+          </el-form-item>
+          <el-form-item :label="$t('schedule.desc')">
+            <el-input v-model="currentItem.desc" :disabled="drawerMode==='detail'" />
+          </el-form-item>
+          <el-form-item :label="$t('schedule.cronString')">
+            <el-input v-model="currentItem.cronString" :disabled="drawerMode==='detail'" />
+          </el-form-item>
+          <el-form-item :label="$t('schedule.executor')">
+            <el-select
+              v-model="currentItem.executor"
+              :disabled="drawerMode==='detail'"
             >
-              <el-form-item :label="$t('schedule.title')">
-                <el-input v-model="currentItem.title" :disabled="drawerMode==='detail'" />
-              </el-form-item>
-              <el-form-item :label="$t('schedule.desc')">
-                <el-input v-model="currentItem.desc" :disabled="drawerMode==='detail'" />
-              </el-form-item>
-              <el-form-item :label="$t('schedule.cronString')">
-                <el-input v-model="currentItem.cronString" :disabled="drawerMode==='detail'" />
-              </el-form-item>
-              <el-form-item :label="$t('schedule.executor')">
-                <el-select
-                  v-model="currentItem.executor"
-                  :disabled="drawerMode==='detail'"
-                  size="large"
-                >
-                  <el-option
-                    v-for="item in executors"
-                    :key="item.name"
-                    :label="item.displayName"
-                    :value="item.name"
-                  />
-                </el-select>
-              </el-form-item>
-              <el-form-item :label="$t('schedule.enabled')">
-                <el-switch v-model="currentItem.enabled" :disabled="drawerMode==='detail'" />
-              </el-form-item>
-              <el-form-item :label="$t('schedule.params')">
-                <el-input type="textarea" :rows="5" v-model="currentItem.params" :disabled="drawerMode==='detail'" />
-              </el-form-item>
-            </el-form>
-          </div>
-          <div class="absolute bottom-4 right-4">
-            <el-button size="small" @click="showDrawer=false" :disabled="loading">{{ $t('close') }}</el-button>
-            <el-button size="small" type="primary" v-if="drawerMode=='edit'" @click="onUpdateSchedule" :disabled="loading">{{ $t('save') }}</el-button>
-          </div>
-        </div>
+              <el-option
+                v-for="item in executors"
+                :key="item.name"
+                :label="item.displayName"
+                :value="item.name"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item :label="$t('schedule.enabled')">
+            <el-switch v-model="currentItem.enabled" :disabled="drawerMode==='detail'" />
+          </el-form-item>
+          <el-form-item :label="$t('schedule.params')">
+            <el-input type="textarea" :rows="5" v-model="currentItem.params" :disabled="drawerMode==='detail'" />
+          </el-form-item>
+        </el-form>
       </div>
-    </transition>
+      <template #footer>
+        <div v-if="drawerMode=='edit'">
+          <el-button size="small" @click="showDrawer=false">{{ $t('cancel') }}</el-button>
+          <el-button size="small" type="primary" v-if="drawerMode=='edit'" @click="onUpdateSchedule">{{ $t('save') }}
+          </el-button>
+        </div>
+      </template>
+    </el-drawer>
   </div>
 </template>
 
 <style scoped>
+:deep(.el-drawer__header) {
+  margin-bottom: 0;
+}
 </style>

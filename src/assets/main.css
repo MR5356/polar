@@ -1,7 +1,6 @@
 @import './base.css';
 
 #app {
-
 }
 
 .slide-fade-enter-active {
@@ -17,3 +16,15 @@
     transform: translateX(30px);
     opacity: 0;
 }
+
+/* 全局loading样式 */
+.circular {
+    animation: none !important;
+}
+
+.el-loading-text {
+    color: rgb(51 65 85) !important;
+    font-size: small !important;
+    font-weight: bold;
+}
+/* 全局loading样式结束 */
