@@ -15,7 +15,8 @@
     "notification": "Notification",
     "scm": "Code Management",
     "pipeline": "Pipeline",
-    "package": "Package Management"
+    "package": "Package Management",
+    "host": "Host Management"
   },
   "tips": "Tips",
   "close": "Close",

@@ -15,7 +15,8 @@
     "notification": "通知设置",
     "scm": "代码管理",
     "pipeline": "流水线",
-    "package": "制品仓库"
+    "package": "制品仓库",
+    "host": "主机管理"
   },
   "tips": "提示",
   "close": "关闭",

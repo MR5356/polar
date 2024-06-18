@@ -20,6 +20,16 @@ const router = createRouter({
           component: () => import('@/views/dashboard/DashboardView.vue')
         },
         {
+          path: '/host',
+          name: 'host',
+          component: () => import('@/views/host/HostIndexView.vue')
+        },
+        {
+          path: '/terminal/:id',
+          name: 'terminal',
+          component: () => import('@/views/host/TerminalView.vue')
+        },
+        {
           path: '/setting',
           name: 'setting',
           component: HomeView
