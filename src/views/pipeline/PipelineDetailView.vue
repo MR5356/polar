@@ -1,124 +1,66 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import WorkFlowView from '@/views/pipeline/workflow/WorkFlowView.vue'
 import type { ModelConfigWithStatus } from '@/views/pipeline/workflow/WorkFlowView'
+import axios from '@/utils/request'
+import { Pipeline } from '@/views/pipeline/PipelineListView'
+import { useRoute } from 'vue-router'
 
-const data = ref({
-  nodes: [
-    {
-      id: 'node1',
-      label: 'node1',
-      status: 'begin'
-    },
-    {
-      id: 'node2',
-      label: 'node2',
-      status: 'success'
-    },
-    {
-      id: 'node3',
-      label: 'node3',
-      status: 'success'
-    },
-    {
-      id: 'node4',
-      label: 'node4',
-      status: 'success'
-    },
-    {
-      id: 'node5',
-      label: 'node5',
-      status: 'fail'
-    },
-    {
-      id: 'node6',
-      label: 'node6',
-      status: 'running'
-    },
-    {
-      id: 'node7',
-      label: 'node7',
-      status: 'waiting'
-    },
-    {
-      id: 'node8',
-      label: 'node8',
-      status: 'running'
-    },
-    {
-      id: 'node9',
-      label: 'node9',
-      status: 'waiting'
-    },
-    {
-      id: 'node10',
-      label: 'node10',
-      status: 'waiting'
-    }
-  ],
-  edges: [
-    {
-      source: 'node1',
-      target: 'node2',
-      status: 'success'
-    },
-    {
-      source: 'node2',
-      target: 'node3',
-      status: 'success'
-    },
-    {
-      source: 'node2',
-      target: 'node4',
-      status: 'success'
-    },
-    {
-      source: 'node2',
-      target: 'node5',
-      status: 'fail'
-    },
-    {
-      source: 'node2',
-      target: 'node6',
-      status: 'success'
-    },
-    {
-      source: 'node5',
-      target: 'node7',
-      status: 'waiting'
-    },
-    {
-      source: 'node4',
-      target: 'node7',
-      status: 'waiting'
-    },
-    {
-      source: 'node3',
-      target: 'node8',
-      status: 'waiting'
-    },
-    {
-      source: 'node6',
-      target: 'node7',
-      status: 'waiting'
-    },
-    {
-      source: 'node7',
-      target: 'node9',
-      status: 'waiting'
-    },
-    {
-      source: 'node8',
-      target: 'node9',
-      status: 'waiting'
-    },
-    {
-      source: 'node9',
-      target: 'node10',
-      status: 'waiting'
-    }
-  ]
+const route = useRoute()
+const interval = ref()
+
+onMounted(() => {
+  interval.value = setInterval(detail, 500)
 })
+
+onBeforeUnmount(() => {
+  clearInterval(interval.value)
+})
+
+const data = ref<Pipeline.PipelineItem>({
+  id: '',
+  title: '',
+  owner: '',
+  createdAt: '',
+  updatedAt: '',
+  nodes: [],
+  edges: []
+})
+const rawData = ref<Pipeline.PipelineItem>({
+  id: '',
+  title: '',
+  owner: '',
+  createdAt: '',
+  updatedAt: '',
+  nodes: [],
+  edges: []
+})
+
+const detail = async () => {
+  await Pipeline.getPipeline(route.params.id as string).then((res) => {
+    if (JSON.stringify(rawData.value) != JSON.stringify(res)) {
+      rawData.value = res
+      data.value = JSON.parse(JSON.stringify(res))
+    }
+  }).catch(() => {
+    clearInterval(interval.value)
+  })
+  // data.value =  await  axios.get('')
+}
+
+const start = async () => {
+  await axios.get('/start')
+}
+
+const reset = async () => {
+  await axios.get('/reset')
+}
+
+const cancel = async () => {
+  await axios.get('/cancel')
+}
+
+detail()
 
 const test = (v: ModelConfigWithStatus) => {
   console.log(v)
@@ -126,8 +68,13 @@ const test = (v: ModelConfigWithStatus) => {
 </script>
 
 <template>
-  <div class="w-2/3 h-[500px] bg-white p-2 rounded-lg">
-    <WorkFlowView v-model:data="data" :on-click-node="test" />
+  <div class="w-full h-[500px] bg-white p-2 rounded-lg">
+    <WorkFlowView :data="data" :on-click-node="test" />
+  </div>
+  <div class="p-4 float-right">
+    <el-button type="primary" @click="start">开始</el-button>
+    <el-button type="primary" @click="cancel">终止</el-button>
+    <el-button type="primary" @click="reset">重置</el-button>
   </div>
 </template>
 

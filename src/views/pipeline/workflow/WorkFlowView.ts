@@ -1,7 +1,5 @@
 // replace object assign
-import type { Graph, IGroup, IShape, ModelConfig } from '@antv/g6'
-import { transform } from '@antv/matrix-util/lib/ext'
-
+import type { ModelConfig } from '@antv/g6'
 
 export const _extends = Object.assign || function(target: any, ...sources: any[]) {
   for (const source of sources) {
@@ -20,8 +18,25 @@ export enum colors {
   success = '#64BB87',
   running = '#E5E5E5',
   waiting = '#aaacb9',
+  ready = '#D7E9DC',
   fail = '#CF2227',
+  aborted = '#EBDDDE',
   hover = '#9BC5F0'
+}
+
+export interface Node {
+  id: string
+  label: string
+  status: string
+}
+export interface Edge {
+  source: string
+  target: string
+  status: string
+}
+export interface WorkflowData {
+  nodes: Node[]
+  edges: Edge[]
 }
 
 export const nodeShapeExtraAttrs = {
@@ -37,14 +52,23 @@ export const nodeShapeExtraAttrs = {
     stroke: colors.success,
     fill: colors.success
   },
+  hover: {
+    fill: colors.hover
+  },
   running: {
     fill: colors.running
   },
-  waiting: {
-    fill: colors.waiting
+  pending: {
+    fill: colors.running
   },
-  fail: {
+  ready: {
+    fill: colors.running
+  },
+  failure: {
     fill: colors.fail
+  },
+  aborted: {
+    fill: colors.aborted
   }
 }
 
@@ -59,13 +83,21 @@ export const nodeEdgeExtraAttrs = {
     stroke: colors.success,
   },
   running: {
+    stroke: colors.success,
+    lineDash: [16, 4]
+  },
+  pending: {
     stroke: colors.running,
   },
-  waiting: {
-    stroke: colors.waiting,
+  ready: {
+    stroke: colors.ready,
+    lineDash: [16, 4]
   },
-  fail: {
+  failure: {
     stroke: colors.fail,
+  },
+  aborted: {
+    stroke: colors.aborted,
   }
 }
 
@@ -81,11 +113,17 @@ export const nodeTextExtraAttrs = {
   success: {
     text: "✓"
   },
-  waiting: {
+  pending: {
     text: ''
   },
-  fail: {
+  ready: {
+    text: ''
+  },
+  failure: {
     text: "×"
+  },
+  aborted: {
+    text: "-"
   }
 }
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, h, type PropType } from 'vue'
+import { onMounted, ref, h, type PropType, WatchEffect, watchEffect, watch } from 'vue'
 import { AutoFocus, Aiming, Clear } from '@icon-park/vue-next'
 import G6 from '@antv/g6'
 import {
@@ -7,15 +7,19 @@ import {
   colors,
   type ModelConfigWithStatus, nodeEdgeExtraAttrs,
   nodeShapeExtraAttrs,
-  nodeTextExtraAttrs
+  nodeTextExtraAttrs, type WorkflowData
 } from '@/views/pipeline/workflow/WorkFlowView'
 import { transform } from '@antv/matrix-util/lib/ext'
 
 const mountNode = ref()
 let graph = null
-const data = defineModel('data', { type: Object, required: true })
+// const data = defineModel('data', { type: Object as PropType<WorkflowData>, required: true })
 
 const props = defineProps({
+  data: {
+    type: Object as PropType<WorkflowData>,
+    required: true
+  },
   onClickNode: {
     type: Function as PropType<((item: ModelConfigWithStatus) => void)>,
     required: true
@@ -35,7 +39,8 @@ G6.registerNode('node', {
         fill: 'transparent',
         cursor: 'pointer',
         fillOpacity: 1
-      }, nodeShapeExtraAttrs[cfg.status])
+      }, nodeShapeExtraAttrs[cfg.status]),
+      name: 'node-shape'
     })
 
     if (cfg.status === 'running') {
@@ -69,6 +74,21 @@ G6.registerNode('node', {
           easing: 'easeLinear'
         }
       )
+    } else if (cfg.status === 'ready') {
+      const loading = group.addShape('circle', {
+        attrs: {
+          cx: 0,
+          cy: 0,
+          r: 8,
+          fill: 'transparent',
+          stroke: '#31B2754D',
+          cursor: 'pointer',
+          lineWidth: 3,
+          lineDash: [8, 2]
+        },
+        name: 'loading-animation',
+        draggable: true
+      })
     } else {
       group.addShape('text', {
         attrs: _extends({
@@ -96,28 +116,84 @@ G6.registerNode('node', {
         text: cfg.label,
         fill: '#5B6880',
         fontWeight: 'bold',
-        fontSize: 12
+        fontSize: 10
       }, {}),
-      name: 'text-shape',
+      name: 'label-shape',
       draggable: true
     })
     return shape
   },
+  update: function update(cfg: ModelConfigWithStatus, item) {
+    const group = item.getContainer()
+    group.get('children').forEach(child => {
+      switch (child.cfg.name) {
+        case 'node-shape':
+          child.attr(_extends({
+            x: -14,
+            y: -14,
+            width: 28,
+            height: 28,
+            radius: 14,
+            fill: 'transparent',
+            cursor: 'pointer',
+            fillOpacity: 1
+          }, nodeShapeExtraAttrs[cfg.status]))
+          break
+        case 'text-shape':
+          child.attr(_extends({
+            x: 0,
+            y: 0,
+            textAlign: 'center',
+            textBaseline: 'middle',
+            cursor: 'pointer',
+            text: cfg.label,
+            fill: 'white',
+            fontWeight: 'bold',
+            fontSize: 16
+          }, nodeTextExtraAttrs[cfg.status]))
+          break
+        case 'loading-animation':
+          child.attr({
+            cx: 0,
+            cy: 0,
+            r: 8,
+            fill: 'transparent',
+            stroke: '#31B275',
+            cursor: 'pointer',
+            lineWidth: 3,
+            lineDash: [8, 2]
+          })
+          break
+        case 'label-shape':
+          child.attr(_extends({
+            x: 0,
+            y: -24,
+            textAlign: 'center',
+            textBaseline: 'middle',
+            text: cfg.label,
+            fill: '#5B6880',
+            fontWeight: 'bold',
+            fontSize: 10
+          }, {}))
+      }
+    })
+  },
+
   // 设置状态
   setState: function setState(name, value, item) {
     const group = item.getContainer()
     const shape = group.get('children')[0]
     if (name === 'hover' && !item.getStates().includes('click')) {
       if (value) {
-        shape.attr('fill', item?._cfg.originStyle?.fill + '99')
+        shape.attr('fill', nodeShapeExtraAttrs[item?.getModel()?.status as string].fill + '99')
       } else {
-        shape.attr('fill', item?._cfg.originStyle?.fill || 'transparent')
+        shape.attr('fill', nodeShapeExtraAttrs[item?.getModel()?.status as string].fill)
       }
     } else if (name === 'click') {
       if (value) {
         shape.attr('fill', colors.hover)
       } else {
-        shape.attr('fill', item?._cfg.originStyle?.fill || 'transparent')
+        shape.attr('fill', nodeShapeExtraAttrs[item?.getModel()?.status as string].fill)
       }
     }
   },
@@ -150,6 +226,7 @@ G6.registerEdge('edge', {
         stroke: '#5B8FF9',
         strokeOffset: 5,
         lineWidth: 4,
+        lineDash: [10, 0],
         endArrow: {
           path: 'M 0,0 L 10,-5 L 10,5 Z'
         }
@@ -158,6 +235,64 @@ G6.registerEdge('edge', {
     })
   }
 })
+
+// 保存节点状态的函数
+function saveNodeStates(graph) {
+  const nodeStates = {}
+  graph.getNodes().forEach((node) => {
+    const id = node.getID()
+    const states = node.getStates()
+    nodeStates[id] = states
+  })
+  return nodeStates
+}
+
+// 恢复节点状态的函数
+function restoreNodeStates(graph, nodeStates) {
+  graph.getNodes().forEach((node) => {
+    const id = node.getID()
+    const states = nodeStates[id] || []
+    states.forEach((state) => {
+      graph.setItemState(node, state, true)
+    })
+  })
+}
+
+function saveNodeStatesAndStyles(graph) {
+  const nodeStatesAndStyles = {}
+  graph.getNodes().forEach((node) => {
+    const id = node.getID()
+    const states = node.getStates()
+    const model = node.getModel()
+    nodeStatesAndStyles[id] = {
+      states: states,
+      style: {
+        fill: model.style?.fill,
+        stroke: model.style?.stroke
+        // 保存其他需要的样式属性
+      }
+    }
+  })
+  return nodeStatesAndStyles
+}
+
+function restoreNodeStatesAndStyles(graph, nodeStatesAndStyles) {
+  graph.getNodes().forEach((node) => {
+    const id = node.getID()
+    const savedData = nodeStatesAndStyles[id]
+    if (savedData) {
+      // 恢复状态
+      savedData.states.forEach((state) => {
+        graph.setItemState(node, state, true)
+      })
+
+      // 恢复样式
+      graph.updateItem(node, {
+        style: savedData.style
+      })
+    }
+  })
+}
 
 onMounted(async () => {
   const minimap = new G6.Minimap({
@@ -171,7 +306,7 @@ onMounted(async () => {
     height: mountNode.value.height,
     width: mountNode.value.width,
     plugins: [minimap],
-    fitView: true,
+    // fitView: true,
     fitCenter: true,
     layout: {
       type: 'dagre',
@@ -202,8 +337,21 @@ onMounted(async () => {
     }
   })
 
-  graph.data(data.value)
+  graph.data(props.data)
   graph.render()
+  // graph.zoomTo(1, { x: 0, y: 0 })
+
+  // watch(data, (next, prev) => {
+  //   console.log(next)
+  //   console.log(prev)
+  //   graph.changeData(next)
+  // }, { deep: true })
+  watchEffect(() => {
+    const nodeStates = saveNodeStates(graph) // 保存当前节点状态
+    graph.changeData(props.data) // 更新数据
+    restoreNodeStates(graph, nodeStates) // 恢复节点状态
+    // graph.fitCenter()
+  })
 
   graph.on('node:mouseenter', function(evt: any) {
     const node = evt.item

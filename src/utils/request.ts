@@ -75,7 +75,7 @@ class RequestHttp {
           ElMessage.error(data.message)
           return Promise.reject(data)
         }
-        return data.data;
+        return data.code ? data.data : data;
       },
       (error: AxiosError) => {
         const {response} = error;

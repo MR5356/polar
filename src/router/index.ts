@@ -39,7 +39,17 @@ const router = createRouter({
           name: 'pipeline',
           children: [
             {
-              path: 'detail',
+              path: '',
+              name: 'pipelineList',
+              component: () => import('@/views/pipeline/PipelineListView.vue')
+            },
+            {
+              path: 'new',
+              name: 'pipelineNew',
+              component: () => import('@/views/pipeline/PipelineNewView.vue')
+            },
+            {
+              path: ':id',
               name: 'pipelineDetail',
               component: () => import('@/views/pipeline/PipelineDetailView.vue')
             }

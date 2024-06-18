@@ -71,6 +71,13 @@
       "fitView": "适应视图大小",
       "fitCenter": "移到视图中心",
       "clearClickState": "清除选中状态"
+    },
+    "table": {
+      "title": "名称",
+      "owner": "拥有者",
+      "createdAt": "创建时间",
+      "updatedAt": "更新时间",
+      "preview": "预览"
     }
   }
 }

@@ -71,6 +71,13 @@
       "fitView": "Fit View Size",
       "fitCenter": "Fit Center",
       "clearClickState": "Clear Click State"
+    },
+    "table": {
+      "title": "Title",
+      "owner": "Owner",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "preview": "Preview"
     }
   }
 }
