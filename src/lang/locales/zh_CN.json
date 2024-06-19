@@ -26,6 +26,7 @@
   "cancel": "取消",
   "confirmLogout": "确定退出登录吗?",
   "confirmDelete": "确定删除吗?",
+  "confirmDeleteGroup": "确定删除该组吗？该组及其下级组将被删除。",
   "unknown": "未知",
   "schedule": {
     "id": "ID",

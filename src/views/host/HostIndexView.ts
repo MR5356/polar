@@ -53,6 +53,10 @@ export namespace Host {
     return axios.post('/host/group/add', { title })
   }
 
+  export const deleteHostGroup = function(id: string): Promise<void> {
+    return axios.delete('/host/group/' + id)
+  }
+
   export const addHost = function(host: HostItem): Promise<void> {
     return axios.post('/host/add', host)
   }

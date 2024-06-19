@@ -8,9 +8,11 @@ import { Unicode11Addon } from 'xterm-addon-unicode11'
 import { WebLinksAddon } from 'xterm-addon-web-links'
 import { ElLoading, ElNotification } from 'element-plus'
 import { onMounted, onUnmounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 let terminalRef = ref(null)
 const loading = ref(true)
+const router = useRouter()
 
 const props = defineProps({
   uri: String
@@ -96,6 +98,7 @@ const initSocket = () => {
   }
 
   ws.onclose = () => {
+    router.go(-1)
     if (term) {
       term.dispose()
     }

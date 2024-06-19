@@ -80,6 +80,17 @@ async function onDeleteMachine(id: string) {
   })
 }
 
+async function onDeleteHostGroup(id: string) {
+  ElMessageBox.confirm(t('confirmDeleteGroup'), t('tips'), {
+    confirmButtonText: t('confirm'),
+    cancelButtonText: t('cancel'),
+    type: 'warning'
+  }).then(async() => {
+    await withLoading(Host.deleteHostGroup, '删除中', id)
+    await init()
+  })
+}
+
 const openTerminal = (host: Host.HostItem) => {
   router.push(`/terminal/${host.id}`)
   // let terminal = router.resolve({ path: '/terminal/' + host.id })
@@ -107,7 +118,27 @@ const openTerminal = (host: Host.HostItem) => {
   </div>
   <div class="p-8 flex flex-col gap-8">
     <div v-for="group in hostGroupsList" :key="group.id">
-      <div class="text-sm font-bold capitalize mb-3">{{ group.title }}</div>
+      <el-popover :width="88" trigger="contextmenu" placement="right-start" class="p-0">
+        <template #reference>
+          <div class="w-fit text-sm font-bold capitalize mb-3 select-none" v-if="group.hosts.length > 0">{{ group.title }}</div>
+        </template>
+        <template #default>
+          <div class="flex flex-col gap-0 text-sm">
+<!--            <div-->
+<!--              class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"-->
+<!--              @click="onClickEditMachine(host)"-->
+<!--            >-->
+<!--              编辑-->
+<!--            </div>-->
+            <div
+              class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
+              @click="onDeleteHostGroup(group.id)"
+            >
+              删除
+            </div>
+          </div>
+        </template>
+      </el-popover>
       <div class="grid grid-cols-4 gap-4">
         <div class="bg-white dark:bg-opacity-30 p-2 rounded-xl" v-for="host in group.hosts" :key="host.id">
           <div class="flex items-center justify-between">
