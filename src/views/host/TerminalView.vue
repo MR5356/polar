@@ -2,7 +2,7 @@
 import { onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
 import Terminal from '@/components/TerminalView.vue'
-import { Newlybuild } from '@icon-park/vue-next'
+import { Copy } from '@icon-park/vue-next'
 
 const route = useRoute()
 
@@ -22,7 +22,7 @@ const openNew = () => {
       @click="openNew"
       title="复制终端"
     >
-      <Newlybuild class="w-full h-full" theme="two-tone" size="22" :fill="['#333', '#6abaf3']" />
+      <Copy class="w-full h-full" theme="two-tone" size="20" :fill="['#333', '#6abaf3']" />
     </div>
     <Terminal class="w-full h-full" :uri="'/api/v1/host/terminal/' + route.params.id" />
   </div>

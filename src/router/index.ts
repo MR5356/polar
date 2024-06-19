@@ -27,6 +27,9 @@ const router = createRouter({
         {
           path: '/terminal/:id',
           name: 'terminal',
+          meta: {
+            keepAlive: true
+          },
           component: () => import('@/views/host/TerminalView.vue')
         },
         {

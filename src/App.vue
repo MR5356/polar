@@ -24,8 +24,13 @@ setLanguage()
 <template>
   <div>
     <router-view v-slot="{ Component }">
+      <keep-alive :max="10">
+        <transition name="slide-fade" :appear="true">
+          <component :is="Component" v-if="$route.meta.keepAlive" />
+        </transition>
+      </keep-alive>
       <transition name="slide-fade" :appear="true">
-        <component :is="Component" />
+        <component :is="Component" v-if="!$route.meta.keepAlive" />
       </transition>
     </router-view>
   </div>

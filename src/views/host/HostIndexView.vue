@@ -24,10 +24,10 @@ async function init() {
 init()
 
 async function onClickEditMachine(host: Host.HostItem) {
-  // isEdit.value = true
-  // newMachine.value = JSON.parse(JSON.stringify(host))
-  // newMachine.value.hostInfo.password = ''
-  // showAddMachine.value = true
+  isEdit.value = true
+  newHost.value = JSON.parse(JSON.stringify(host))
+  newHost.value.hostInfo.password = ''
+  showAddMachine.value = true
 }
 
 async function onClickAddMachine() {
