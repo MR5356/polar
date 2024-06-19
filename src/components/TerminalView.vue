@@ -6,10 +6,11 @@ import { FitAddon } from 'xterm-addon-fit'
 import { SerializeAddon } from 'xterm-addon-serialize'
 import { Unicode11Addon } from 'xterm-addon-unicode11'
 import { WebLinksAddon } from 'xterm-addon-web-links'
-import { ElNotification } from 'element-plus'
+import { ElLoading, ElNotification } from 'element-plus'
 import { onMounted, onUnmounted, ref } from 'vue'
 
 let terminalRef = ref(null)
+const loading = ref(true)
 
 const props = defineProps({
   uri: String
@@ -23,7 +24,7 @@ const term = new Terminal({
   convertEol: true,
   cursorWidth: 2,
   fontFamily:
-    "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+    'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \'Liberation Mono\', \'Courier New\', monospace',
   fullscreenWin: true,
   maximizeWin: true,
   screenReaderMode: true,
@@ -83,7 +84,7 @@ const initSocket = () => {
       term.clearSelection()
       e.stop()
     } else {
-      ;() => {
+      () => {
         ws.send(e.key)
       }
     }
@@ -91,6 +92,7 @@ const initSocket = () => {
 
   ws.onopen = () => {
     initTerm()
+    loading.value = false
   }
 
   ws.onclose = () => {
@@ -138,7 +140,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="h-full w-full bg-black" ref="terminalRef"></div>
+  <div v-loading="loading" class="h-full w-full bg-black" ref="terminalRef"></div>
 </template>
 
 <style>

@@ -18,6 +18,7 @@
     "package": "制品仓库",
     "host": "主机管理"
   },
+  "loading": "加载中...",
   "tips": "提示",
   "close": "关闭",
   "confirm": "确定",
@@ -80,5 +81,8 @@
       "updatedAt": "更新时间",
       "preview": "预览"
     }
+  },
+  "host": {
+    "new": "新增主机"
   }
 }

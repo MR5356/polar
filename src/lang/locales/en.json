@@ -18,6 +18,7 @@
     "package": "Package Management",
     "host": "Host Management"
   },
+  "loading": "Loading...",
   "tips": "Tips",
   "close": "Close",
   "confirm": "Confirm",
@@ -80,5 +81,8 @@
       "updatedAt": "Updated At",
       "preview": "Preview"
     }
+  },
+  "host": {
+    "new": "New Host"
   }
 }
