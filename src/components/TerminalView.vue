@@ -6,13 +6,15 @@ import { FitAddon } from 'xterm-addon-fit'
 import { SerializeAddon } from 'xterm-addon-serialize'
 import { Unicode11Addon } from 'xterm-addon-unicode11'
 import { WebLinksAddon } from 'xterm-addon-web-links'
-import { ElLoading, ElNotification } from 'element-plus'
+import { ElNotification } from 'element-plus'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 let terminalRef = ref(null)
 const loading = ref(true)
 const router = useRouter()
+
+const actively = ref(false)
 
 const props = defineProps({
   uri: String
@@ -61,7 +63,7 @@ const initTerm = () => {
   term.loadAddon(webLinksAddon)
   term.open(terminalRef.value)
   term.focus()
-  term.write('连接中...\n')
+  // term.write('连接中...\n')
   fitAddon.fit()
   resizeTerm()
 }
@@ -98,7 +100,9 @@ const initSocket = () => {
   }
 
   ws.onclose = () => {
-    router.go(-1)
+    if (!actively.value) {
+      router.go(-1)
+    }
     if (term) {
       term.dispose()
     }
@@ -134,6 +138,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
+  actively.value = true
   if (ws) {
     ws.close()
   }
@@ -143,7 +148,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div v-loading="loading" class="h-full w-full bg-black" ref="terminalRef"></div>
+  <div v-loading="loading" :element-loading-text="$t('loading')" class="h-full w-full bg-black" ref="terminalRef"></div>
 </template>
 
 <style>
