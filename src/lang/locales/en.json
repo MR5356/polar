@@ -16,7 +16,8 @@
     "scm": "Code Management",
     "pipeline": "Pipeline",
     "package": "Package Management",
-    "host": "Host Management"
+    "host": "Host Management",
+    "health": "Health Check"
   },
   "loading": "Loading...",
   "tips": "Tips",
@@ -85,5 +86,9 @@
   },
   "host": {
     "new": "New Host"
+  },
+  "health": {
+    "new": "New Host",
+    "edit": "Edit Host"
   }
 }

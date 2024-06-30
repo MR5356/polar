@@ -145,11 +145,11 @@ const openTerminal = (host: Host.HostItem) => {
             <div class="flex items-center gap-3">
               <div>
                 <img :src="Host.metaInfos.os[host.metaInfo.os]"
-                     class="w-10 h-10 bg-slate-500 bg-opacity-30 dark:bg-slate-400 rounded-lg p-1" alt="logo">
+                     class="w-10 h-10 min-w-10 min-h-10 bg-slate-500 bg-opacity-30 dark:bg-slate-400 rounded-lg p-1" alt="logo">
               </div>
-              <div class="flex flex-col">
+              <div class="flex flex-col flex-grow">
                 <div class="text-sm">{{ host.title }}</div>
-                <div class="text-xs text-slate-500 dark:text-slate-300">{{ host.desc }}
+                <div class="text-xs text-slate-500 dark:text-slate-300 break-all">{{ host.desc }}
                 </div>
               </div>
             </div>
@@ -231,8 +231,8 @@ const openTerminal = (host: Host.HostItem) => {
     </el-form>
     <template #footer>
       <span>
-        <el-button @click="showAddMachine = false">取消</el-button>
-        <el-button type="primary" @click="onSubmitMachine">提交</el-button>
+        <el-button @click="showAddMachine = false">{{ $t('cancel') }}</el-button>
+        <el-button type="primary" @click="onSubmitMachine">{{ $t('save') }}</el-button>
       </span>
     </template>
   </el-dialog>

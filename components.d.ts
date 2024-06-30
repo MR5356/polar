@@ -45,6 +45,7 @@ declare module 'vue' {
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
+    ElTag: typeof import('element-plus/es')['ElTag']
     GithubIcon: typeof import('./src/components/icons/GithubIcon.vue')['default']
     GitlabIcon: typeof import('./src/components/icons/GitlabIcon.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

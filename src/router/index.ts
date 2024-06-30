@@ -25,6 +25,11 @@ const router = createRouter({
           component: () => import('@/views/host/HostIndexView.vue')
         },
         {
+          path: '/health',
+          name: 'health',
+          component: () => import('@/views/health/HealthIndexView.vue')
+        },
+        {
           path: '/terminal/:id',
           name: 'terminal',
           meta: {
