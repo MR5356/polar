@@ -30,9 +30,29 @@ export namespace Health {
     params: Param[];
   }
 
+  export interface Statistics {
+    total: number;
+    up: number;
+    down: number;
+    unknown: number;
+    error: number;
+    ping: number;
+    ssh: number;
+    http: number;
+    database: number;
+    errorList?: HealthItem[];
+    slowList?: HealthItem[];
+  }
+
   export const STATUS_UP = "up"
   export const STATUS_DOWN = "down"
   export const STATUS_UNKNOWN = "unknown"
+
+  export const WarningRtt = 460
+
+  export const getHealthStatistics = async (): Promise<Statistics> => {
+    return axios.get('/health/statistics')
+  }
 
   export const getHealthList = async (): Promise<HealthItem[]> => {
     return axios.get('/health/list')

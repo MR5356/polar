@@ -2,18 +2,76 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { Health } from '@/views/health/HealthIndexView'
 import withLoading from '@/utils/loading'
-import { ElMessageBox } from 'element-plus'
+import { ElMessageBox, ElNotification } from 'element-plus'
 import { useI18n } from 'vue-i18n'
+import * as echarts from 'echarts/core'
+import { TooltipComponent, LegendComponent } from 'echarts/components'
+import { PieChart } from 'echarts/charts'
+import { LabelLayout } from 'echarts/features'
+import { CanvasRenderer } from 'echarts/renderers'
+import HealthItemView from '@/views/health/HealthItemView.vue'
+
+echarts.use([TooltipComponent, LegendComponent, PieChart, CanvasRenderer, LabelLayout])
+
+function getOption(data: any): any {
+  return {
+    tooltip: {
+      trigger: 'item'
+    },
+    legend: {
+      orient: 'vertical',
+      left: '15%',
+      bottom: 'center',
+      textStyle: {
+        fontSize: 14,
+        fontWeight: 'bold'
+      },
+      formatter: (name: string) => {
+        return `${t('health.' + name)}: ${healthStatistics.value[name] || 0}`
+      }
+    },
+    series: [
+      {
+        name: 'Checker',
+        type: 'pie',
+        radius: ['42%', '66%'],
+        avoidLabelOverlap: false,
+        padAngle: 0,
+        center: ['70%', '50%'],
+        itemStyle: {
+          borderRadius: '10%'
+        },
+        label: {
+          show: false,
+          position: 'center',
+          formatter: '{d}%\n{b}',
+          color: ''
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: 18,
+            fontWeight: 'bold'
+          }
+        },
+        data: data
+      }
+    ]
+  }
+}
 
 const { t } = useI18n()
 
 const healthList = ref<Health.HealthItem[]>([])
+const healthStatistics = ref<Health.Statistics>(null as Health.Statistics)
 const showAddHealth = ref(false)
 const isEdit = ref(false)
 const newHealth = ref<Health.HealthItem>(null as Health.HealthItem)
 const newHealthParams = ref<Health.Param[]>([])
 
 const interval = ref()
+const mainChart = ref()
+const statusChart = ref()
 
 onMounted(() => {
   interval.value = setInterval(init, 1000)
@@ -24,7 +82,42 @@ onBeforeUnmount(() => {
 })
 
 const init = async () => {
-  healthList.value = await Health.getHealthList()
+  await Health.getHealthList().then((res) => {
+    healthList.value = res ?? healthList.value
+  }).catch(() => {
+    ElNotification({
+      title: t('notification.title.error'),
+      dangerouslyUseHTMLString: true,
+      message: '数据加载失败, 请尝试<span class="text-blue-500 underline underline-offset-4 cursor-pointer px-1">刷新页面</span>重新加载',
+      type: 'error',
+      duration: 0,
+      onClick() {
+        history.go(0)
+      }
+    })
+    clearInterval(interval.value)
+  })
+  await Health.getHealthStatistics().then((res => {
+    healthStatistics.value = res
+    if (mainChart.value) {
+      const myChart = echarts.init(mainChart.value)
+      myChart.setOption(getOption([
+        { value: res.ping, name: 'ping' },
+        { value: res.http, name: 'http' },
+        { value: res.ssh, name: 'ssh' },
+        { value: res.database, name: 'database' }
+      ]))
+    }
+    if (statusChart.value) {
+      const myChart = echarts.init(statusChart.value)
+      myChart.setOption(getOption([
+        { value: res.up, name: 'up' },
+        { value: res.down, name: 'down' },
+        { value: res.unknown, name: 'unknown' },
+        { value: res.error, name: 'error' }
+      ]))
+    }
+  }))
 }
 
 const healthCheckTypes = ref<Health.HealthCheckType[]>([])
@@ -69,14 +162,13 @@ async function onSubmitHealth() {
 
 function onHealthTypeChange() {
   newHealthParams.value = healthCheckTypes.value.find((item) => item.type === newHealth.value.type).params
-  console.log(newHealthParams.value)
-  console.log(newHealth.value)
 }
 
 init()
 </script>
 
 <template>
+  <!-- 顶部 -->
   <div class="select-none flex justify-between items-center px-4 py-2 bg-gray-400 bg-opacity-20">
     <div class="flex items-center gap-4">
       <el-button class="uppercase font-bold" @click="onClickAddHealth" type="info" size="small" round>
@@ -86,54 +178,100 @@ init()
     </div>
     <div></div>
   </div>
-  <div class="select-none p-4 grid grid-cols-4 gap-4">
-    <template v-for="health in healthList" :key="health.id">
-      <el-popover :width="88" trigger="contextmenu" placement="bottom-end" class="p-0">
-        <template #reference>
-          <div class="bg-white dark:bg-slate-600 rounded-lg p-4 relative">
-            <div class="absolute right-2 top-2 flex gap-1 items-center">
-        <span class="relative flex h-2.5 w-2.5 items-center justify-center">
-          <span v-if="health.status === Health.STATUS_UP"
-                :class="'animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ' + (health.rtt < 180 ? 'bg-green-500' : 'bg-yellow-500')"></span>
-          <span
-            :class="'relative inline-flex rounded-full h-2.5 w-2.5 ' + (health.status === Health.STATUS_UP ? health.rtt < 180 ? 'bg-green-500' : 'bg-yellow-500' : 'bg-red-500')"></span>
-        </span>
-              <div class="text-[0.6rem] w-8 flex justify-start items-center">
-                <div>{{ health.rtt < 999 ? health.rtt : '999' }}</div>
-                <div>ms</div>
+
+  <!-- 左侧内容 -->
+  <div class="p-4 flex gap-4 select-none">
+    <div class="w-3/4 h-fit grid grid-cols-2 gap-4">
+      <div class="col-span-1 h-[250px] bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">
+        <div class="text-sm font-bold border-green-400 border-l-4 rounded pl-1">检查类型统计</div>
+        <div class="w-full h-full" ref="mainChart"></div>
+      </div>
+      <div class="col-span-1 h-[250px] bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">
+        <div class="text-sm font-bold border-green-400 border-l-4 rounded pl-1">运行状态统计</div>
+        <div class="w-full h-full" ref="statusChart"></div>
+      </div>
+      <div class="col-span-2 grid grid-cols-4 gap-4 bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">
+        <div class="col-span-4 text-sm font-bold border-green-400 border-l-4 rounded pl-1">监控列表</div>
+        <template v-for="health in healthList" :key="health.id">
+          <el-popover :width="88" trigger="contextmenu" placement="bottom-end" class="p-0">
+            <template #reference>
+              <HealthItemView class="" :health="health" />
+            </template>
+            <template #default>
+              <div class="flex flex-col gap-0 text-sm">
+                <!--            <div-->
+                <!--              class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"-->
+                <!--              @click="onClickEditMachine(host)"-->
+                <!--            >-->
+                <!--              编辑-->
+                <!--            </div>-->
+                <div
+                  class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
+                  @click="onDeleteHealth(health.id)"
+                >
+                  删除
+                </div>
               </div>
-            </div>
-            <div class="flex justify-start items-center gap-2">
-              <div>
-                <img :src="Health.getTypeIcon(health.type)"
-                     class="w-10 h-10 min-w-10 min-h-10 bg-slate-500 bg-opacity-30 dark:bg-slate-400 rounded-lg p-1"
-                     alt="logo">
-              </div>
-              <div class="flex flex-col">
-                <div class="text-sm font-bold">{{ health.title }}</div>
-                <div class="text-xs opacity-40">{{ health.desc }}</div>
-              </div>
-            </div>
-          </div>
+            </template>
+          </el-popover>
         </template>
-        <template #default>
-          <div class="flex flex-col gap-0 text-sm">
-            <!--            <div-->
-            <!--              class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"-->
-            <!--              @click="onClickEditMachine(host)"-->
-            <!--            >-->
-            <!--              编辑-->
-            <!--            </div>-->
-            <div
-              class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
-              @click="onDeleteHealth(health.id)"
-            >
-              删除
-            </div>
-          </div>
+      </div>
+    </div>
+    <!-- 右侧栏 -->
+    <div class="w-1/4 grid grid-cols-1 h-fit gap-4">
+      <div class="grid grid-cols-1 gap-4 bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">
+        <div class="text-sm font-bold border-red-400 border-l-4 rounded pl-1">检查出错列表</div>
+        <template v-for="health in healthStatistics?.errorList" :key="health.id">
+          <el-popover :width="88" trigger="contextmenu" placement="bottom-end" class="p-0">
+            <template #reference>
+              <HealthItemView :health="health" />
+            </template>
+            <template #default>
+              <div class="flex flex-col gap-0 text-sm">
+                <!--            <div-->
+                <!--              class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"-->
+                <!--              @click="onClickEditMachine(host)"-->
+                <!--            >-->
+                <!--              编辑-->
+                <!--            </div>-->
+                <div
+                  class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
+                  @click="onDeleteHealth(health.id)"
+                >
+                  删除
+                </div>
+              </div>
+            </template>
+          </el-popover>
         </template>
-      </el-popover>
-    </template>
+      </div>
+      <div class="grid grid-cols-1 gap-4 bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">
+        <div class="text-sm font-bold border-red-400 border-l-4 rounded pl-1">响应缓慢列表</div>
+        <template v-for="health in healthStatistics?.slowList" :key="health.id">
+          <el-popover :width="88" trigger="contextmenu" placement="bottom-end" class="p-0">
+            <template #reference>
+              <HealthItemView :health="health" />
+            </template>
+            <template #default>
+              <div class="flex flex-col gap-0 text-sm">
+                <!--            <div-->
+                <!--              class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"-->
+                <!--              @click="onClickEditMachine(host)"-->
+                <!--            >-->
+                <!--              编辑-->
+                <!--            </div>-->
+                <div
+                  class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
+                  @click="onDeleteHealth(health.id)"
+                >
+                  删除
+                </div>
+              </div>
+            </template>
+          </el-popover>
+        </template>
+      </div>
+    </div>
   </div>
   <el-dialog
     v-model="showAddHealth"
@@ -159,7 +297,7 @@ init()
             <el-option
               v-for="item in healthCheckTypes"
               :key="item.type"
-              :label="item.title"
+              :label="$t('health.' + item.title)"
               :value="item.type"
             />
           </el-select>

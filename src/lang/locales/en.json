@@ -6,6 +6,11 @@
   "signWithGitlab": "Continue with Gitlab",
   "needLogin": "continue with your account",
   "signInNote": "By continuing, you agree to our Terms of Service and Privacy Policy.",
+  "notification": {
+    "title": {
+      "error": "Error"
+    }
+  },
   "navigation": {
     "dashboard": "Dashboard",
     "setting": "Setting",
@@ -89,6 +94,14 @@
   },
   "health": {
     "new": "New Host",
-    "edit": "Edit Host"
+    "edit": "Edit Host",
+    "http": "HTTP",
+    "ssh": "SSH",
+    "ping": "Ping",
+    "database": "Database",
+    "up": "Up",
+    "down": "Down",
+    "unknown": "Unknown",
+    "error": "Error"
   }
 }

@@ -81,6 +81,7 @@ class RequestHttp {
         const {response} = error;
         if (response) {
           this.handleCode(response.status)
+          return Promise.reject(response.data)
         }
         if (!window.navigator.onLine) {
           ElMessage.error('网络连接失败')
