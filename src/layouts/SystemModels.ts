@@ -118,7 +118,7 @@ export namespace SystemModels {
     title: 'Aurora',
     favicon: '/logo.svg',
     logo: '/logo.svg',
-    copyright: 'Copyright © 2024 Aurora.'
+    copyright: 'Copyright © 2024 <a class="underline underline-offset-2" href="https://github.com/MR5356/aurora" target="_blank">Aurora</a>.'
   }
 
   export function setWebsite(website: Website) {
