@@ -10,6 +10,7 @@ import { PieChart } from 'echarts/charts'
 import { LabelLayout } from 'echarts/features'
 import { CanvasRenderer } from 'echarts/renderers'
 import HealthItemView from '@/views/health/HealthItemView.vue'
+import EmptyImage from '@/assets/surfing.svg'
 
 echarts.use([TooltipComponent, LegendComponent, PieChart, CanvasRenderer, LabelLayout])
 
@@ -71,7 +72,9 @@ const newHealthParams = ref<Health.Param[]>([])
 
 const interval = ref()
 const mainChart = ref()
+const mainCharts = ref()
 const statusChart = ref()
+const statusCharts = ref()
 
 onMounted(() => {
   interval.value = setInterval(init, 1000)
@@ -100,8 +103,10 @@ const init = async () => {
   await Health.getHealthStatistics().then((res => {
     healthStatistics.value = res
     if (mainChart.value) {
-      const myChart = echarts.init(mainChart.value)
-      myChart.setOption(getOption([
+      if (!mainCharts.value) {
+        mainCharts.value = echarts.init(mainChart.value)
+      }
+      mainCharts.value.setOption(getOption([
         { value: res.ping, name: 'ping' },
         { value: res.http, name: 'http' },
         { value: res.ssh, name: 'ssh' },
@@ -109,8 +114,10 @@ const init = async () => {
       ]))
     }
     if (statusChart.value) {
-      const myChart = echarts.init(statusChart.value)
-      myChart.setOption(getOption([
+      if (!statusCharts.value) {
+        statusCharts.value = echarts.init(statusChart.value)
+      }
+      statusCharts.value.setOption(getOption([
         { value: res.up, name: 'up' },
         { value: res.down, name: 'down' },
         { value: res.unknown, name: 'unknown' },
@@ -168,108 +175,116 @@ init()
 </script>
 
 <template>
-  <!-- 顶部 -->
-  <div class="select-none flex justify-between items-center px-4 py-2 bg-gray-400 bg-opacity-20">
-    <div class="flex items-center gap-4">
-      <el-button class="uppercase font-bold" @click="onClickAddHealth" type="info" size="small" round>
-        {{ $t('health.new')
-        }}
-      </el-button>
+  <div class="flex flex-col h-[100vh] overflow-hidden">
+    <!-- 顶部 -->
+    <div class="sticky top-0 select-none flex justify-between items-center px-4 py-2 bg-sky-100 dark:bg-slate-700 z-10">
+      <div class="flex items-center gap-4">
+        <el-button class="uppercase font-bold" @click="onClickAddHealth" type="info" size="small" round>
+          {{ $t('health.new')
+          }}
+        </el-button>
+      </div>
+      <div></div>
     </div>
-    <div></div>
-  </div>
 
-  <!-- 左侧内容 -->
-  <div class="p-4 flex gap-4 select-none">
-    <div class="w-3/4 h-fit grid grid-cols-2 gap-4">
-      <div class="col-span-1 h-[250px] bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">
-        <div class="text-sm font-bold border-green-400 border-l-4 rounded pl-1">检查类型统计</div>
-        <div class="w-full h-full" ref="mainChart"></div>
-      </div>
-      <div class="col-span-1 h-[250px] bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">
-        <div class="text-sm font-bold border-green-400 border-l-4 rounded pl-1">运行状态统计</div>
-        <div class="w-full h-full" ref="statusChart"></div>
-      </div>
-      <div class="col-span-2 grid grid-cols-4 gap-4 bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">
-        <div class="col-span-4 text-sm font-bold border-green-400 border-l-4 rounded pl-1">监控列表</div>
-        <template v-for="health in healthList" :key="health.id">
-          <el-popover :width="88" trigger="contextmenu" placement="bottom-end" class="p-0">
-            <template #reference>
-              <HealthItemView class="" :health="health" />
-            </template>
-            <template #default>
-              <div class="flex flex-col gap-0 text-sm">
-                <!--            <div-->
-                <!--              class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"-->
-                <!--              @click="onClickEditMachine(host)"-->
-                <!--            >-->
-                <!--              编辑-->
-                <!--            </div>-->
-                <div
-                  class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
-                  @click="onDeleteHealth(health.id)"
-                >
-                  删除
+    <div class="p-4 flex gap-4 select-none h-[96%]">
+      <!-- 左侧内容 -->
+      <div class="w-3/4 h-fit grid grid-cols-2 gap-4">
+        <div class="col-span-1 h-[250px] bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">
+          <div class="text-sm font-bold border-green-400 border-l-4 rounded pl-1">检查类型统计</div>
+          <div class="w-full h-full" ref="mainChart"></div>
+        </div>
+        <div class="col-span-1 h-[250px] bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">
+          <div class="text-sm font-bold border-green-400 border-l-4 rounded pl-1">运行状态统计</div>
+          <div class="w-full h-full" ref="statusChart"></div>
+        </div>
+        <div class="col-span-2 grid grid-cols-4 gap-4 bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">
+          <div class="col-span-4 text-sm font-bold border-green-400 border-l-4 rounded pl-1">监控列表</div>
+          <template v-for="health in healthList" :key="health.id">
+            <el-popover :width="88" trigger="contextmenu" placement="bottom-end" class="p-0">
+              <template #reference>
+                <HealthItemView class="" :health="health" />
+              </template>
+              <template #default>
+                <div class="flex flex-col gap-0 text-sm">
+                  <!--            <div-->
+                  <!--              class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"-->
+                  <!--              @click="onClickEditMachine(host)"-->
+                  <!--            >-->
+                  <!--              编辑-->
+                  <!--            </div>-->
+                  <div
+                    class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
+                    @click="onDeleteHealth(health.id)"
+                  >
+                    删除
+                  </div>
                 </div>
-              </div>
-            </template>
-          </el-popover>
-        </template>
+              </template>
+            </el-popover>
+          </template>
+        </div>
       </div>
-    </div>
-    <!-- 右侧栏 -->
-    <div class="w-1/4 grid grid-cols-1 h-fit gap-4">
-      <div class="grid grid-cols-1 gap-4 bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">
-        <div class="text-sm font-bold border-red-400 border-l-4 rounded pl-1">检查出错列表</div>
-        <template v-for="health in healthStatistics?.errorList" :key="health.id">
-          <el-popover :width="88" trigger="contextmenu" placement="bottom-end" class="p-0">
-            <template #reference>
-              <HealthItemView :health="health" />
-            </template>
-            <template #default>
-              <div class="flex flex-col gap-0 text-sm">
-                <!--            <div-->
-                <!--              class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"-->
-                <!--              @click="onClickEditMachine(host)"-->
-                <!--            >-->
-                <!--              编辑-->
-                <!--            </div>-->
-                <div
-                  class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
-                  @click="onDeleteHealth(health.id)"
-                >
-                  删除
+      <!-- 右侧栏 -->
+      <div class="w-1/4 flex flex-col gap-4 overflow-y-auto">
+        <div class="flex flex-col gap-4 bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">
+          <div class="text-sm font-bold border-red-400 border-l-4 rounded pl-1">检查出错列表</div>
+          <div v-if="!healthStatistics?.errorList || !healthStatistics?.errorList.length">
+            <el-empty :description="$t('health.noError')" :image="EmptyImage" />
+          </div>
+          <template v-for="health in healthStatistics?.errorList" :key="health.id">
+            <el-popover :width="88" trigger="contextmenu" placement="bottom-end" class="p-0">
+              <template #reference>
+                <HealthItemView :health="health" />
+              </template>
+              <template #default>
+                <div class="flex flex-col gap-0 text-sm">
+                  <!--            <div-->
+                  <!--              class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"-->
+                  <!--              @click="onClickEditMachine(host)"-->
+                  <!--            >-->
+                  <!--              编辑-->
+                  <!--            </div>-->
+                  <div
+                    class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
+                    @click="onDeleteHealth(health.id)"
+                  >
+                    删除
+                  </div>
                 </div>
-              </div>
-            </template>
-          </el-popover>
-        </template>
-      </div>
-      <div class="grid grid-cols-1 gap-4 bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">
-        <div class="text-sm font-bold border-red-400 border-l-4 rounded pl-1">响应缓慢列表</div>
-        <template v-for="health in healthStatistics?.slowList" :key="health.id">
-          <el-popover :width="88" trigger="contextmenu" placement="bottom-end" class="p-0">
-            <template #reference>
-              <HealthItemView :health="health" />
-            </template>
-            <template #default>
-              <div class="flex flex-col gap-0 text-sm">
-                <!--            <div-->
-                <!--              class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"-->
-                <!--              @click="onClickEditMachine(host)"-->
-                <!--            >-->
-                <!--              编辑-->
-                <!--            </div>-->
-                <div
-                  class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
-                  @click="onDeleteHealth(health.id)"
-                >
-                  删除
+              </template>
+            </el-popover>
+          </template>
+        </div>
+        <div class="grid grid-cols-1 gap-4 bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">
+          <div class="text-sm font-bold border-red-400 border-l-4 rounded pl-1">响应缓慢列表</div>
+          <div v-if="!healthStatistics?.slowList || !healthStatistics?.slowList.length">
+            <el-empty :description="$t('health.noSlow')" :image="EmptyImage" />
+          </div>
+          <template v-for="health in healthStatistics?.slowList" :key="health.id">
+            <el-popover :width="88" trigger="contextmenu" placement="bottom-end" class="p-0">
+              <template #reference>
+                <HealthItemView :health="health" />
+              </template>
+              <template #default>
+                <div class="flex flex-col gap-0 text-sm">
+                  <!--            <div-->
+                  <!--              class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"-->
+                  <!--              @click="onClickEditMachine(host)"-->
+                  <!--            >-->
+                  <!--              编辑-->
+                  <!--            </div>-->
+                  <div
+                    class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
+                    @click="onDeleteHealth(health.id)"
+                  >
+                    删除
+                  </div>
                 </div>
-              </div>
-            </template>
-          </el-popover>
-        </template>
+              </template>
+            </el-popover>
+          </template>
+        </div>
       </div>
     </div>
   </div>
@@ -288,9 +303,9 @@ init()
       <el-form-item label="描述">
         <el-input v-model="newHealth.desc" />
       </el-form-item>
-      <el-form-item label="启用">
-        <el-switch v-model="newHealth.enabled" />
-      </el-form-item>
+<!--      <el-form-item label="启用">-->
+<!--        <el-switch v-model="newHealth.enabled" />-->
+<!--      </el-form-item>-->
       <div class="p-2 pl-4 bg-slate-100 w-full">
         <el-form-item label="类型" required>
           <el-select v-model="newHealth.type" class="w-full" @change="onHealthTypeChange">

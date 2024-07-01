@@ -93,7 +93,7 @@
     "new": "New Host"
   },
   "health": {
-    "new": "New Host",
+    "new": "New Health Check",
     "edit": "Edit Host",
     "http": "HTTP",
     "ssh": "SSH",
@@ -102,6 +102,8 @@
     "up": "Up",
     "down": "Down",
     "unknown": "Unknown",
-    "error": "Error"
+    "error": "Error",
+    "noError": "There is no error",
+    "noSlow": "There is no slow"
   }
 }
