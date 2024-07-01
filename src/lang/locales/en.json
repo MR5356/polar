@@ -6,6 +6,11 @@
   "signWithGitlab": "Continue with Gitlab",
   "needLogin": "continue with your account",
   "signInNote": "By continuing, you agree to our Terms of Service and Privacy Policy.",
+  "notification": {
+    "title": {
+      "error": "Error"
+    }
+  },
   "navigation": {
     "dashboard": "Dashboard",
     "setting": "Setting",
@@ -15,8 +20,11 @@
     "notification": "Notification",
     "scm": "Code Management",
     "pipeline": "Pipeline",
-    "package": "Package Management"
+    "package": "Package Management",
+    "host": "Host Management",
+    "health": "Health Check"
   },
+  "loading": "Loading...",
   "tips": "Tips",
   "close": "Close",
   "confirm": "Confirm",
@@ -24,6 +32,7 @@
   "cancel": "Cancel",
   "confirmLogout": "Are you sure you want to log out?",
   "confirmDelete": "Are you sure you want to delete?",
+  "confirmDeleteGroup": "Are you sure you want to delete this group? All children in this group will be deleted.",
   "unknown": "Unknown",
   "schedule": {
     "id": "ID",
@@ -79,5 +88,22 @@
       "updatedAt": "Updated At",
       "preview": "Preview"
     }
+  },
+  "host": {
+    "new": "New Host"
+  },
+  "health": {
+    "new": "New Health Check",
+    "edit": "Edit Host",
+    "http": "HTTP",
+    "ssh": "SSH",
+    "ping": "Ping",
+    "database": "Database",
+    "up": "Up",
+    "down": "Down",
+    "unknown": "Unknown",
+    "error": "Error",
+    "noError": "There is no error",
+    "noSlow": "There is no slow"
   }
 }

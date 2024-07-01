@@ -7,6 +7,7 @@ import '@/assets/el-dark.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import WrapElLoading from '@/utils/wrapElLoading'
 
 import App from './App.vue'
 import router from './router'
@@ -19,6 +20,7 @@ const app = createApp(App)
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 
+app.use(WrapElLoading)
 app.use(UUID)
 app.use(i18n)
 app.use(pinia)

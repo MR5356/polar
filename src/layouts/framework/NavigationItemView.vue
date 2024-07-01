@@ -53,7 +53,7 @@ const onClickNavigation = (item: SystemModels.Navigation) => {
 <template>
   <ColorView
     @click="onClickNavigation(item)"
-    :custom-class="'transition duration-700 ease-in-out cursor-pointer ' + (currentPath === item.path && (!haveChildren(item)) ? 'bg-pink-100 dark:bg-pink-500 font-bold text-black dark:text-white' : '')">
+    :custom-class="'transition duration-700 ease-in-out cursor-pointer ' + (currentPath === item.path && (!haveChildren(item)) ? 'bg-sky-100 dark:bg-sky-400 dark:bg-opacity-20 font-bold text-black dark:text-white' : '')">
     <div class="flex gap-3 items-center p-1">
       <img :src="getIcon(item)" v-if="!isChildren" alt="icon" class="w-4 h-4" />
       <div>

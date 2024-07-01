@@ -20,6 +20,24 @@ const router = createRouter({
           component: () => import('@/views/dashboard/DashboardView.vue')
         },
         {
+          path: '/host',
+          name: 'host',
+          component: () => import('@/views/host/HostIndexView.vue')
+        },
+        {
+          path: '/health',
+          name: 'health',
+          component: () => import('@/views/health/HealthIndexView.vue')
+        },
+        {
+          path: '/terminal/:id',
+          name: 'terminal',
+          meta: {
+            keepAlive: true
+          },
+          component: () => import('@/views/host/TerminalView.vue')
+        },
+        {
           path: '/setting',
           name: 'setting',
           component: HomeView
