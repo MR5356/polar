@@ -12,7 +12,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="bg-white dark:bg-slate-600 rounded-lg p-4 relative">
+  <div class="cursor-pointer bg-white dark:bg-slate-600 rounded-lg p-4 relative">
     <div class="absolute right-2 top-2 flex gap-1 items-center">
         <span class="relative flex h-2.5 w-2.5 items-center justify-center">
           <span v-if="health.status === Health.STATUS_UP"
