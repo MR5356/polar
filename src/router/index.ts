@@ -30,14 +30,6 @@ const router = createRouter({
           component: () => import('@/views/health/HealthIndexView.vue')
         },
         {
-          path: '/terminal/:id',
-          name: 'terminal',
-          meta: {
-            keepAlive: true
-          },
-          component: () => import('@/views/host/TerminalView.vue')
-        },
-        {
           path: '/setting',
           name: 'setting',
           component: HomeView
@@ -84,6 +76,19 @@ const router = createRouter({
           component: () => import('../views/NotFoundView.vue')
         }
       ]
+    },
+    {
+      path: '/online-terminal',
+      name: 'online-terminal',
+      component: () => import('@/views/terminal/TerminalView.vue'),
+    },
+    {
+      path: '/terminal/:id',
+      name: 'terminal',
+      meta: {
+        keepAlive: true
+      },
+      component: () => import('@/views/host/TerminalView.vue')
     },
     {
       path: '/login',

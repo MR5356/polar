@@ -105,5 +105,14 @@
     "error": "错误",
     "noError": "这里没有错误",
     "noSlow": "响应都很快"
+  },
+  "terminal": {
+    "open": {
+      "newTab": "在新标签页打开",
+      "currentTab": "在当前标签页打开",
+      "newWindow": "在新窗口打开",
+      "right": "在右侧打开",
+      "bottom": "在底部打开"
+    }
   }
 }

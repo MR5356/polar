@@ -105,5 +105,14 @@
     "error": "Error",
     "noError": "There is no error",
     "noSlow": "There is no slow"
+  },
+  "terminal": {
+    "open": {
+      "newTab": "Open in new tab",
+      "currentTab": "Open in current tab",
+      "newWindow": "Open in new window",
+      "right": "Open in right side",
+      "bottom": "Open in bottom"
+    }
   }
 }

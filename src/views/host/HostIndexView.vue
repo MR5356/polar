@@ -85,25 +85,26 @@ async function onDeleteHostGroup(id: string) {
     confirmButtonText: t('confirm'),
     cancelButtonText: t('cancel'),
     type: 'warning'
-  }).then(async() => {
+  }).then(async () => {
     await withLoading(Host.deleteHostGroup, '删除中', id)
     await init()
   })
 }
 
 const openTerminal = (host: Host.HostItem) => {
-  router.push(`/terminal/${host.id}`)
-  // let terminal = router.resolve({ path: '/terminal/' + host.id })
-  //
-  // let win = window.open('', terminal.href)
-  // if (win.location.href === 'about:blank') {
-  //   win = window.open(terminal.href, terminal.href)
-  // } else if (win.location.href === window.location.href) {
-  //   window.name = ''
-  //   win = window.open(terminal.href, terminal.href)
-  // } else {
-  //   win.focus()
-  // }
+  // router.push(`/terminal/${host.id}`)
+  // let terminal = router.resolve({ path: '/online-terminal/' + host.id })
+  let terminal = { href: `/online-terminal?id=${host.id}` }
+
+  let win = window.open('', terminal.href)
+  if (win.location.href === 'about:blank') {
+    win = window.open(terminal.href, terminal.href)
+  } else if (win.location.href === window.location.href) {
+    window.name = ''
+    win = window.open(terminal.href, terminal.href)
+  } else {
+    win.focus()
+  }
 }
 </script>
 
@@ -117,70 +118,78 @@ const openTerminal = (host: Host.HostItem) => {
     <div></div>
   </div>
   <div class="p-8 flex flex-col gap-8">
-    <div v-for="group in hostGroupsList" :key="group.id">
-      <el-popover :width="88" trigger="contextmenu" placement="right-start" class="p-0">
-        <template #reference>
-          <div class="w-fit text-sm font-bold capitalize mb-3 select-none" v-if="group.hosts.length > 0">{{ group.title }}</div>
-        </template>
-        <template #default>
-          <div class="flex flex-col gap-0 text-sm">
-<!--            <div-->
-<!--              class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"-->
-<!--              @click="onClickEditMachine(host)"-->
-<!--            >-->
-<!--              编辑-->
-<!--            </div>-->
-            <div
-              class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
-              @click="onDeleteHostGroup(group.id)"
-            >
-              删除
-            </div>
-          </div>
-        </template>
-      </el-popover>
-      <div class="grid grid-cols-4 gap-4">
-        <div class="bg-white dark:bg-opacity-30 p-2 rounded-xl" v-for="host in group.hosts" :key="host.id">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div>
-                <img :src="Host.metaInfos.os[host.metaInfo.os]"
-                     class="w-10 h-10 min-w-10 min-h-10 bg-slate-500 bg-opacity-30 dark:bg-slate-400 rounded-lg p-1" alt="logo">
+    <template v-for="group in hostGroupsList" :key="group.id">
+      <div v-if="group.hosts.length > 0">
+        <el-popover :width="88" trigger="contextmenu" placement="right-start" class="p-0">
+          <template #reference>
+            <div class="w-fit text-sm font-bold capitalize mb-3 select-none">{{ group.title }}</div>
+          </template>
+          <template #default>
+            <div class="flex flex-col gap-0 text-sm">
+              <!--            <div-->
+              <!--              class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"-->
+              <!--              @click="onClickEditMachine(host)"-->
+              <!--            >-->
+              <!--              编辑-->
+              <!--            </div>-->
+              <div
+                class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
+                @click="onDeleteHostGroup(group.id)"
+              >
+                删除
               </div>
-              <div class="flex flex-col flex-grow">
-                <div class="text-sm">{{ host.title }}</div>
-                <div class="text-xs text-slate-500 dark:text-slate-300 break-all">{{ host.desc }}
+            </div>
+          </template>
+        </el-popover>
+        <div class="grid grid-cols-4 gap-4">
+          <div class="bg-white dark:bg-opacity-30 p-2 rounded-xl" v-for="host in group.hosts" :key="host.id">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div>
+                  <img :src="Host.metaInfos.os[host.metaInfo.os]"
+                       class="w-10 h-10 min-w-10 min-h-10 bg-slate-500 bg-opacity-30 dark:bg-slate-400 rounded-lg p-1"
+                       alt="logo">
+                </div>
+                <div class="flex flex-col flex-grow">
+                  <div class="text-sm">{{ host.title }}</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-300 break-all">{{ host.desc }}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="flex gap-2 items-center opacity-50">
-              <Terminal size="20" title="终端" @click="() => openTerminal(host)" />
-              <el-popover :width="88" trigger="hover" class="p-0">
-                <template #reference>
-                  <MoreOne />
-                </template>
-                <template #default>
-                  <div class="flex flex-col gap-0 text-sm">
-                    <div
-                      class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
-                      @click="onClickEditMachine(host)"
-                    >
-                      编辑
+              <div class="flex gap-2 items-center opacity-50">
+                <el-tooltip
+                  placement="top"
+                  content="在线终端"
+                >
+                  <Terminal size="20" title="终端" @click="() => openTerminal(host)" />
+                </el-tooltip>
+                <el-popover :width="88" trigger="hover" class="p-0">
+                  <template #reference>
+                    <MoreOne />
+                  </template>
+                  <template #default>
+                    <div class="flex flex-col gap-0 text-sm">
+                      <div
+                        class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
+                        @click="onClickEditMachine(host)"
+                      >
+                        编辑
+                      </div>
+                      <div
+                        class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
+                        @click="onDeleteMachine(host.id)"
+                      >
+                        删除
+                      </div>
                     </div>
-                    <div
-                      class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
-                      @click="onDeleteMachine(host.id)"
-                    >
-                      删除
-                    </div>
-                  </div>
-                </template>
-              </el-popover>
+                  </template>
+                </el-popover>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </template>
   </div>
   <el-dialog
     v-model="showAddMachine"
