@@ -1,4 +1,5 @@
 {
+  "welcome": "欢迎使用",
   "language": "语言",
   "search": "搜索",
   "signIn": "登录",
@@ -22,7 +23,9 @@
     "pipeline": "流水线",
     "package": "制品仓库",
     "host": "主机管理",
-    "health": "健康检查"
+    "health": "健康检查",
+    "terminal": "在线终端",
+    "script": "代码片段"
   },
   "loading": "加载中...",
   "tips": "提示",
@@ -68,7 +71,10 @@
   "statistic": {
     "user": "用户数量",
     "schedule": "计划任务",
-    "record": "访问次数"
+    "record": "访问次数",
+    "host": "主机数量",
+    "health": "健康检查",
+    "terminal": "在线终端"
   },
   "404": {
     "message": "明明记得藏财宝的地方就在这片海滩<br />怎么一下子消失得无影无踪<br /><br />还是换个地方继续寻找吧"
@@ -115,6 +121,7 @@
       "bottom": "在底部打开",
       "noTerminal": "选择一个终端来打开，或者输入连接信息",
       "connect": "连接"
-    }
+    },
+    "info": "开始终端"
   }
 }

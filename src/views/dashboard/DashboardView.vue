@@ -5,6 +5,7 @@ import { LinkThree } from '@icon-park/vue-next'
 import NumberAnimation from 'vue-number-animation'
 import numeral from 'numeral'
 import moment from 'moment'
+import EmptyImage from '@/assets/coding.svg'
 
 const statistics = ref<Dashboard.StatisticItem[]>([])
 
@@ -30,12 +31,12 @@ init()
 </script>
 
 <template>
-  <div class="bg-white bg-opacity-0 backdrop-blur-lg absolute inset-0 p-8">
+  <div class="bg-white bg-opacity-0 backdrop-blur-lg absolute inset-0 p-4">
     <div class="flex flex-col gap-4">
       <!-- header -->
       <div class="flex items-center justify-between">
         <div class="flex flex-col gap-2">
-          <div class="text-3xl font-medium text-slate-700 dark:text-red-200">{{ $t('navigation.dashboard') }}</div>
+          <div class="text-3xl font-medium text-slate-700 dark:text-slate-200">{{ $t('navigation.dashboard') }}</div>
           <div class="text-xs text-gray-500"
                v-html="moment().format('[<span class=\'text-green-500 dark:text-green-400 font-bold pr-2\'>]ddd[.</span>] YYYY-MM-DD')"></div>
         </div>
@@ -43,36 +44,42 @@ init()
 
       <!-- Welcome -->
 
-      <!-- statistics -->
-      <div class="grid grid-cols-3 gap-8">
-        <div v-for="item in statistics" :key="item.name"
-             class="flex items-center gap-4 bg-white dark:bg-slate-900 rounded-2xl p-4 relative">
-          <div v-if="item.path" class="absolute right-4 top-4 cursor-pointer">
+      <div class="flex gap-4">
+        <!-- statistics -->
+        <div class="w-3/4 grid grid-cols-3 gap-4 select-none h-fit">
+          <template v-for="item in statistics" :key="item.name">
             <router-link :to="item.path">
-              <link-three theme="outline" size="18" fill="rgb(148 163 184)" />
+              <div class="flex items-center gap-4 bg-white dark:bg-slate-900 rounded-2xl p-2 relative">
+                <link-three class="absolute top-2 right-2" v-if="item.path" theme="outline" size="18"
+                            fill="rgb(148 163 184)" />
+                <div class="w-20 h-20">
+                  <img :src="Dashboard.getIcon(item.icon)" alt="" />
+                </div>
+                <div class="flex flex-col gap-2">
+                  <div class="text-3xl font-medium text-blue-500 dark:text-slate-200">
+                    <NumberAnimation
+                      v-if="isNumber(item.count)"
+                      :from="0"
+                      :to="Number(item.count)"
+                      :duration="1"
+                      :delay="0"
+                      :format="theFormat"
+                      autoplay
+                      easing="linear" />
+                    <span v-else>
+                    <span v-if="item.count.startsWith('i18n://')"
+                          class="text-3xl">{{ $t(item.count.replaceAll('i18n://', '')) }}</span>
+                    <span v-else>{{ item.count }}</span>
+                  </span>
+                  </div>
+                  <div class="text-gray-500 dark:text-slate-400">{{ $t(item.name) }}</div>
+                </div>
+              </div>
             </router-link>
-          </div>
-          <div class="w-28 h-28">
-            <img :src="item.icon" alt="" />
-          </div>
-          <div class="flex flex-col gap-2">
-<!--            <div class="text-5xl font-medium text-blue-500 dark:text-red-200">-->
-<!--              {{ isNumber(item.count) ? numeral(item.count).format('0.[00]a') : item.count }}-->
-<!--            </div>-->
-            <div class="text-5xl font-medium text-blue-500 dark:text-red-200">
-              <NumberAnimation
-                v-if="isNumber(item.count)"
-                :from="0"
-                :to="Number(item.count)"
-                :duration="1"
-                :delay="0"
-                :format="theFormat"
-                autoplay
-                easing="linear" />
-              <span v-else>{{ item.count }}</span>
-            </div>
-            <div class="text-gray-500 dark:text-slate-400">{{ $t(item.name) }}</div>
-          </div>
+          </template>
+        </div>
+        <div class="bg-white w-1/4 h-fit rounded-2xl p-2">
+          <el-empty :description="$t('welcome')" :image-size="240" :image="EmptyImage" />
         </div>
       </div>
     </div>

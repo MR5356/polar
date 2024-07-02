@@ -1,4 +1,5 @@
 {
+  "welcome": "Welcome",
   "language": "Language",
   "search": "Search",
   "signIn": "Sign in",
@@ -22,7 +23,9 @@
     "pipeline": "Pipeline",
     "package": "Package Management",
     "host": "Host Management",
-    "health": "Health Check"
+    "health": "Health Check",
+    "terminal": "Terminal",
+    "script": "Script"
   },
   "loading": "Loading...",
   "tips": "Tips",
@@ -68,7 +71,10 @@
   "statistic": {
     "user": "Number of user",
     "schedule": "Number of schedule",
-    "record": "Number of visits"
+    "record": "Number of visits",
+    "host": "Number of host",
+    "health": "Number of health check",
+    "terminal": "Online terminal"
   },
   "404": {
     "message": "Page not found"
@@ -115,6 +121,7 @@
       "bottom": "Open in bottom",
       "noTerminal": "Select a terminal to open Or Input one",
       "connect": "Connect"
-    }
+    },
+    "info": "Open Terminal"
   }
 }
