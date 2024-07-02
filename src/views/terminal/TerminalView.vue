@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { onBeforeUnmount, ref, h, type VNode } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { Host } from '@/views/host/HostIndexView'
 import type { TreeProps } from 'ant-design-vue'
 import Terminal from '@/components/TerminalView.vue'
+import { locales } from '@/lang/i18n'
+import { useSystemStore } from '@/stores/system'
 
 const treeData = ref<TreeProps['treeData']>([])
+const systemStore = useSystemStore()
 
 const route = useRoute()
 const router = useRouter()
@@ -26,7 +29,7 @@ const init = async () => {
         panes.value.push({
           title: child.title,
           content: child.id,
-          key: child.id,
+          key: child.id
         })
       }
       idDict.value[child.id] = child
@@ -53,11 +56,11 @@ const onSelect = (key: string[]) => {
   }
   selectedKeys.value = key
   const temp = panes.value.find((item) => item.content === key[0])
-  if (!temp ) {
+  if (!temp) {
     panes.value.push({
       title: idDict.value[key[0]].title,
       content: idDict.value[key[0]].id,
-      key: idDict.value[key[0]].id,
+      key: idDict.value[key[0]].id
     })
     activeKey.value = key[0]
   } else {
@@ -76,7 +79,7 @@ const getTitle = (title: string, count: number = 0): string => {
   if (!temp) {
     return count === 0 ? title : `${title}-${count}`
   } else {
-    return getTitle(title, count+1)
+    return getTitle(title, count + 1)
   }
 }
 
@@ -87,7 +90,7 @@ const onContextMenuClick = (treeKey: string, menuKey: string | number) => {
       panes.value.push({
         title: getTitle(idDict.value[treeKey].title),
         content: idDict.value[treeKey].id,
-        key: key,
+        key: key
       })
       activeKey.value = key
       break
@@ -146,8 +149,18 @@ const onExit = (id: string) => {
 </script>
 
 <template>
-  <div class="absolute inset-0 overflow-hidden rounded-none flex items-center justify-center gap-0">
-    <div class="h-full w-1/5 bg-slate-700 text-white">
+  <div class="absolute inset-0 overflow-hidden rounded-none grid grid-cols-6 gap-0">
+    <div class="h-full bg-slate-700 text-white">
+      <div class="px-6 py-4">
+        <div class="flex items-center justify-between">
+          <router-link to="/">
+            <div class="flex gap-2 items-center">
+              <img class="w-8 h-8" :src="systemStore.website.logo" alt="logo">
+              <div class="text-2xl font-bold text-teal-400">{{ systemStore.website.title }}.</div>
+            </div>
+          </router-link>
+        </div>
+      </div>
       <a-tree
         class="bg-slate-700 text-white"
         v-model:selectedKeys="selectedKeys"
@@ -168,8 +181,6 @@ const onExit = (id: string) => {
             <template #overlay>
               <a-menu @click="({ key: menuKey }) => onContextMenuClick(key, menuKey)">
                 <a-menu-item key="newTab">{{ $t('terminal.open.newTab') }}</a-menu-item>
-<!--                <a-menu-item key="currentTab" v-if="key !== route.params.id">{{ $t('terminal.open.currentTab') }}-->
-<!--                </a-menu-item>-->
                 <a-menu-item key="newWindow">{{ $t('terminal.open.newWindow') }}</a-menu-item>
                 <a-menu-item key="right">{{ $t('terminal.open.right') }}</a-menu-item>
                 <a-menu-item key="bottom">{{ $t('terminal.open.bottom') }}</a-menu-item>
@@ -179,11 +190,13 @@ const onExit = (id: string) => {
         </template>
       </a-tree>
     </div>
-    <div class="h-full w-full">
-      <a-tabs class="w-full h-full bg-slate-700" v-model:activeKey="activeKey" hide-add type="editable-card" @edit="onEdit">
+    <div class="col-span-5 h-full w-full flex-grow">
+      <a-tabs class="w-full h-full bg-slate-700" v-model:activeKey="activeKey" hide-add type="editable-card"
+              @edit="onEdit">
         <a-tab-pane class="w-full h-full bg-black" v-for="pane in panes" :key="pane.key" :tab="pane.title"
                     :closable="panes.length > 1">
-          <Terminal class="w-full h-full" :uri="'/api/v1/host/terminal/' + pane.content" :focus="activeKey === pane.key" :exit="() => onExit(pane.key)" />
+          <Terminal class="w-full h-full" :uri="'/api/v1/host/terminal/' + pane.content" :focus="activeKey === pane.key"
+                    :exit="() => onExit(pane.key)" />
         </a-tab-pane>
       </a-tabs>
     </div>
@@ -195,7 +208,7 @@ const onExit = (id: string) => {
   margin: 0;
 }
 
-:deep(.anticon-close),
+:deep(.anticon),
 :deep(.ant-tabs-tab-btn) {
   color: white !important;
 }
@@ -205,6 +218,7 @@ const onExit = (id: string) => {
   color: white !important;
   border-radius: 0.8rem 0.8rem 0 0 !important;
   border-bottom-color: #0a0a0a !important;
+
   &::before {
     content: '';
     position: absolute;
@@ -238,6 +252,7 @@ const onExit = (id: string) => {
   background: transparent;
   border: 0;
 }
+
 :deep(.ant-tabs-content) {
   height: 100%;
 }
