@@ -112,7 +112,9 @@
       "currentTab": "在当前标签页打开",
       "newWindow": "在新窗口打开",
       "right": "在右侧打开",
-      "bottom": "在底部打开"
+      "bottom": "在底部打开",
+      "noTerminal": "选择一个终端来打开，或者输入连接信息",
+      "connect": "连接"
     }
   }
 }

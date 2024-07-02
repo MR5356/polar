@@ -26,6 +26,9 @@ const props = defineProps({
 })
 
 const term = new Terminal({
+  theme: {
+    background: "#1d2434"
+  },
   screenKeys: true,
   rendererType: 'canvas',
   useStyle: true,
@@ -176,7 +179,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div v-loading="loading" :element-loading-text="$t('loading')" class="h-full w-full bg-black" ref="terminalRef"></div>
+  <div v-loading="loading" :element-loading-text="$t('loading')" class="h-full w-full bg-slate-800" ref="terminalRef"></div>
 </template>
 
 <style>

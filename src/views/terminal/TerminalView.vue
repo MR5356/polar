@@ -6,6 +6,7 @@ import type { TreeProps } from 'ant-design-vue'
 import Terminal from '@/components/TerminalView.vue'
 import { locales } from '@/lang/i18n'
 import { useSystemStore } from '@/stores/system'
+import EmptyImage from '@/assets/coding.svg'
 
 const treeData = ref<TreeProps['treeData']>([])
 const systemStore = useSystemStore()
@@ -140,11 +141,20 @@ const onEdit = (targetKey: string | MouseEvent, action: string) => {
 
 const onExit = (id: string) => {
   remove(id)
-  if (panes.value.length === 0) {
-    window.opener = null
-    window.open('', '_self')
-    window.close()
-  }
+  // if (panes.value.length === 0) {
+  //   window.opener = null
+  //   window.open('', '_self')
+  //   window.close()
+  // }
+}
+
+const hostInfo = ref<Host.HostInfo>({port: 22} as Host.HostInfo)
+const onConnect = () => {
+  panes.value.push({
+    title: hostInfo.value.host + ':' + hostInfo.value.port,
+    content: `new?host=${hostInfo.value.host}&port=${hostInfo.value.port}&username=${hostInfo.value.username}&password=${hostInfo.value.password}`,
+    key: new Date().toString()
+  })
 }
 </script>
 
@@ -190,7 +200,7 @@ const onExit = (id: string) => {
         </template>
       </a-tree>
     </div>
-    <div class="col-span-5 h-full w-full flex-grow">
+    <div class="col-span-5 h-full w-full flex-grow" v-if="panes.length > 0">
       <a-tabs class="w-full h-full bg-slate-700" v-model:activeKey="activeKey" hide-add type="editable-card"
               @edit="onEdit">
         <a-tab-pane class="w-full h-full bg-black" v-for="pane in panes" :key="pane.key" :tab="pane.title"
@@ -199,6 +209,26 @@ const onExit = (id: string) => {
                     :exit="() => onExit(pane.key)" />
         </a-tab-pane>
       </a-tabs>
+    </div>
+    <div v-else class="bg-slate-800 w-full h-full col-span-5 flex flex-col items-center justify-center gap-8">
+      <el-empty :description="$t('terminal.open.noTerminal')" :image-size="240" :image="EmptyImage" />
+      <el-form class="dark" :model="hostInfo" label-position="top" style="width: 366px" inline>
+        <el-form-item label="Host">
+          <el-input style="width: 150px" v-model="hostInfo.host" placeholder="Host or ip" />
+        </el-form-item>
+        <el-form-item label="Port">
+          <el-input-number style="width: 150px" v-model="hostInfo.port" :min="1" :max="65535" />
+        </el-form-item>
+        <el-form-item label="Username">
+          <el-input style="width: 150px" v-model="hostInfo.username" placeholder="Username" />
+        </el-form-item>
+        <el-form-item label="Password">
+          <el-input style="width: 150px" v-model="hostInfo.password" type="password" placeholder="Password" />
+        </el-form-item>
+        <el-form-item class="w-full">
+          <div class="m-auto bg-slate-500 text-white w-full text-center px-6 py-0 rounded-lg" @click="onConnect">{{ $t('terminal.open.connect') }}</div>
+        </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
@@ -214,10 +244,10 @@ const onExit = (id: string) => {
 }
 
 :deep(.ant-tabs-tab-active) {
-  background: #000 !important;
+  background: #1d2434 !important;
   color: white !important;
   border-radius: 0.8rem 0.8rem 0 0 !important;
-  border-bottom-color: #0a0a0a !important;
+  border-bottom-color: #1d2434 !important;
 
   &::before {
     content: '';
@@ -226,7 +256,7 @@ const onExit = (id: string) => {
     left: -0.8rem;
     width: 0.8rem;
     height: 0.8rem;
-    background: radial-gradient(circle at 0% 0%, transparent 0.8rem, #000 0);
+    background: radial-gradient(circle at 0% 0%, transparent 0.8rem, #1d2434 0);
     animation: inherit;
   }
 
@@ -237,7 +267,7 @@ const onExit = (id: string) => {
     right: -0.8rem;
     width: 0.8rem;
     height: 0.8rem;
-    background: radial-gradient(circle at 100% 0%, transparent 0.8rem, #000 0);
+    background: radial-gradient(circle at 100% 0%, transparent 0.8rem, #1d2434 0);
     animation: inherit;
   }
 }
@@ -266,7 +296,7 @@ const onExit = (id: string) => {
 
 :deep(.ant-tree-node-content-wrapper-normal) {
   &:hover {
-    background-color: rgba(0, 0, 0, 0.8) !important; /* 你想要的背景色 */
+    background-color: #1d2434 !important; /* 你想要的背景色 */
     border-radius: 0.8rem 0.8rem;
     margin-right: 0.25rem;
     position: relative;
@@ -278,7 +308,7 @@ const onExit = (id: string) => {
 }
 
 :deep(.ant-tree-node-selected) {
-  background-color: #000 !important; /* 你想要的背景色 */
+  background-color: #1d2434 !important; /* 你想要的背景色 */
   border-radius: 0.8rem 0 0 0.8rem !important;
   margin-right: 0 !important;
   position: relative;
@@ -290,7 +320,7 @@ const onExit = (id: string) => {
     right: 0;
     width: 0.8rem;
     height: 0.8rem;
-    background: radial-gradient(circle at 0% 0%, transparent 0.8rem, #000 0);
+    background: radial-gradient(circle at 0% 0%, transparent 0.8rem, #1d2434 0);
     animation: inherit;
   }
 
@@ -301,7 +331,7 @@ const onExit = (id: string) => {
     right: 0;
     width: 0.8rem;
     height: 0.8rem;
-    background: radial-gradient(circle at 0% 100%, transparent 0.8rem, #000 0);
+    background: radial-gradient(circle at 0% 100%, transparent 0.8rem, #1d2434 0);
     animation: inherit;
   }
 }

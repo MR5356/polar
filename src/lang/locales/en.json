@@ -112,7 +112,9 @@
       "currentTab": "Open in current tab",
       "newWindow": "Open in new window",
       "right": "Open in right side",
-      "bottom": "Open in bottom"
+      "bottom": "Open in bottom",
+      "noTerminal": "Select a terminal to open Or Input one",
+      "connect": "Connect"
     }
   }
 }
