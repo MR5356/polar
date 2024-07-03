@@ -7,7 +7,8 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: () => import('../layouts/framework/FrameworkLayout.vue'),
+      // component: () => import('../layouts/framework/FrameworkLayout.vue'),
+      component: () => import('../layouts/TabbedFramework/TabbedFrameworkLayout.vue'),
       children: [
         {
           path: '',
@@ -32,7 +33,6 @@ const router = createRouter({
         {
           path: '/setting',
           name: 'setting',
-          component: HomeView
         },
         {
           path: '/schedule/list',
@@ -68,33 +68,24 @@ const router = createRouter({
         {
           path: '/notification',
           name: 'notification',
-          component: HomeView
         },
-        {
-          path: '/:pathMatch(.*)',
-          name: 'not-found',
-          component: () => import('../views/NotFoundView.vue')
-        }
       ]
     },
     {
-      path: '/online-terminal',
-      name: 'online-terminal',
-      component: () => import('@/views/terminal/TerminalView.vue'),
-    },
-    {
-      path: '/terminal/:id',
+      path: '/terminal',
       name: 'terminal',
-      meta: {
-        keepAlive: true
-      },
-      component: () => import('@/views/host/TerminalView.vue')
+      component: () => import('@/views/terminal/TerminalView.vue'),
     },
     {
       path: '/login',
       name: 'login',
       component: () => import('../views/LoginView.vue')
     },
+    {
+      path: '/:pathMatch(.*)',
+      name: 'not-found',
+      component: () => import('../views/NotFoundView.vue')
+    }
   ]
 })
 

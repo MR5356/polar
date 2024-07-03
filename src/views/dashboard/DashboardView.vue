@@ -78,7 +78,7 @@ init()
             </router-link>
           </template>
         </div>
-        <div class="bg-white w-1/4 h-fit rounded-2xl p-2">
+        <div class="bg-white dark:bg-slate-900 w-1/4 h-fit rounded-2xl p-2">
           <el-empty :description="$t('welcome')" :image-size="240" :image="EmptyImage" />
         </div>
       </div>

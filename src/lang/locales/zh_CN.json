@@ -3,10 +3,14 @@
   "language": "语言",
   "search": "搜索",
   "signIn": "登录",
+  "logout": "退出登录",
   "signWithGithub": "使用 Github 登录",
   "signWithGitlab": "使用 Gitlab 登录",
   "needLogin": "登录后继续",
   "signInNote": "继续使用即表示您同意我们的服务条款和隐私政策。",
+  "darkMode": "启用深色模式",
+  "lightMode": "启用浅色模式",
+  "home": "返回主页",
   "notification": {
     "title": {
       "error": "错误"

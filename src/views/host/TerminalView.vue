@@ -111,7 +111,7 @@ const onContextMenuClick = (treeKey: string, menuKey: string | number) => {
           <a-dropdown :trigger="['contextmenu']">
             <router-link :to="isChild ? `/terminal/${key}` : ''">
               <div class="flex items-center gap-0 pl-2">
-                <img v-if="isChild" :src="Host.metaInfos.os[os]"
+                <img v-if="isChild" :src="Host.getOsIcon(os)"
                      class="w-6 h-6 min-w-6 min-h-6 rounded-lg"
                      alt="logo">
                 <span class="text-white m-2 capitalize">{{ title }}</span>

@@ -96,14 +96,14 @@ const onContextMenuClick = (treeKey: string, menuKey: string | number) => {
       activeKey.value = key
       break
     case 'newWindow':
-      window.open(`/online-terminal?id=${treeKey}`, '_blank', 'toolbar=no,location=no,directories=no,status=no,menubar=no')
+      window.open(`/terminal?id=${treeKey}`, '_blank', 'toolbar=no,location=no,directories=no,status=no,menubar=no')
       break
     case 'right':
       break
     case 'bottom':
       break
     default:
-      router.push(`/online-terminal?id=${treeKey}`)
+      router.push(`/terminal?id=${treeKey}`)
   }
 }
 
@@ -159,8 +159,8 @@ const onConnect = () => {
 </script>
 
 <template>
-  <div class="absolute inset-0 overflow-hidden rounded-none grid grid-cols-6 gap-0">
-    <div class="h-full bg-slate-700 text-white">
+  <div class="absolute inset-0 overflow-hidden rounded-none flex gap-0">
+    <div class="w-[300px] min-w-[300px] h-full bg-slate-700 text-white">
       <div class="px-6 py-4">
         <div class="flex items-center justify-between">
           <router-link to="/">
@@ -172,7 +172,7 @@ const onConnect = () => {
         </div>
       </div>
       <a-tree
-        class="bg-slate-700 text-white"
+        class="bg-slate-700 text-white pl-4"
         v-model:selectedKeys="selectedKeys"
         v-model:expanded-keys="expandedKeys"
         :tree-data="treeData"
@@ -183,7 +183,7 @@ const onConnect = () => {
         <template #title="{ title, isChild, os, key }">
           <a-dropdown :trigger="['contextmenu']">
             <div class="flex items-center gap-0 pl-2">
-              <img v-if="isChild" :src="Host.metaInfos.os[os]"
+              <img v-if="isChild" :src="Host.getOsIcon(os)"
                    class="w-6 h-6 min-w-6 min-h-6 rounded-lg"
                    alt="logo">
               <span class="text-white m-2 capitalize">{{ title }}</span>
@@ -200,7 +200,7 @@ const onConnect = () => {
         </template>
       </a-tree>
     </div>
-    <div class="col-span-5 h-full w-full flex-grow" v-if="panes.length > 0">
+    <div class="h-full w-full flex-grow" v-if="panes.length > 0">
       <a-tabs class="w-full h-full bg-slate-700" v-model:activeKey="activeKey" hide-add type="editable-card"
               @edit="onEdit">
         <a-tab-pane class="w-full h-full bg-black" v-for="pane in panes" :key="pane.key" :tab="pane.title"
@@ -211,7 +211,7 @@ const onConnect = () => {
       </a-tabs>
     </div>
     <div v-else class="bg-slate-800 w-full h-full col-span-5 flex flex-col items-center justify-center gap-8">
-      <el-empty :description="$t('terminal.open.noTerminal')" :image-size="240" :image="EmptyImage" />
+      <el-empty class="mt-[-10%]" :description="$t('terminal.open.noTerminal')" :image-size="240" :image="EmptyImage" />
       <el-form class="dark" :model="hostInfo" label-position="top" style="width: 366px" inline>
         <el-form-item label="Host">
           <el-input style="width: 150px" v-model="hostInfo.host" placeholder="Host or ip" />
@@ -244,7 +244,7 @@ const onConnect = () => {
 }
 
 :deep(.ant-tabs-tab-active) {
-  background: #1d2434 !important;
+  background: #20293a !important;
   color: white !important;
   border-radius: 0.8rem 0.8rem 0 0 !important;
   border-bottom-color: #1d2434 !important;
@@ -256,7 +256,7 @@ const onConnect = () => {
     left: -0.8rem;
     width: 0.8rem;
     height: 0.8rem;
-    background: radial-gradient(circle at 0% 0%, transparent 0.8rem, #1d2434 0);
+    background: radial-gradient(circle at 0% 0%, transparent 0.8rem, #20293a 0);
     animation: inherit;
   }
 
@@ -267,7 +267,7 @@ const onConnect = () => {
     right: -0.8rem;
     width: 0.8rem;
     height: 0.8rem;
-    background: radial-gradient(circle at 100% 0%, transparent 0.8rem, #1d2434 0);
+    background: radial-gradient(circle at 100% 0%, transparent 0.8rem, #20293a 0);
     animation: inherit;
   }
 }
@@ -296,7 +296,7 @@ const onConnect = () => {
 
 :deep(.ant-tree-node-content-wrapper-normal) {
   &:hover {
-    background-color: #1d2434 !important; /* 你想要的背景色 */
+    background-color: #20293a !important; /* 你想要的背景色 */
     border-radius: 0.8rem 0.8rem;
     margin-right: 0.25rem;
     position: relative;
@@ -308,7 +308,7 @@ const onConnect = () => {
 }
 
 :deep(.ant-tree-node-selected) {
-  background-color: #1d2434 !important; /* 你想要的背景色 */
+  background-color: #20293a !important; /* 你想要的背景色 */
   border-radius: 0.8rem 0 0 0.8rem !important;
   margin-right: 0 !important;
   position: relative;
@@ -320,7 +320,7 @@ const onConnect = () => {
     right: 0;
     width: 0.8rem;
     height: 0.8rem;
-    background: radial-gradient(circle at 0% 0%, transparent 0.8rem, #1d2434 0);
+    background: radial-gradient(circle at 0% 0%, transparent 0.8rem, #20293a 0);
     animation: inherit;
   }
 
@@ -331,7 +331,7 @@ const onConnect = () => {
     right: 0;
     width: 0.8rem;
     height: 0.8rem;
-    background: radial-gradient(circle at 0% 100%, transparent 0.8rem, #1d2434 0);
+    background: radial-gradient(circle at 0% 100%, transparent 0.8rem, #20293a 0);
     animation: inherit;
   }
 }

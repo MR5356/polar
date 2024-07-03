@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { RouterView, RouterLink, useRouter } from 'vue-router'
 import { useSystemStore } from '@/stores/system'
-import ColorView from '@/layouts/framework/ColorView.vue'
+import ColorView from '@/components/ColorView.vue'
 import NavigationView from '@/layouts/framework/NavigationView.vue'
 import { useDark, useToggle } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
