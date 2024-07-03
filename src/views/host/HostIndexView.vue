@@ -11,6 +11,7 @@ import getGroups = Host.getGroups
 const router = useRouter()
 const { t } = useI18n()
 
+const loading = ref(false)
 const newHost = ref<Host.HostItem>({} as Host.HostItem)
 const isEdit = ref(false)
 const showAddMachine = ref(false)
@@ -18,7 +19,9 @@ const showAddMachine = ref(false)
 const hostGroupsList = ref<Host.Group[]>([])
 
 async function init() {
-  hostGroupsList.value = await withLoading(Host.getGroups)
+  loading.value = true
+  hostGroupsList.value = await Host.getGroups()
+  loading.value = false
 }
 
 init()

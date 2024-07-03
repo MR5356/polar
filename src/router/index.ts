@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { useSystemStore } from '@/stores/system'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,31 +18,56 @@ const router = createRouter({
         {
           path: '/dashboard',
           name: 'dashboard',
+          meta: {
+            tabbed: true
+          },
           component: () => import('@/views/dashboard/DashboardView.vue')
         },
         {
           path: '/host',
           name: 'host',
+          meta: {
+            tabbed: true
+          },
           component: () => import('@/views/host/HostIndexView.vue')
         },
         {
           path: '/health',
           name: 'health',
+          meta: {
+            tabbed: true
+          },
           component: () => import('@/views/health/HealthIndexView.vue')
         },
         {
           path: '/setting',
           name: 'setting',
+          meta: {
+            tabbed: true
+          },
         },
         {
           path: '/schedule/list',
           name: 'scheduleList',
+          meta: {
+            tabbed: true
+          },
           component: () => import('@/views/schedule/ScheduleView.vue')
         },
         {
           path: '/schedule/record',
           name: 'scheduleRecord',
+          meta: {
+            tabbed: true
+          },
           component: () => import('@/views/schedule/ScheduleRecordView.vue')
+        },
+        {
+          path: '/script',
+          name: 'script',
+          meta: {
+            tabbed: true
+          },
         },
         {
           path: '/pipeline',
@@ -68,6 +93,9 @@ const router = createRouter({
         {
           path: '/notification',
           name: 'notification',
+          meta: {
+            tabbed: true
+          },
         },
       ]
     },
@@ -87,6 +115,18 @@ const router = createRouter({
       component: () => import('../views/NotFoundView.vue')
     }
   ]
+})
+
+router.beforeEach(async (to, from, next) => {
+  const systemStore = useSystemStore()
+
+  if (to.meta.tabbed) {
+    systemStore.addTab({
+      title: to.name as string,
+      key: to.path,
+    })
+  }
+  next()
 })
 
 export default router

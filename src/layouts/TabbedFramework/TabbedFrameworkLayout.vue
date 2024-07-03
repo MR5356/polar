@@ -140,8 +140,11 @@ setLanguage()
       </div>
     </el-aside>
     <el-container class="bg-gradient-to-l from-indigo-100 dark:from-slate-900 to-slate-50 dark:to-slate-700">
-      <el-main class="relative">
+      <el-header>
         <TabView />
+      </el-header>
+      <el-main class="relative">
+        <RouterView />
       </el-main>
     </el-container>
   </el-container>
