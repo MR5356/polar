@@ -175,7 +175,7 @@ init()
 </script>
 
 <template>
-  <div class="flex flex-col h-[100vh] overflow-hidden">
+  <div class="absolute inset-0 flex flex-col overflow-hidden">
     <!-- 顶部 -->
     <div class="sticky top-0 select-none flex justify-between items-center px-4 py-2 bg-sky-100 dark:bg-slate-700 z-10">
       <div class="flex items-center gap-4">

@@ -34,13 +34,13 @@ init()
   <div class="bg-white bg-opacity-0 backdrop-blur-lg absolute inset-0 p-4">
     <div class="flex flex-col gap-4">
       <!-- header -->
-      <div class="flex items-center justify-between">
-        <div class="flex flex-col gap-2">
-          <div class="text-3xl font-medium text-slate-700 dark:text-slate-200">{{ $t('navigation.dashboard') }}</div>
-          <div class="text-xs text-gray-500"
-               v-html="moment().format('[<span class=\'text-green-500 dark:text-green-400 font-bold pr-2\'>]ddd[.</span>] YYYY-MM-DD')"></div>
-        </div>
-      </div>
+<!--      <div class="flex items-center justify-between">-->
+<!--        <div class="flex flex-col gap-2">-->
+<!--          <div class="text-3xl font-medium text-slate-700 dark:text-slate-200">{{ $t('navigation.dashboard') }}</div>-->
+<!--          <div class="text-xs text-gray-500"-->
+<!--               v-html="moment().format('[<span class=\'text-green-500 dark:text-green-400 font-bold pr-2\'>]ddd[.</span>] YYYY-MM-DD')"></div>-->
+<!--        </div>-->
+<!--      </div>-->
 
       <!-- Welcome -->
 
