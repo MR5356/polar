@@ -55,7 +55,7 @@ const onClickNavigation = (item: SystemModels.Navigation) => {
     @click="onClickNavigation(item)"
     :custom-class="'transition duration-700 ease-in-out cursor-pointer ' + (currentPath === item.path && (!haveChildren(item)) ? 'bg-sky-100 dark:bg-sky-400 dark:bg-opacity-20 font-bold text-black dark:text-white' : '')">
     <div class="flex gap-3 items-center p-1">
-      <img :src="getIcon(item)" v-if="!isChildren" alt="icon" class="w-4 h-4" />
+      <img :src="getIcon(item)" v-if="!isChildren" alt="icon" class="w-[1.125rem] h-[1.125rem]" />
       <div>
         <div>{{ $t(item.title) }}</div>
       </div>

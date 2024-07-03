@@ -96,7 +96,15 @@
     }
   },
   "host": {
-    "new": "New Host"
+    "new": "New Host",
+    "metaInfo": {
+      "os": "OS",
+      "cpu": "CPU",
+      "mem": "Memory",
+      "arch": "Arch",
+      "kernel": "Kernel",
+      "hostname": "Hostname"
+    }
   },
   "health": {
     "new": "New Health Check",

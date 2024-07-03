@@ -96,7 +96,15 @@
     }
   },
   "host": {
-    "new": "新增主机"
+    "new": "新增主机",
+    "metaInfo": {
+      "os": "系统",
+      "cpu": "核心",
+      "mem": "内存",
+      "arch": "架构",
+      "kernel": "内核",
+      "hostname": "主机名"
+    }
   },
   "health": {
     "new": "新增健康检查",

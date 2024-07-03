@@ -117,7 +117,7 @@ const openTerminal = (host: Host.HostItem) => {
     </div>
     <div></div>
   </div>
-  <div class="p-8 flex flex-col gap-8">
+  <div class="p-8 flex flex-col gap-8 select-none">
     <template v-for="group in hostGroupsList" :key="group.id">
       <div v-if="group.hosts.length > 0">
         <el-popover :width="88" trigger="contextmenu" placement="right-start" class="p-0">
@@ -143,49 +143,63 @@ const openTerminal = (host: Host.HostItem) => {
         </el-popover>
         <div class="grid grid-cols-4 gap-4">
           <div class="bg-white dark:bg-opacity-30 p-2 rounded-xl" v-for="host in group.hosts" :key="host.id">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-3">
-                <div>
-                  <img :src="Host.metaInfos.os[host.metaInfo.os]"
-                       class="w-10 h-10 min-w-10 min-h-10 bg-slate-500 bg-opacity-30 dark:bg-slate-400 rounded-lg p-1"
-                       alt="logo">
-                </div>
-                <div class="flex flex-col flex-grow">
-                  <div class="text-sm">{{ host.title }}</div>
-                  <div class="text-xs text-slate-500 dark:text-slate-300 break-all">{{ host.desc }}
-                  </div>
-                </div>
-              </div>
-              <div class="flex gap-2 items-center opacity-50">
-                <el-tooltip
-                  placement="top"
-                  content="在线终端"
-                >
-                  <Terminal size="20" title="终端" @click="() => openTerminal(host)" />
-                </el-tooltip>
-                <el-popover :width="88" trigger="hover" class="p-0">
-                  <template #reference>
-                    <MoreOne />
-                  </template>
-                  <template #default>
-                    <div class="flex flex-col gap-0 text-sm">
-                      <div
-                        class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
-                        @click="onClickEditMachine(host)"
-                      >
-                        编辑
-                      </div>
-                      <div
-                        class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
-                        @click="onDeleteMachine(host.id)"
-                      >
-                        删除
+            <el-popover trigger="hover" class="p-0" :width="300">
+              <template #reference>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <div>
+                      <img :src="Host.metaInfos.os[host.metaInfo.os]"
+                           class="w-10 h-10 min-w-10 min-h-10 bg-slate-500 bg-opacity-30 dark:bg-slate-400 rounded-lg p-1"
+                           alt="logo">
+                    </div>
+                    <div class="flex flex-col flex-grow">
+                      <div class="text-sm">{{ host.title }}</div>
+                      <div class="text-xs text-slate-500 dark:text-slate-300 break-all">{{ host.desc }}
                       </div>
                     </div>
-                  </template>
-                </el-popover>
-              </div>
-            </div>
+                  </div>
+                  <div class="flex gap-2 items-center opacity-50">
+                    <el-tooltip
+                      placement="top"
+                      content="在线终端"
+                    >
+                      <Terminal size="20" title="终端" @click="() => openTerminal(host)" />
+                    </el-tooltip>
+                    <el-popover :width="88" trigger="hover" class="p-0">
+                      <template #reference>
+                        <MoreOne />
+                      </template>
+                      <template #default>
+                        <div class="flex flex-col gap-0 text-sm">
+                          <div
+                            class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
+                            @click="onClickEditMachine(host)"
+                          >
+                            编辑
+                          </div>
+                          <div
+                            class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
+                            @click="onDeleteMachine(host.id)"
+                          >
+                            删除
+                          </div>
+                        </div>
+                      </template>
+                    </el-popover>
+                  </div>
+                </div>
+              </template>
+              <template #default>
+                <div class="grid grid-cols-3 gap-1">
+                  <div class="col-span-3">{{ $t('host.metaInfo.os') }}: {{ host?.metaInfo.os }}</div>
+                  <div class="col-span-3">{{ $t('host.metaInfo.cpu') }}: {{ host?.metaInfo.cpu }}</div>
+                  <div class="col-span-3">{{ $t('host.metaInfo.mem') }}: {{ host?.metaInfo.mem }}</div>
+                  <div class="col-span-3">{{ $t('host.metaInfo.arch') }}: {{ host?.metaInfo.arch }}</div>
+                  <div class="col-span-3">{{ $t('host.metaInfo.kernel') }}: {{ host?.metaInfo.kernel }}</div>
+                  <div class="col-span-3">{{ $t('host.metaInfo.hostname') }}: {{ host?.metaInfo.hostname }}</div>
+                </div>
+              </template>
+            </el-popover>
           </div>
         </div>
       </div>
