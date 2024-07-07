@@ -146,7 +146,7 @@ const openTerminal = (host: Host.HostItem) => {
             </template>
           </el-popover>
           <div class="grid grid-cols-4 gap-4">
-            <div class="bg-white dark:bg-slate-700 p-2 rounded-xl" v-for="host in group.hosts" :key="host.id">
+            <div class="bg-white dark:bg-slate-700 shadow-lg shadow-sky-100 p-4 rounded-xl" v-for="host in group.hosts" :key="host.id">
               <div class="flex items-center justify-between">
                 <el-popover trigger="hover" class="p-0" placement="bottom-start" :width="300">
                   <template #reference>

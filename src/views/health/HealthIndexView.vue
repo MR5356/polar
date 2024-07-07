@@ -4,62 +4,10 @@ import { Health } from '@/views/health/HealthIndexView'
 import withLoading from '@/utils/loading'
 import { ElMessageBox, ElNotification } from 'element-plus'
 import { useI18n } from 'vue-i18n'
-import * as echarts from 'echarts/core'
-import { TooltipComponent, LegendComponent } from 'echarts/components'
-import { PieChart } from 'echarts/charts'
-import { LabelLayout } from 'echarts/features'
-import { CanvasRenderer } from 'echarts/renderers'
 import HealthItemView from '@/views/health/HealthItemView.vue'
 import EmptyImage from '@/assets/surfing.svg'
-
-echarts.use([TooltipComponent, LegendComponent, PieChart, CanvasRenderer, LabelLayout])
-
-function getOption(data: any): any {
-  return {
-    tooltip: {
-      trigger: 'item'
-    },
-    legend: {
-      orient: 'vertical',
-      left: '15%',
-      bottom: 'center',
-      textStyle: {
-        fontSize: 14,
-        fontWeight: 'bold'
-      },
-      formatter: (name: string) => {
-        return `${t('health.' + name)}: ${healthStatistics.value[name] || 0}`
-      }
-    },
-    series: [
-      {
-        name: 'Checker',
-        type: 'pie',
-        radius: ['42%', '66%'],
-        avoidLabelOverlap: false,
-        padAngle: 0,
-        center: ['70%', '50%'],
-        itemStyle: {
-          borderRadius: '10%'
-        },
-        label: {
-          show: false,
-          position: 'center',
-          formatter: '{d}%\n{b}',
-          color: ''
-        },
-        emphasis: {
-          label: {
-            show: true,
-            fontSize: 18,
-            fontWeight: 'bold'
-          }
-        },
-        data: data
-      }
-    ]
-  }
-}
+import { Plus } from '@icon-park/vue-next'
+import HealthStatisticsView from '@/views/health/HealthStatisticsView.vue'
 
 const { t } = useI18n()
 
@@ -71,10 +19,6 @@ const newHealth = ref<Health.HealthItem>(null as Health.HealthItem)
 const newHealthParams = ref<Health.Param[]>([])
 
 const interval = ref()
-const mainChart = ref()
-const mainCharts = ref()
-const statusChart = ref()
-const statusCharts = ref()
 
 onMounted(() => {
   interval.value = setInterval(init, 1000)
@@ -100,31 +44,6 @@ const init = async () => {
     })
     clearInterval(interval.value)
   })
-  await Health.getHealthStatistics().then((res => {
-    healthStatistics.value = res
-    if (mainChart.value) {
-      if (!mainCharts.value) {
-        mainCharts.value = echarts.init(mainChart.value)
-      }
-      mainCharts.value.setOption(getOption([
-        { value: res.ping, name: 'ping' },
-        { value: res.http, name: 'http' },
-        { value: res.ssh, name: 'ssh' },
-        { value: res.database, name: 'database' }
-      ]))
-    }
-    if (statusChart.value) {
-      if (!statusCharts.value) {
-        statusCharts.value = echarts.init(statusChart.value)
-      }
-      statusCharts.value.setOption(getOption([
-        { value: res.up, name: 'up' },
-        { value: res.down, name: 'down' },
-        { value: res.unknown, name: 'unknown' },
-        { value: res.error, name: 'error' }
-      ]))
-    }
-  }))
 }
 
 const healthCheckTypes = ref<Health.HealthCheckType[]>([])
@@ -177,29 +96,38 @@ init()
 <template>
   <div class="absolute inset-0 flex flex-col overflow-hidden">
     <!-- 顶部 -->
-    <div class="sticky top-0 select-none flex justify-between items-center px-4 py-2 bg-sky-100 dark:bg-slate-700 z-10">
-      <div class="flex items-center gap-4">
-        <el-button class="uppercase font-bold" @click="onClickAddHealth" type="info" size="small" round>
-          {{ $t('health.new')
-          }}
-        </el-button>
-      </div>
-      <div></div>
-    </div>
+<!--    <div class="sticky top-0 select-none flex justify-between items-center px-4 py-2 bg-sky-100 dark:bg-slate-700 z-10">-->
+<!--      <div class="flex items-center gap-4">-->
+<!--        <el-button class="uppercase font-bold" @click="onClickAddHealth" type="info" size="small" round>-->
+<!--          {{ $t('health.new')-->
+<!--          }}-->
+<!--        </el-button>-->
+<!--      </div>-->
+<!--      <div></div>-->
+<!--    </div>-->
 
     <div class="p-4 flex gap-4 select-none h-[96%]">
       <!-- 左侧内容 -->
       <div class="w-3/4 h-fit grid grid-cols-2 gap-4">
-        <div class="col-span-1 h-[250px] bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">
-          <div class="text-sm font-bold border-green-400 border-l-4 rounded pl-1">检查类型统计</div>
-          <div class="w-full h-full" ref="mainChart"></div>
+        <div class="col-span-2">
+          <HealthStatisticsView />
         </div>
-        <div class="col-span-1 h-[250px] bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">
-          <div class="text-sm font-bold border-green-400 border-l-4 rounded pl-1">运行状态统计</div>
-          <div class="w-full h-full" ref="statusChart"></div>
-        </div>
+<!--        <div class="col-span-1 h-[250px] bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">-->
+<!--          <div class="text-sm font-bold border-green-400 border-l-4 rounded pl-1">检查类型统计</div>-->
+<!--          <div class="w-full h-full" ref="mainChart"></div>-->
+<!--        </div>-->
+<!--        <div class="col-span-1 h-[250px] bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">-->
+<!--          <div class="text-sm font-bold border-green-400 border-l-4 rounded pl-1">运行状态统计</div>-->
+<!--          <div class="w-full h-full" ref="statusChart"></div>-->
+<!--        </div>-->
         <div class="col-span-2 grid grid-cols-4 gap-4 bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">
           <div class="col-span-4 text-sm font-bold border-green-400 border-l-4 rounded pl-1">监控列表</div>
+          <div class="cursor-pointer text-slate-700 dark:text-slate-100 shadow-lg shadow-sky-100 bg-sky-50 dark:bg-slate-600 rounded-lg p-4 relative" @click="onClickAddHealth" >
+            <div class="absolute w-full h-full inset-0 m-auto flex justify-center items-center gap-2">
+              <plus theme="outline" size="22" fill="#332" :strokeWidth="4" />
+              <div class="text-sm font-bold">{{ $t('health.new') }}</div>
+            </div>
+          </div>
           <template v-for="health in healthList" :key="health.id">
             <el-popover :width="88" trigger="contextmenu" placement="bottom-end" class="p-0">
               <template #reference>
@@ -303,9 +231,9 @@ init()
       <el-form-item label="描述">
         <el-input v-model="newHealth.desc" />
       </el-form-item>
-<!--      <el-form-item label="启用">-->
-<!--        <el-switch v-model="newHealth.enabled" />-->
-<!--      </el-form-item>-->
+      <!--      <el-form-item label="启用">-->
+      <!--        <el-switch v-model="newHealth.enabled" />-->
+      <!--      </el-form-item>-->
       <div class="p-2 pl-4 bg-slate-100 w-full">
         <el-form-item label="类型" required>
           <el-select v-model="newHealth.type" class="w-full" @change="onHealthTypeChange">

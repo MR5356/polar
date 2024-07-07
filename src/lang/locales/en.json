@@ -1,5 +1,5 @@
 {
-  "welcome": "On Develop, a new world is born",
+  "welcome": "Nothing to do",
   "language": "Language",
   "search": "Search",
   "signIn": "Sign in",
@@ -135,5 +135,10 @@
       "connect": "Connect"
     },
     "info": "Open Terminal"
+  },
+  "version": {
+    "current": "version",
+    "latest": "Found new version",
+    "releaseNote": "Release Note"
   }
 }

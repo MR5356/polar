@@ -1,5 +1,5 @@
 {
-  "welcome": "正在开发中，期待新的世界",
+  "welcome": "没有待办事项",
   "language": "语言",
   "search": "搜索",
   "signIn": "登录",
@@ -135,5 +135,10 @@
       "connect": "连接"
     },
     "info": "开始终端"
+  },
+  "version": {
+    "current": "版本",
+    "latest": "发现新版本",
+    "releaseNote": "发布说明"
   }
 }

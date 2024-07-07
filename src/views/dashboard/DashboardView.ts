@@ -8,8 +8,20 @@ export namespace Dashboard {
     icon: string
   }
 
+  export interface VersionInfo {
+    version: string;
+    latestVersion: string;
+    latestInfo: string;
+    latestUrl: string;
+  }
+
+
   export const getStatistics = async (): Promise<StatisticItem[]> => {
     return axios.get<StatisticItem[]>('/system/statistic')
+  }
+
+  export const getVersionInfo = async ():Promise<VersionInfo> => {
+    return axios.get('/system/version')
   }
 
   export const getIcon = (name: string): string => {

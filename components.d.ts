@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    ABadge: typeof import('ant-design-vue/es')['Badge']
     AButton: typeof import('ant-design-vue/es')['Button']
     ACheckbox: typeof import('ant-design-vue/es')['Checkbox']
     ACheckboxGroup: typeof import('ant-design-vue/es')['CheckboxGroup']
@@ -29,6 +30,7 @@ declare module 'vue' {
     ATree: typeof import('ant-design-vue/es')['Tree']
     ColorView: typeof import('./src/components/ColorView.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
+    ElBadge: typeof import('element-plus/es')['ElBadge']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElContainer: typeof import('element-plus/es')['ElContainer']
     ElDialog: typeof import('element-plus/es')['ElDialog']
@@ -59,6 +61,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     TableView: typeof import('./src/components/TableView.vue')['default']
     TerminalView: typeof import('./src/components/TerminalView.vue')['default']
+    TimeClock: typeof import('./src/components/TimeClock.vue')['default']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']
