@@ -78,24 +78,24 @@ setLanguage()
                   </div>
                 </el-popover>
               </div>
-              <div @click="toggleDark()">
-                <div v-if="!isDark" class="cursor-pointer opacity-80">
-                  <el-tooltip trigger="hover" :content="$t('darkMode')" placement="bottom">
-                    <img
-                      class="w-6 h-6"
-                      src="data:image/svg+xml;charset=utf-8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDQ4IDQ4IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0yNC4wMDMzIDRMMjkuMjczNyA5LjI3MDM4SDM4LjcyOTZWMTguNzI2M0w0NCAyMy45OTY3TDM4LjcyOTYgMjkuMjczN1YzOC43Mjk2SDI5LjI3MzdMMjQuMDAzMyA0NEwxOC43MjY0IDM4LjcyOTZIOS4yNzAzNlYyOS4yNzM3TDQgMjMuOTk2N0w5LjI3MDM2IDE4LjcyNjNWOS4yNzAzOEgxOC43MjY0TDI0LjAwMzMgNFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik0yNyAxN0MyNyAyNSAyMiAyNiAxNyAyNkMxNyAzMCAyMy41IDM0IDI5IDMwQzM0LjUgMjYgMzEgMTcgMjcgMTdaIiBmaWxsPSJub25lIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4="
-                      alt="dark" />
-                  </el-tooltip>
-                </div>
-                <div v-else class="cursor-pointer opacity-80">
-                  <el-tooltip trigger="hover" :content="$t('lightMode')" placement="bottom">
-                    <img
-                      class="w-6 h-6"
-                      src="data:image/svg+xml;charset=utf-8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDQ4IDQ4IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0yNC4wMDMzIDRMMjkuMjczNyA5LjI3MDM4SDM4LjcyOTZWMTguNzI2M0w0NCAyMy45OTY3TDM4LjcyOTYgMjkuMjczN1YzOC43Mjk2SDI5LjI3MzdMMjQuMDAzMyA0NEwxOC43MjY0IDM4LjcyOTZIOS4yNzAzNlYyOS4yNzM3TDQgMjMuOTk2N0w5LjI3MDM2IDE4LjcyNjNWOS4yNzAzOEgxOC43MjY0TDI0LjAwMzMgNFoiIGZpbGw9IiNmZmZhMmYiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik0yNyAxN0MyNyAyNSAyMiAyNiAxNyAyNkMxNyAzMCAyMy41IDM0IDI5IDMwQzM0LjUgMjYgMzEgMTcgMjcgMTdaIiBmaWxsPSIjNmM3MWMwIiBzdHJva2U9IiNGRkYiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4="
-                      alt="light" />
-                  </el-tooltip>
-                </div>
-              </div>
+<!--              <div @click="toggleDark()">-->
+<!--                <div v-if="!isDark" class="cursor-pointer opacity-80">-->
+<!--                  <el-tooltip trigger="hover" :content="$t('darkMode')" placement="bottom">-->
+<!--                    <img-->
+<!--                      class="w-6 h-6"-->
+<!--                      src="data:image/svg+xml;charset=utf-8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDQ4IDQ4IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0yNC4wMDMzIDRMMjkuMjczNyA5LjI3MDM4SDM4LjcyOTZWMTguNzI2M0w0NCAyMy45OTY3TDM4LjcyOTYgMjkuMjczN1YzOC43Mjk2SDI5LjI3MzdMMjQuMDAzMyA0NEwxOC43MjY0IDM4LjcyOTZIOS4yNzAzNlYyOS4yNzM3TDQgMjMuOTk2N0w5LjI3MDM2IDE4LjcyNjNWOS4yNzAzOEgxOC43MjY0TDI0LjAwMzMgNFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik0yNyAxN0MyNyAyNSAyMiAyNiAxNyAyNkMxNyAzMCAyMy41IDM0IDI5IDMwQzM0LjUgMjYgMzEgMTcgMjcgMTdaIiBmaWxsPSJub25lIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4="-->
+<!--                      alt="dark" />-->
+<!--                  </el-tooltip>-->
+<!--                </div>-->
+<!--                <div v-else class="cursor-pointer opacity-80">-->
+<!--                  <el-tooltip trigger="hover" :content="$t('lightMode')" placement="bottom">-->
+<!--                    <img-->
+<!--                      class="w-6 h-6"-->
+<!--                      src="data:image/svg+xml;charset=utf-8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDQ4IDQ4IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0yNC4wMDMzIDRMMjkuMjczNyA5LjI3MDM4SDM4LjcyOTZWMTguNzI2M0w0NCAyMy45OTY3TDM4LjcyOTYgMjkuMjczN1YzOC43Mjk2SDI5LjI3MzdMMjQuMDAzMyA0NEwxOC43MjY0IDM4LjcyOTZIOS4yNzAzNlYyOS4yNzM3TDQgMjMuOTk2N0w5LjI3MDM2IDE4LjcyNjNWOS4yNzAzOEgxOC43MjY0TDI0LjAwMzMgNFoiIGZpbGw9IiNmZmZhMmYiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik0yNyAxN0MyNyAyNSAyMiAyNiAxNyAyNkMxNyAzMCAyMy41IDM0IDI5IDMwQzM0LjUgMjYgMzEgMTcgMjcgMTdaIiBmaWxsPSIjNmM3MWMwIiBzdHJva2U9IiNGRkYiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4="-->
+<!--                      alt="light" />-->
+<!--                  </el-tooltip>-->
+<!--                </div>-->
+<!--              </div>-->
             </div>
           </div>
           <!-- user info -->

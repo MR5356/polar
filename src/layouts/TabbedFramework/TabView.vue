@@ -73,6 +73,7 @@ const onClick = (targetKey: string) => {
 }
 
 :deep(.ant-tabs-tab) {
+  color: #5b6880 !important;
   padding-top: 4px !important;
   padding-bottom: 6px !important;
   margin-top: 8px !important;

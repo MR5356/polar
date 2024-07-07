@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import ColorView from '@/components/ColorView.vue'
 import { SystemModels } from '@/layouts/SystemModels'
 import { useRouter } from 'vue-router'
 import { ref, watchEffect } from 'vue'
