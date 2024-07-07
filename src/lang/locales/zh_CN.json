@@ -1,11 +1,16 @@
 {
+  "welcome": "没有待办事项",
   "language": "语言",
   "search": "搜索",
   "signIn": "登录",
+  "logout": "退出登录",
   "signWithGithub": "使用 Github 登录",
   "signWithGitlab": "使用 Gitlab 登录",
   "needLogin": "登录后继续",
   "signInNote": "继续使用即表示您同意我们的服务条款和隐私政策。",
+  "darkMode": "启用深色模式",
+  "lightMode": "启用浅色模式",
+  "home": "返回主页",
   "notification": {
     "title": {
       "error": "错误"
@@ -22,7 +27,9 @@
     "pipeline": "流水线",
     "package": "制品仓库",
     "host": "主机管理",
-    "health": "健康检查"
+    "health": "健康检查",
+    "terminal": "在线终端",
+    "script": "代码片段"
   },
   "loading": "加载中...",
   "tips": "提示",
@@ -68,7 +75,10 @@
   "statistic": {
     "user": "用户数量",
     "schedule": "计划任务",
-    "record": "访问次数"
+    "record": "访问次数",
+    "host": "主机数量",
+    "health": "健康检查",
+    "terminal": "在线终端"
   },
   "404": {
     "message": "明明记得藏财宝的地方就在这片海滩<br />怎么一下子消失得无影无踪<br /><br />还是换个地方继续寻找吧"
@@ -90,7 +100,15 @@
     }
   },
   "host": {
-    "new": "新增主机"
+    "new": "新增主机",
+    "metaInfo": {
+      "os": "系统",
+      "cpu": "核心",
+      "mem": "内存",
+      "arch": "架构",
+      "kernel": "内核",
+      "hostname": "主机名"
+    }
   },
   "health": {
     "new": "新增健康检查",
@@ -105,5 +123,22 @@
     "error": "错误",
     "noError": "这里没有错误",
     "noSlow": "响应都很快"
+  },
+  "terminal": {
+    "open": {
+      "newTab": "在新标签页打开",
+      "currentTab": "在当前标签页打开",
+      "newWindow": "在新窗口打开",
+      "right": "在右侧打开",
+      "bottom": "在底部打开",
+      "noTerminal": "选择一个终端来打开，或者输入连接信息",
+      "connect": "连接"
+    },
+    "info": "开始终端"
+  },
+  "version": {
+    "current": "版本",
+    "latest": "发现新版本",
+    "releaseNote": "发布说明"
   }
 }

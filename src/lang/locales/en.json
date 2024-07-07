@@ -1,11 +1,16 @@
 {
+  "welcome": "Nothing to do",
   "language": "Language",
   "search": "Search",
   "signIn": "Sign in",
+  "logout": "Sign out",
   "signWithGithub": "Continue with Github",
   "signWithGitlab": "Continue with Gitlab",
   "needLogin": "continue with your account",
   "signInNote": "By continuing, you agree to our Terms of Service and Privacy Policy.",
+  "darkMode": "Turn on Dark Mode",
+  "lightMode": "Turn on Light Mode",
+  "home": "Go Home",
   "notification": {
     "title": {
       "error": "Error"
@@ -22,7 +27,9 @@
     "pipeline": "Pipeline",
     "package": "Package Management",
     "host": "Host Management",
-    "health": "Health Check"
+    "health": "Health Check",
+    "terminal": "Terminal",
+    "script": "Script"
   },
   "loading": "Loading...",
   "tips": "Tips",
@@ -68,7 +75,10 @@
   "statistic": {
     "user": "Number of user",
     "schedule": "Number of schedule",
-    "record": "Number of visits"
+    "record": "Number of visits",
+    "host": "Number of host",
+    "health": "Number of health check",
+    "terminal": "Online terminal"
   },
   "404": {
     "message": "Page not found"
@@ -90,7 +100,15 @@
     }
   },
   "host": {
-    "new": "New Host"
+    "new": "New Host",
+    "metaInfo": {
+      "os": "OS",
+      "cpu": "CPU",
+      "mem": "Memory",
+      "arch": "Arch",
+      "kernel": "Kernel",
+      "hostname": "Hostname"
+    }
   },
   "health": {
     "new": "New Health Check",
@@ -105,5 +123,22 @@
     "error": "Error",
     "noError": "There is no error",
     "noSlow": "There is no slow"
+  },
+  "terminal": {
+    "open": {
+      "newTab": "Open in new tab",
+      "currentTab": "Open in current tab",
+      "newWindow": "Open in new window",
+      "right": "Open in right side",
+      "bottom": "Open in bottom",
+      "noTerminal": "Select a terminal to open Or Input one",
+      "connect": "Connect"
+    },
+    "info": "Open Terminal"
+  },
+  "version": {
+    "current": "version",
+    "latest": "Found new version",
+    "releaseNote": "Release Note"
   }
 }

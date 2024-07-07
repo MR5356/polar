@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { useSystemStore } from '@/stores/system'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,7 +7,8 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: () => import('../layouts/framework/FrameworkLayout.vue'),
+      // component: () => import('../layouts/framework/FrameworkLayout.vue'),
+      component: () => import('../layouts/TabbedFramework/TabbedFrameworkLayout.vue'),
       children: [
         {
           path: '',
@@ -17,40 +18,56 @@ const router = createRouter({
         {
           path: '/dashboard',
           name: 'dashboard',
+          meta: {
+            tabbed: true
+          },
           component: () => import('@/views/dashboard/DashboardView.vue')
         },
         {
           path: '/host',
           name: 'host',
+          meta: {
+            tabbed: true
+          },
           component: () => import('@/views/host/HostIndexView.vue')
         },
         {
           path: '/health',
           name: 'health',
-          component: () => import('@/views/health/HealthIndexView.vue')
-        },
-        {
-          path: '/terminal/:id',
-          name: 'terminal',
           meta: {
-            keepAlive: true
+            tabbed: true
           },
-          component: () => import('@/views/host/TerminalView.vue')
+          component: () => import('@/views/health/HealthIndexView.vue')
         },
         {
           path: '/setting',
           name: 'setting',
-          component: HomeView
+          meta: {
+            tabbed: true
+          },
         },
         {
           path: '/schedule/list',
           name: 'scheduleList',
+          meta: {
+            tabbed: true
+          },
           component: () => import('@/views/schedule/ScheduleView.vue')
         },
         {
           path: '/schedule/record',
           name: 'scheduleRecord',
+          meta: {
+            tabbed: true
+          },
           component: () => import('@/views/schedule/ScheduleRecordView.vue')
+        },
+        {
+          path: '/script',
+          name: 'script',
+          meta: {
+            tabbed: true
+          },
         },
         {
           path: '/pipeline',
@@ -76,21 +93,40 @@ const router = createRouter({
         {
           path: '/notification',
           name: 'notification',
-          component: HomeView
+          meta: {
+            tabbed: true
+          },
         },
-        {
-          path: '/:pathMatch(.*)',
-          name: 'not-found',
-          component: () => import('../views/NotFoundView.vue')
-        }
       ]
+    },
+    {
+      path: '/terminal',
+      name: 'terminal',
+      component: () => import('@/views/terminal/TerminalView.vue'),
     },
     {
       path: '/login',
       name: 'login',
       component: () => import('../views/LoginView.vue')
     },
+    {
+      path: '/:pathMatch(.*)',
+      name: 'not-found',
+      component: () => import('../views/NotFoundView.vue')
+    }
   ]
+})
+
+router.beforeEach(async (to, from, next) => {
+  const systemStore = useSystemStore()
+
+  if (to.meta.tabbed) {
+    systemStore.addTab({
+      title: to.name as string,
+      key: to.path,
+    })
+  }
+  next()
 })
 
 export default router

@@ -19,11 +19,10 @@ const app = createApp(App)
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
-
+app.use(pinia)
 app.use(WrapElLoading)
 app.use(UUID)
 app.use(i18n)
-app.use(pinia)
 app.use(router)
 
 app.mount('#app')

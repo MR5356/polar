@@ -7,7 +7,7 @@ import { SerializeAddon } from 'xterm-addon-serialize'
 import { Unicode11Addon } from 'xterm-addon-unicode11'
 import { WebLinksAddon } from 'xterm-addon-web-links'
 import { ElNotification } from 'element-plus'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 
 let terminalRef = ref(null)
@@ -17,10 +17,18 @@ const router = useRouter()
 const actively = ref(false)
 
 const props = defineProps({
-  uri: String
+  uri: String,
+  exit: Function,
+  isActive: {
+    type: Boolean,
+    default: false
+  }
 })
 
 const term = new Terminal({
+  theme: {
+    background: "#1d2434"
+  },
   screenKeys: true,
   rendererType: 'canvas',
   useStyle: true,
@@ -101,7 +109,13 @@ const initSocket = () => {
 
   ws.onclose = () => {
     if (!actively.value) {
-      router.go(-1)
+      // router.go(-1)
+      props.exit? props.exit() : () => {
+        window.opener = null
+        window.open('', '_self')
+        window.close()
+      }
+
     }
     if (term) {
       term.dispose()
@@ -131,10 +145,26 @@ const initSocket = () => {
     },
     false
   )
-}
 
+  window.addEventListener(
+    'focus',
+    () => {
+      if (term) {
+        console.log("聚焦")
+        term.focus()
+      }
+    }
+  )
+}
+const interval = ref(null)
 onMounted(() => {
   initSocket()
+  // FIXME: 很丑陋的循环聚焦，有待优化
+  interval.value = setInterval(()=>{
+    if (term) {
+      term.focus()
+    }
+  }, 100)
 })
 
 onUnmounted(() => {
@@ -142,13 +172,14 @@ onUnmounted(() => {
   if (ws) {
     ws.close()
   }
+  clearInterval(interval.value)
 
   term.dispose()
 })
 </script>
 
 <template>
-  <div v-loading="loading" :element-loading-text="$t('loading')" class="h-full w-full bg-black" ref="terminalRef"></div>
+  <div v-loading="loading" :element-loading-text="$t('loading')" class="h-full w-full bg-slate-800" ref="terminalRef"></div>
 </template>
 
 <style>
