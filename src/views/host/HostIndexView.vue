@@ -97,7 +97,7 @@ async function onDeleteHostGroup(id: string) {
 const openTerminal = (host: Host.HostItem) => {
   // router.push(`/terminal/${host.id}`)
   // let terminal = router.resolve({ path: '/terminal/' + host.id })
-  let terminal = { href: `/terminal?id=${host.id}` }
+  let terminal = { href: host.id ? `/terminal?id=${host.id}` : `/terminal` }
 
   let win = window.open('', terminal.href)
   if (win.location.href === 'about:blank') {
@@ -112,102 +112,104 @@ const openTerminal = (host: Host.HostItem) => {
 </script>
 
 <template>
-  <div class="flex justify-between items-center px-4 py-2 bg-gray-400 bg-opacity-20">
-    <div class="flex items-center gap-4">
-      <el-button class="uppercase font-bold" @click="onClickAddMachine" type="info" size="small" round>{{ $t('host.new')
-        }}
-      </el-button>
-    </div>
-    <div></div>
-  </div>
-  <div class="p-4 flex flex-col gap-8 select-none">
-    <template v-for="group in hostGroupsList" :key="group.id">
-      <div class="bg-white bg-opacity-30 dark:bg-slate-600 p-4 rounded-xl" v-if="group.hosts.length > 0">
-        <el-popover :width="88" trigger="contextmenu" placement="right-start" class="p-0">
-          <template #reference>
-            <div class="w-fit text-sm font-bold capitalize mb-3 select-none">{{ group.title }}</div>
-          </template>
-          <template #default>
-            <div class="flex flex-col gap-0 text-sm">
-              <!--            <div-->
-              <!--              class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"-->
-              <!--              @click="onClickEditMachine(host)"-->
-              <!--            >-->
-              <!--              编辑-->
-              <!--            </div>-->
-              <div
-                class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
-                @click="onDeleteHostGroup(group.id)"
-              >
-                删除
+  <div class="p-4 select-none">
+    <div class="bg-slate-100 p-4 rounded-xl flex flex-col gap-4">
+      <div class="flex justify-between items-center px-4 py-2 bg-white bg-opacity-80 rounded-lg">
+        <div class="uppercase font-bold flex items-center justify-between">
+          <el-button @click="onClickAddMachine" type="info" size="small">{{ $t('host.new') }}</el-button>
+          <el-button @click="openTerminal({id: ''} as Host.HostItem)" type="success" size="small">{{ $t('navigation.terminal') }}</el-button>
+        </div>
+        <div>
+        </div>
+      </div>
+      <template v-for="group in hostGroupsList" :key="group.id">
+        <div class="bg-white bg-opacity-80 dark:bg-slate-600 p-4 rounded-xl" v-if="group.hosts.length > 0">
+          <el-popover :width="88" trigger="contextmenu" placement="right-start" class="p-0">
+            <template #reference>
+              <div class="w-fit text-sm font-bold capitalize mb-3 select-none">{{ group.title }}</div>
+            </template>
+            <template #default>
+              <div class="flex flex-col gap-0 text-sm">
+                <!--            <div-->
+                <!--              class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"-->
+                <!--              @click="onClickEditMachine(host)"-->
+                <!--            >-->
+                <!--              编辑-->
+                <!--            </div>-->
+                <div
+                  class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
+                  @click="onDeleteHostGroup(group.id)"
+                >
+                  删除
+                </div>
               </div>
-            </div>
-          </template>
-        </el-popover>
-        <div class="grid grid-cols-4 gap-4">
-          <div class="bg-white dark:bg-slate-700 p-2 rounded-xl" v-for="host in group.hosts" :key="host.id">
-            <div class="flex items-center justify-between">
-              <el-popover trigger="hover" class="p-0" placement="bottom-start" :width="300">
-                <template #reference>
-                  <div class="flex items-center gap-3">
-                    <div>
-                      <img :src="Host.getOsIcon(host.metaInfo.os)"
-                           class="w-10 h-10 min-w-10 min-h-10 bg-slate-500 bg-opacity-30 dark:bg-slate-400 rounded-lg p-1"
-                           alt="logo">
-                    </div>
-                    <div class="flex flex-col flex-grow">
-                      <div class="text-sm">{{ host.title }}</div>
-                      <div class="text-xs text-slate-500 dark:text-slate-300 break-all">{{ host.desc }}
+            </template>
+          </el-popover>
+          <div class="grid grid-cols-4 gap-4">
+            <div class="bg-white dark:bg-slate-700 p-2 rounded-xl" v-for="host in group.hosts" :key="host.id">
+              <div class="flex items-center justify-between">
+                <el-popover trigger="hover" class="p-0" placement="bottom-start" :width="300">
+                  <template #reference>
+                    <div class="flex items-center gap-3">
+                      <div>
+                        <img :src="Host.getOsIcon(host.metaInfo.os)"
+                             class="w-10 h-10 min-w-10 min-h-10 bg-slate-500 bg-opacity-30 dark:bg-slate-400 rounded-lg p-1"
+                             alt="logo">
+                      </div>
+                      <div class="flex flex-col flex-grow">
+                        <div class="text-sm">{{ host.title }}</div>
+                        <div class="text-xs text-slate-500 dark:text-slate-300 break-all">{{ host.desc }}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </template>
-                <template #default>
-                  <div class="grid grid-cols-3 gap-1">
-                    <div class="col-span-3">{{ $t('host.metaInfo.os') }}: {{ host?.metaInfo.os }}</div>
-                    <div class="col-span-3">{{ $t('host.metaInfo.cpu') }}: {{ host?.metaInfo.cpu }}</div>
-                    <div class="col-span-3">{{ $t('host.metaInfo.mem') }}: {{ host?.metaInfo.mem }}</div>
-                    <div class="col-span-3">{{ $t('host.metaInfo.arch') }}: {{ host?.metaInfo.arch }}</div>
-                    <div class="col-span-3">{{ $t('host.metaInfo.kernel') }}: {{ host?.metaInfo.kernel }}</div>
-                    <div class="col-span-3">{{ $t('host.metaInfo.hostname') }}: {{ host?.metaInfo.hostname }}</div>
-                  </div>
-                </template>
-              </el-popover>
-
-              <div class="flex gap-2 items-center opacity-50">
-                <el-tooltip
-                  placement="top"
-                  content="在线终端"
-                >
-                  <Terminal size="20" @click="() => openTerminal(host)" />
-                </el-tooltip>
-                <el-popover :width="88" trigger="hover" placement="right-start" class="p-0">
-                  <template #reference>
-                    <MoreOne />
                   </template>
                   <template #default>
-                    <div class="flex flex-col gap-0 text-sm">
-                      <div
-                        class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
-                        @click="onClickEditMachine(host)"
-                      >
-                        编辑
-                      </div>
-                      <div
-                        class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
-                        @click="onDeleteMachine(host.id)"
-                      >
-                        删除
-                      </div>
+                    <div class="grid grid-cols-3 gap-1">
+                      <div class="col-span-3">{{ $t('host.metaInfo.os') }}: {{ host?.metaInfo.os }}</div>
+                      <div class="col-span-3">{{ $t('host.metaInfo.cpu') }}: {{ host?.metaInfo.cpu }}</div>
+                      <div class="col-span-3">{{ $t('host.metaInfo.mem') }}: {{ host?.metaInfo.mem }}</div>
+                      <div class="col-span-3">{{ $t('host.metaInfo.arch') }}: {{ host?.metaInfo.arch }}</div>
+                      <div class="col-span-3">{{ $t('host.metaInfo.kernel') }}: {{ host?.metaInfo.kernel }}</div>
+                      <div class="col-span-3">{{ $t('host.metaInfo.hostname') }}: {{ host?.metaInfo.hostname }}</div>
                     </div>
                   </template>
                 </el-popover>
+
+                <div class="flex gap-2 items-center opacity-50">
+                  <el-tooltip
+                    placement="top"
+                    content="在线终端"
+                  >
+                    <Terminal size="20" @click="() => openTerminal(host)" />
+                  </el-tooltip>
+                  <el-popover :width="88" trigger="hover" placement="right-start" class="p-0">
+                    <template #reference>
+                      <MoreOne />
+                    </template>
+                    <template #default>
+                      <div class="flex flex-col gap-0 text-sm">
+                        <div
+                          class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
+                          @click="onClickEditMachine(host)"
+                        >
+                          编辑
+                        </div>
+                        <div
+                          class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
+                          @click="onDeleteMachine(host.id)"
+                        >
+                          删除
+                        </div>
+                      </div>
+                    </template>
+                  </el-popover>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </template>
+      </template>
+    </div>
   </div>
   <el-dialog
     v-model="showAddMachine"
