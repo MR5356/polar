@@ -19,7 +19,7 @@ function openUrl(url: string) {
 
 <template>
   <div v-if="version" class="relative bg-white dark:bg-slate-900 rounded-2xl p-4 flex flex-col gap-2 select-none">
-    <span class="absolute right-2 top-2 inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+    <span v-if="version?.version !== version?.latestVersion" class="absolute right-2 top-2 inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
     <div class="flex gap-2 justify-between items-center">
       <div class="text-xs">{{ $t('version.current') }}: {{ version?.version }}</div>
       <el-popover trigger="hover" class="p-0" :width="300">
