@@ -20,7 +20,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="bg-gradient-to-br from-cyan-50 dark:from-slate-900 to-sky-50 dark:to-slate-700 shadow-lg shadow-sky-200 rounded-2xl p-4 flex flex-col gap-1 font-momo">
+  <div class="bg-white dark:bg-slate-800 shadow-lg shadow-sky-200 rounded-lg p-4 flex flex-col gap-1 font-momo">
     <div class="text-3xl font-medium tabular-nums text-slate-600">{{ time }}</div>
     <div class="text-xs text-slate-400">{{ date }}</div>
   </div>
