@@ -24,6 +24,14 @@ const router = createRouter({
           component: () => import('@/views/dashboard/DashboardView.vue')
         },
         {
+          path: '/application',
+          name: 'application',
+          meta: {
+            tabbed: true
+          },
+          component: () => import('@/views/application/ApplicationView.vue')
+        },
+        {
           path: '/host',
           name: 'host',
           meta: {
