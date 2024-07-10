@@ -113,7 +113,7 @@ const openTerminal = (host: Host.HostItem) => {
 
 <template>
   <div class="p-4 select-none">
-    <div class="bg-slate-100 p-4 rounded-xl flex flex-col gap-4">
+    <div class="flex flex-col gap-4">
       <div class="flex justify-between items-center px-4 py-2 bg-white bg-opacity-80 rounded-lg">
         <div class="uppercase font-bold flex items-center justify-between">
           <el-button @click="onClickAddMachine" type="info" size="small">{{ $t('host.new') }}</el-button>
@@ -123,7 +123,7 @@ const openTerminal = (host: Host.HostItem) => {
         </div>
       </div>
       <template v-for="group in hostGroupsList" :key="group.id">
-        <div class="bg-white bg-opacity-80 dark:bg-slate-600 p-4 rounded-xl" v-if="group.hosts.length > 0">
+        <div class="bg-white bg-opacity-80 dark:bg-slate-600 p-4 rounded-lg" v-if="group.hosts.length > 0">
           <el-popover :width="88" trigger="contextmenu" placement="right-start" class="p-0">
             <template #reference>
               <div class="w-fit text-sm font-bold capitalize mb-3 select-none">{{ group.title }}</div>
@@ -146,7 +146,7 @@ const openTerminal = (host: Host.HostItem) => {
             </template>
           </el-popover>
           <div class="grid grid-cols-4 gap-4">
-            <div class="bg-white dark:bg-slate-700 shadow-lg shadow-sky-100 p-4 rounded-xl" v-for="host in group.hosts" :key="host.id">
+            <div class="bg-white dark:bg-slate-700 shadow-lg shadow-sky-100 p-4 rounded-lg" v-for="host in group.hosts" :key="host.id">
               <div class="flex items-center justify-between">
                 <el-popover trigger="hover" class="p-0" placement="bottom-start" :width="300">
                   <template #reference>

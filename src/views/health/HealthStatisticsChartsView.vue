@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import * as echarts from 'echarts/core'
 import { LegendComponent, TooltipComponent } from 'echarts/components'
-import { PieChart, TreemapChart } from 'echarts/charts'
+import { PieChart } from 'echarts/charts'
 import { CanvasRenderer } from 'echarts/renderers'
 import { LabelLayout } from 'echarts/features'
 import { useI18n } from 'vue-i18n'
@@ -9,7 +9,7 @@ import { onBeforeUnmount, ref } from 'vue'
 import { Health } from '@/views/health/HealthIndexView'
 import axios from '@/utils/request'
 
-echarts.use([TooltipComponent, LegendComponent, PieChart, TreemapChart, CanvasRenderer, LabelLayout])
+echarts.use([TooltipComponent, LegendComponent, PieChart, CanvasRenderer, LabelLayout])
 
 const { t } = useI18n()
 
