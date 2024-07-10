@@ -45,6 +45,7 @@ const router = createRouter({
           meta: {
             tabbed: true
           },
+          component: () => import('@/views/TestView.vue')
         },
         {
           path: '/schedule/list',

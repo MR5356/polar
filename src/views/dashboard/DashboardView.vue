@@ -6,7 +6,7 @@ import NumberAnimation from 'vue-number-animation'
 import numeral from 'numeral'
 import EmptyImage from '@/assets/coding.svg'
 import TimeClock from '@/components/TimeClock.vue'
-import HealthStatisticsView from '@/views/health/HealthStatisticsView.vue'
+import HealthStatisticsView from '@/views/health/HealthStatisticsChartsView.vue'
 import VersionView from '@/views/dashboard/VersionView.vue'
 
 const statistics = ref<Dashboard.StatisticItem[]>([])

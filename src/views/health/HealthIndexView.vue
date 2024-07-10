@@ -7,7 +7,7 @@ import { useI18n } from 'vue-i18n'
 import HealthItemView from '@/views/health/HealthItemView.vue'
 import EmptyImage from '@/assets/surfing.svg'
 import { Plus } from '@icon-park/vue-next'
-import HealthStatisticsView from '@/views/health/HealthStatisticsView.vue'
+import HealthStatisticsView from '@/views/health/HealthStatisticsChartsView.vue'
 
 const { t } = useI18n()
 
