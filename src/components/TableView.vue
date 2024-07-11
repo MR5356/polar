@@ -30,6 +30,10 @@ defineProps({
     require: false,
     default: false
   },
+  operationsWidth: {
+    type: Number,
+    require: false,
+  },
   selectChange: Function as PropType<((val: any[]) => void)>,
   handlerEdit: Function as PropType<((val: any) => void)>,
   handlerDelete: Function as PropType<((val: any) => void)>,
@@ -65,7 +69,7 @@ const data = defineModel('data', { type: Array<any>, required: true })
         v-if="handlerDelete || handlerDetail || handlerEdit"
         :label="$t('table.operations')"
         fixed="right"
-        :width="((handlerEdit ? 1 : 0) + (handlerDetail ? 1 : 0) + (handlerDelete ? 1 : 0)) === 1 ? 84 : ((handlerEdit ? 1 : 0) + (handlerDetail ? 1 : 0) + (handlerDelete ? 1 : 0)) * 76"
+        :width="operationsWidth ?? (((handlerEdit ? 1 : 0) + (handlerDetail ? 1 : 0) + (handlerDelete ? 1 : 0)) === 1 ? 84 : ((handlerEdit ? 1 : 0) + (handlerDetail ? 1 : 0) + (handlerDelete ? 1 : 0)) * 76)"
       >
         <template #header>
           <el-input
@@ -77,15 +81,17 @@ const data = defineModel('data', { type: Array<any>, required: true })
             @keyup.enter="onSearch" />
         </template>
         <template #default="scope">
-          <el-button size="small" text bg v-if="handlerDetail" @click="handlerDetail(scope.row)">
-            {{ $t('table.detail') }}
-          </el-button>
-          <el-button size="small" text bg v-if="handlerEdit" @click="handlerEdit(scope.row)">
-            {{ $t('table.edit') }}
-          </el-button>
-          <el-button size="small" text bg type="danger" v-if="handlerDelete" @click="handlerDelete(scope.row)">
-            {{ $t('table.delete') }}
-          </el-button>
+          <slot name="operations" :row="scope.row">
+            <el-button size="small" text bg v-if="handlerDetail" @click="handlerDetail(scope.row)">
+              {{ $t('table.detail') }}
+            </el-button>
+            <el-button size="small" text bg v-if="handlerEdit" @click="handlerEdit(scope.row)">
+              {{ $t('table.edit') }}
+            </el-button>
+            <el-button size="small" text bg type="danger" v-if="handlerDelete" @click="handlerDelete(scope.row)">
+              {{ $t('table.delete') }}
+            </el-button>
+          </slot>
         </template>
       </el-table-column>
     </el-table>

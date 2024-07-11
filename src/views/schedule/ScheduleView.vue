@@ -243,7 +243,7 @@ const onSearch = () => {
 </script>
 
 <template>
-  <div class="flex gap-0 h-[100vh]">
+  <div class="flex gap-0 absolute inset-0">
     <div
       class="w-full h-full flex flex-col rounded-none shadow-2xl shadow-fuchsia-50 dark:shadow-slate-900 overflow-hidden">
       <TableView

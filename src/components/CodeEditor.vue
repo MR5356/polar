@@ -17,11 +17,14 @@ const props = defineProps({
   readOnly: {
     type: Boolean,
     default: false
+  },
+  theme: {
+    type: String,
+    default: 'vs-dark'
   }
 })
 
 const emit = defineEmits<(e: 'update:value', value: string) => void>()
-
 onMounted(() => {
   editor = monaco.editor.create(editorRef.value, {
     value: props.value,
@@ -31,7 +34,7 @@ onMounted(() => {
     },
     colorDecorators: true,
     readOnly: props.readOnly,
-    theme: 'vs-dark',
+    theme: props.theme,
     acceptSuggestionOnCommitCharacter: true,
     acceptSuggestionOnEnter: 'on',
     codeLens: true,

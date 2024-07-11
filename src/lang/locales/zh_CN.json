@@ -30,7 +30,9 @@
     "host": "主机管理",
     "health": "健康检查",
     "terminal": "在线终端",
-    "script": "代码片段"
+    "script": "代码片段",
+    "scriptList": "代码片段列表",
+    "scriptRecord": "代码片段记录"
   },
   "loading": "加载中...",
   "tips": "提示",
@@ -42,6 +44,19 @@
   "confirmDelete": "确定删除吗?",
   "confirmDeleteGroup": "确定删除该组吗？该组及其下级组将被删除。",
   "unknown": "未知",
+  "script": {
+    "id": "ID",
+    "title": "名称",
+    "desc": "描述",
+    "content": "内容",
+    "createdAt": "创建时间",
+    "type": "类型",
+    "run": "运行",
+    "cron": "定时运行",
+    "editTitle": "编辑",
+    "detailTitle": "详情",
+    "addTitle": "新增"
+  },
   "schedule": {
     "id": "ID",
     "title": "名称",

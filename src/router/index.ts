@@ -72,11 +72,20 @@ const router = createRouter({
           component: () => import('@/views/schedule/ScheduleRecordView.vue')
         },
         {
-          path: '/script',
-          name: 'script',
+          path: '/script/list',
+          name: 'scriptList',
           meta: {
             tabbed: true
           },
+          component: () => import('@/views/script/ScriptListView.vue')
+        },
+        {
+          path: '/script/record',
+          name: 'scriptRecord',
+          meta: {
+            tabbed: true
+          },
+          component: () => import('@/views/script/ScriptRecordView.vue')
         },
         {
           path: '/pipeline',
