@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-import CodeEditor from '@/components/CodeEditor.vue'
 import ContainerView from '@/components/ContainerView.vue'
 
 const v = ref('package main')
