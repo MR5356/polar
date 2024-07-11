@@ -25,6 +25,7 @@ export default defineConfig({
   plugins: [
     vue(),
     vueJsx(),
+    VueDevTools(),
     AutoImport({
       resolvers: [ElementPlusResolver()]
     }),
