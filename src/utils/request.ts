@@ -113,6 +113,27 @@ class RequestHttp {
   delete<T>(url: string, params?: object): Promise<T> {
     return this.service.delete(url, {params});
   }
+
+  sse(url: string, onMessage?: any, onError?: any, onOpen?: any): EventSource {
+    const eventSource = new EventSource(`${location.protocol}//${window.location.hostname}:${window.location.port}/api/v1${url.startsWith("/") ? url : `/${url}`}`)
+    eventSource.onmessage = function(event) {
+      if (onMessage) {
+        onMessage(event)
+      }
+    }
+    eventSource.onerror = function(err) {
+      if (onError) {
+        onError(err)
+      }
+    }
+    eventSource.onopen = function() {
+      if (onOpen) {
+        onOpen()
+      }
+    }
+
+    return eventSource
+  }
 }
 
 // 导出一个实例对象

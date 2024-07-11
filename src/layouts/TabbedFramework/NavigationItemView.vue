@@ -61,7 +61,7 @@ const onClickNavigation = (item: SystemModels.Navigation) => {
     </div>
   </div>
 
-  <div v-if="item.expand" class="pl-7 flex flex-col gap-2">
+  <div v-if="item.expand" class="pl-7 flex flex-col gap-2 mt-2">
     <div v-for="child in item.children" :key="child.title">
       <NavigationItemView :item="child" :is-children="true" />
     </div>

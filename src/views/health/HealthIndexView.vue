@@ -7,7 +7,8 @@ import { useI18n } from 'vue-i18n'
 import HealthItemView from '@/views/health/HealthItemView.vue'
 import EmptyImage from '@/assets/surfing.svg'
 import { Plus } from '@icon-park/vue-next'
-import HealthStatisticsView from '@/views/health/HealthStatisticsView.vue'
+import HealthStatisticsView from '@/views/health/HealthStatisticsChartsView.vue'
+import axios from '@/utils/request'
 
 const { t } = useI18n()
 
@@ -17,6 +18,7 @@ const showAddHealth = ref(false)
 const isEdit = ref(false)
 const newHealth = ref<Health.HealthItem>(null as Health.HealthItem)
 const newHealthParams = ref<Health.Param[]>([])
+let svtSource: EventSource
 
 const interval = ref()
 
@@ -26,7 +28,30 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   clearInterval(interval.value)
+  svtSource.close()
 })
+
+const createSSE = (n: number = 0) => {
+  if (n > 0) {
+    if (n > 10) {
+      svtSource.close()
+      return
+    }
+    console.log("/health/statistics/sse reconnect: ", n)
+  }
+  svtSource = axios.sse(
+    '/health/statistics/sse',
+    (event) => {
+      healthStatistics.value = JSON.parse(event.data) as Health.Statistics
+    },
+    (e) => {
+      console.log('/health/statistics/sse error: ', e)
+      setTimeout(() => {createSSE(n + 1)}, 1000)
+    }
+  )
+}
+
+createSSE()
 
 const init = async () => {
   await Health.getHealthList().then((res) => {
@@ -94,36 +119,17 @@ init()
 </script>
 
 <template>
-  <div class="absolute inset-0 flex flex-col overflow-hidden">
-    <!-- 顶部 -->
-<!--    <div class="sticky top-0 select-none flex justify-between items-center px-4 py-2 bg-sky-100 dark:bg-slate-700 z-10">-->
-<!--      <div class="flex items-center gap-4">-->
-<!--        <el-button class="uppercase font-bold" @click="onClickAddHealth" type="info" size="small" round>-->
-<!--          {{ $t('health.new')-->
-<!--          }}-->
-<!--        </el-button>-->
-<!--      </div>-->
-<!--      <div></div>-->
-<!--    </div>-->
-
-    <div class="p-4 flex gap-4 select-none h-[96%]">
+  <div class="absolute inset-0 flex flex-col overflow-y-auto">
+    <div class="p-4 flex gap-4 select-none">
       <!-- 左侧内容 -->
       <div class="w-3/4 h-fit grid grid-cols-2 gap-4">
         <div class="col-span-2">
           <HealthStatisticsView />
         </div>
-<!--        <div class="col-span-1 h-[250px] bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">-->
-<!--          <div class="text-sm font-bold border-green-400 border-l-4 rounded pl-1">检查类型统计</div>-->
-<!--          <div class="w-full h-full" ref="mainChart"></div>-->
-<!--        </div>-->
-<!--        <div class="col-span-1 h-[250px] bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">-->
-<!--          <div class="text-sm font-bold border-green-400 border-l-4 rounded pl-1">运行状态统计</div>-->
-<!--          <div class="w-full h-full" ref="statusChart"></div>-->
-<!--        </div>-->
         <div class="col-span-2 grid grid-cols-4 gap-4 bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">
           <div class="col-span-4 text-sm font-bold border-green-400 border-l-4 rounded pl-1">监控列表</div>
           <div class="cursor-pointer text-slate-700 dark:text-slate-100 shadow-lg shadow-sky-100 bg-sky-50 dark:bg-slate-600 rounded-lg p-4 relative" @click="onClickAddHealth" >
-            <div class="absolute w-full h-full inset-0 m-auto flex justify-center items-center gap-2">
+            <div class="absolute w-full h-full min-h-[100px] inset-0 m-auto flex justify-center items-center gap-2">
               <plus theme="outline" size="22" fill="#332" :strokeWidth="4" />
               <div class="text-sm font-bold">{{ $t('health.new') }}</div>
             </div>
