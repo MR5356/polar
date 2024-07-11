@@ -6,7 +6,6 @@ import type { Pager } from '@/utils/request'
 import moment from 'moment'
 import TableView, { type TableColumn } from '@/components/TableView.vue'
 import { ElMessageBox } from 'element-plus'
-import CodeEditor from '@/components/CodeEditor.vue'
 
 const { t } = useI18n()
 
