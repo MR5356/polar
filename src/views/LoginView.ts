@@ -31,6 +31,10 @@ export namespace User {
     return axios.get<UserInfo>("/user/info")
   }
 
+  export const login = async (username: string, password: string) => {
+    return axios.post("/user/login", { username, password })
+  }
+
   export const logout = async () => {
     return axios.get("/user/logout")
   }
