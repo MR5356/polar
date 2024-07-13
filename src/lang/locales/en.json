@@ -4,6 +4,9 @@
   "search": "Search",
   "signIn": "Sign in",
   "logout": "Sign out",
+  "username": "Username",
+  "password": "Password",
+  "usernameOrPasswordNotNull": "Username or password cannot be empty",
   "signWithGithub": "Continue with Github",
   "signWithGitlab": "Continue with Gitlab",
   "needLogin": "continue with your account",
@@ -32,7 +35,8 @@
     "terminal": "Terminal",
     "script": "Script",
     "scriptList": "Script List",
-    "scriptRecord": "Script Record"
+    "scriptRecord": "Script Record",
+    "user": "User Management"
   },
   "loading": "Loading...",
   "tips": "Tips",
@@ -156,5 +160,26 @@
     "current": "version",
     "latest": "Found new version",
     "releaseNote": "Release Note"
+  },
+  "user": {
+    "new": "New User",
+    "newGroup": "New Group",
+    "edit": "Edit User",
+    "type": {
+      "0": "Local",
+      "1": "OAuth"
+    },
+    "status": {
+      "0": "Unactivated",
+      "1": "Normal",
+      "2": "Banned"
+    },
+    "action": {
+      "delete": "Delete",
+      "reset": "Reset Password",
+      "ban": "Ban",
+      "unban": "Unban",
+      "group": "Group"
+    }
   }
 }

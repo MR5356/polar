@@ -5,9 +5,24 @@ import { useSystemStore } from '@/stores/system'
 import GithubIcon from '@/components/icons/GithubIcon.vue'
 import GitlabIcon from '@/components/icons/GitlabIcon.vue'
 import { User } from '@/views/LoginView'
+import { ElMessage } from 'element-plus'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const systemStore = useSystemStore()
 const router = useRouter()
+
+const username = ref('')
+const password = ref('')
+
+const login = async () => {
+  if (!username.value || !password.value) {
+    ElMessage.error(t('usernameOrPasswordNotNull'))
+    return
+  }
+  await User.login(username.value, password.value)
+  await router.replace(router.currentRoute.value.query.redirectURL as string ?? '/')
+}
 
 const loading = ref(false)
 
@@ -55,23 +70,39 @@ init()
           </router-link>
           <div class="text-5xl font-bold">{{ $t('signIn') }}</div>
         </div>
-        <div class="flex flex-col gap-0 font-mono subpixel-antialiased items-center w-full">
-          <div v-for="(item, index) in availableOAuth" :key="item.oauth" class="w-full">
-            <el-button class="w-full" :icon="item.type === 'github' ? GithubIcon : GitlabIcon" type="primary" size="large"
-                       :disabled="loading" @click="onClickOAuthLogin(item.oauth)">
-              {{ (item.type === 'github' ? $t('signWithGithub') : $t('signWithGitlab')).replaceAll('Github', item.oauth).replaceAll('Gitlab', item.oauth)
-              }}
-            </el-button>
-            <!--            <div class="flex items-center justify-between w-full" @click="onClickOAuthLogin(item.oauth)">-->
-            <!--              <div-->
-            <!--                class="cursor-pointer bg-blue-600 text-white rounded-lg p-3 px-6 flex items-center gap-2 w-full justify-center hover:shadow-lg">-->
-            <!--                <github-icon v-if="item.type === 'github'" class="w-4 h-4" />-->
-            <!--                <gitlab-icon v-if="item.type === 'gitlab'" class="w-4 h-4" />-->
-            <!--                <div v-if="item.type === 'github'">{{ $t('signWithGithub').replaceAll('Github', item.oauth) }}</div>-->
-            <!--                <div v-if="item.type === 'gitlab'">{{ $t('signWithGitlab').replaceAll('Gitlab', item.oauth) }}</div>-->
-            <!--              </div>-->
-            <!--            </div>-->
-            <div v-if="index !== availableOAuth.length - 1" class="text-sm text-gray-500 text-center py-1">OR</div>
+        <div>
+          <el-form label-position="top">
+            <el-form-item :label="$t('username')">
+              <el-input v-model="username" />
+            </el-form-item>
+            <el-form-item :label="$t('password')">
+              <el-input v-model="password" type="password" />
+            </el-form-item>
+            <el-form-item>
+              <el-button class="w-full" type="primary" size="large" :disabled="loading" @click="login">
+                {{ $t('signIn') }}
+              </el-button>
+            </el-form-item>
+          </el-form>
+          <div class="flex items-center gap-4">
+            <div v-for="item in availableOAuth" :key="item.oauth">
+              <el-popover trigger="hover" :width="120">
+                <template #reference>
+                  <div class="w-6 h-6">
+                    <GithubIcon class="w-full h-full cursor-pointer" v-if="item.type === 'github'" @click="onClickOAuthLogin(item.oauth)" />
+                    <GitlabIcon class="w-full h-full cursor-pointer" v-if="item.type === 'gitlab'" @click="onClickOAuthLogin(item.oauth)" />
+                  </div>
+                </template>
+                <div class="text-center text-xs text-gray-500">
+                  {{ (item.type === 'github' ? $t('signWithGithub') : $t('signWithGitlab')).replaceAll('Github', item.oauth).replaceAll('Gitlab', item.oauth)
+                  }}
+                </div>
+              </el-popover>
+<!--              <div class="w-6 h-6">-->
+<!--                <GithubIcon class="w-full h-full cursor-pointer" v-if="item.type === 'github'" @click="onClickOAuthLogin(item.oauth)" />-->
+<!--                <GitlabIcon class="w-full h-full cursor-pointer" v-if="item.type === 'gitlab'" @click="onClickOAuthLogin(item.oauth)" />-->
+<!--              </div>-->
+            </div>
           </div>
         </div>
         <div class="text-center text-xs text-gray-500" v-html="$t('signInNote')" />

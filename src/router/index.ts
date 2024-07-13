@@ -115,6 +115,14 @@ const router = createRouter({
             tabbed: true
           },
         },
+        {
+          path: '/user',
+          name: 'user',
+          meta: {
+            tabbed: true
+          },
+          component: () => import('@/views/user/UserView.vue')
+        },
       ]
     },
     {
