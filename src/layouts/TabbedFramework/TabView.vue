@@ -10,7 +10,9 @@ const activeKey = ref<string>(route.path)
 
 const onEdit = (targetKey: string | MouseEvent, action: string) => {
   systemStore.removeTab(targetKey as string)
-  history.go(-1)
+  if (targetKey === route.path) {
+    history.go(-1)
+  }
 }
 
 

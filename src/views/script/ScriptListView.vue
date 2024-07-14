@@ -2,10 +2,12 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Script } from '@/views/script/Script'
+import { Host } from '@/views/host/HostIndexView'
 import type { Pager } from '@/utils/request'
 import moment from 'moment'
 import TableView, { type TableColumn } from '@/components/TableView.vue'
-import { ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import router from '@/router'
 
 const { t } = useI18n()
 
@@ -14,6 +16,28 @@ const data = ref<Script.ScriptItem[]>([])
 const currentItem = ref<Script.ScriptItem | null>(null)
 const showDrawer = ref(false)
 const drawerMode = ref<'edit' | 'detail' | 'add'>('edit')
+
+const showRunScript = ref(false)
+const currentScript = ref<Script.ScriptItem | null>(null)
+const params = ref('')
+
+const runScript = ref({
+  scriptId: '',
+  params: '',
+  hostIds: [],
+  type: 'machine',
+  machineGroupId: null,
+  ms: [],
+  mgs: []
+})
+
+function onRunScriptTabChange(e) {
+  if (e === 'machine') {
+    runScript.value.machineGroupId = null
+  } else {
+    runScript.value.hostIds = []
+  }
+}
 
 const rawData = ref<Pager<Script.ScriptItem>>({
   current: 1,
@@ -139,6 +163,35 @@ const onSubmit = async () => {
   await listScript()
 }
 
+const onClickRunScript = async (script: Script.ScriptItem) => {
+  currentScript.value = script
+  runScript.value.scriptId = script.id
+  runScript.value.ms = await Host.getHosts()
+  runScript.value.mgs = await Host.getGroups()
+  showRunScript.value = true
+}
+
+const onSubmitRunScript = async () => {
+  const hostIds = []
+  if (runScript.value.machineGroupId) {
+    const temp = runScript.value.mgs.find((item) => item.id == runScript.value.machineGroupId)
+    if (temp) {
+      temp.hosts.forEach((item) => {
+        hostIds.push(item.id)
+      })
+    }
+  } else {
+    hostIds.push(...runScript.value.hostIds)
+  }
+  if (hostIds.length === 0) {
+    ElMessage.warning(t('script.noHost'))
+    return
+  }
+  await Script.execScript(runScript.value.scriptId, hostIds, params.value)
+  showRunScript.value = false
+  await router.push('/script/record')
+}
+
 </script>
 
 <template>
@@ -167,16 +220,16 @@ const onSubmit = async () => {
           </div>
         </template>
         <template #operations="scope">
-          <el-button size="small" text bg @click="handleEdit(scope.row)">
+          <el-button size="small" text bg type="primary" @click="handleEdit(scope.row)">
             {{ $t('table.edit') }}
           </el-button>
           <el-button size="small" text bg type="danger" @click="handleDelete(scope.row)">
             {{ $t('table.delete') }}
           </el-button>
-          <el-button size="small" text bg disabled @click="handleEdit(scope.row)">
+          <el-button size="small" text bg type="primary" @click="onClickRunScript(scope.row)">
             {{ $t('script.run') }}
           </el-button>
-          <el-button size="small" text bg disabled @click="handleEdit(scope.row)">
+          <el-button size="small" text bg type="primary" disabled @click="handleEdit(scope.row)">
             {{ $t('script.cron') }}
           </el-button>
         </template>
@@ -221,11 +274,81 @@ const onSubmit = async () => {
     <template #footer>
       <div v-if="drawerMode=='edit' || drawerMode=='add'">
         <el-button size="small" @click="showDrawer=false">{{ $t('cancel') }}</el-button>
-        <el-button size="small" type="primary" v-if="drawerMode=='edit' || drawerMode=='add'" @click="onSubmit">{{ $t('save') }}
+        <el-button size="small" type="primary" v-if="drawerMode=='edit' || drawerMode=='add'" @click="onSubmit">
+          {{ $t('save') }}
         </el-button>
       </div>
     </template>
   </el-drawer>
+  <el-dialog
+    v-model="showRunScript"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    :show-close="false"
+    class="max-w-[600px] min-w-[420px] max-h-[800px] overflow-y-auto"
+    :title="$t('script.run')"
+  >
+    <div class="font-bold select-none">
+      <el-form
+        label-position="top"
+        label-width="auto"
+        :model="currentScript"
+        size="small"
+      >
+        <el-form-item :label="$t('script.title')">
+          <el-input v-model="currentScript.title" disabled />
+        </el-form-item>
+        <el-form-item :label="$t('script.params')">
+          <el-input v-model="params" />
+        </el-form-item>
+        <el-tabs v-model="runScript.type" @tab-change="onRunScriptTabChange">
+          <el-tab-pane label="选择机器" name="machine">
+            <el-form-item label="">
+              <el-select v-model="runScript.hostIds" multiple default-first-option>
+                <el-option
+                  v-for="m in runScript.ms"
+                  :key="m.id"
+                  :label="`${m.title}: ${m.hostInfo?.username}@${m.hostInfo.host}:${m.hostInfo.port}`"
+                  :value="m.id"
+                />
+              </el-select>
+            </el-form-item>
+          </el-tab-pane>
+          <el-tab-pane label="选择机器组" name="machineGroup">
+            <el-form-item label="">
+              <el-select v-model="runScript.machineGroupId" default-first-option>
+                <el-option
+                  v-for="m in runScript?.mgs"
+                  :key="m.id"
+                  :label="`${m.title}`"
+                  :value="m.id"
+                />
+              </el-select>
+            </el-form-item>
+            <div class="flex gap-2 flex-wrap">
+              <div
+                class="bg-blue-100 rounded-full px-2 py-1 text-xs text-gray-500"
+                v-for="m in runScript.mgs?.find(
+                      (i) => i.id === runScript.machineGroupId
+                    )?.hosts"
+                :key="m.id"
+              >
+                {{ m.title }}: {{ m.hostInfo.username }}@{{ m.hostInfo.host }}:{{
+                  m.hostInfo.port
+                }}
+              </div>
+            </div>
+          </el-tab-pane>
+        </el-tabs>
+      </el-form>
+    </div>
+    <template #footer>
+            <span>
+              <el-button @click="showRunScript = false">取消</el-button>
+              <el-button type="primary" @click="onSubmitRunScript">提交</el-button>
+            </span>
+    </template>
+  </el-dialog>
 </template>
 
 <style scoped>

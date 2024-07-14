@@ -59,7 +59,15 @@
     "cron": "Cron",
     "editTitle": "Edit",
     "detailTitle": "Detail",
-    "addTitle": "Add"
+    "addTitle": "Add",
+    "params": "Params",
+    "status": "Status",
+    "spend": "Spend",
+    "action": {
+      "stop": "Stop",
+      "log": "Log"
+    },
+    "noHost": "Host empty"
   },
   "schedule": {
     "id": "ID",
@@ -180,6 +188,7 @@
       "ban": "Ban",
       "unban": "Unban",
       "group": "Group"
-    }
+    },
+    "noGroup": ""
   }
 }

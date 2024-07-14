@@ -69,10 +69,10 @@ export namespace SystemModels {
           title: 'navigation.scriptList',
           path: '/script/list',
         },
-        // {
-        //   title: 'navigation.scriptRecord',
-        //   path: '/script/record',
-        // }
+        {
+          title: 'navigation.scriptRecord',
+          path: '/script/record',
+        }
       ]
     },
     {
