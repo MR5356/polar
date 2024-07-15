@@ -57,6 +57,7 @@
     "type": "类型",
     "run": "运行",
     "cron": "定时运行",
+    "cronStr": "定时任务表达式",
     "editTitle": "编辑",
     "detailTitle": "详情",
     "addTitle": "新增",

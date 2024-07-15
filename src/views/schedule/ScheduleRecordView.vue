@@ -131,9 +131,10 @@ const formatData = () => {
     let newItem = JSON.parse(JSON.stringify(item))
 
     // newItem.enabled = t('schedule.' + newItem.enabled)
+    newItem.costTime = (newItem.createdAt === newItem.updatedAt ? moment().diff(moment(newItem.createdAt), 'seconds') : moment(newItem.updatedAt).diff(moment(newItem.createdAt), 'seconds')).toLocaleString() + 's'
     newItem.createdAt = moment(newItem.createdAt).format('YYYY-MM-DD HH:mm:ss')
     newItem.updatedAt = moment(newItem.updatedAt).format('YYYY-MM-DD HH:mm:ss')
-    newItem.costTime = (newItem.createdAt === newItem.updatedAt ? moment().diff(moment(newItem.createdAt), 'seconds') : moment(newItem.updatedAt).diff(moment(newItem.createdAt), 'seconds')).toLocaleString() + 's'
+    // newItem.costTime = (moment(newItem.updatedAt).diff(moment(newItem.createdAt), 'seconds')).toLocaleString() + 's'
     newItem.executor = executors.value.find((item) => item.name === newItem.executor)?.displayName ?? t('unknown')
     data.value.push(newItem)
   })

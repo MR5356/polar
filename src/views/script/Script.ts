@@ -61,4 +61,8 @@ export namespace Script {
   export const getJobLog = async (id: string): Promise<Map<string, string[]>> => {
     return axios.get(`/script/exec/${id}/log`)
   }
+
+  export const cronExecScript = async (data: any) => {
+    return axios.post(`/schedule`, data)
+  }
 }

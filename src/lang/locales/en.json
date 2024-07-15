@@ -57,6 +57,7 @@
     "type": "Type",
     "run": "Run",
     "cron": "Cron",
+    "cronStr": "CronStr",
     "editTitle": "Edit",
     "detailTitle": "Detail",
     "addTitle": "Add",

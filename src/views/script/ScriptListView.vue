@@ -20,6 +20,7 @@ const drawerMode = ref<'edit' | 'detail' | 'add'>('edit')
 const showRunScript = ref(false)
 const currentScript = ref<Script.ScriptItem | null>(null)
 const params = ref('')
+const isCron = ref(false)
 
 const runScript = ref({
   scriptId: '',
@@ -28,7 +29,10 @@ const runScript = ref({
   type: 'machine',
   machineGroupId: null,
   ms: [],
-  mgs: []
+  mgs: [],
+  cron: "",
+  title: "",
+  desc: ""
 })
 
 function onRunScriptTabChange(e) {
@@ -164,8 +168,22 @@ const onSubmit = async () => {
 }
 
 const onClickRunScript = async (script: Script.ScriptItem) => {
-  currentScript.value = script
+  currentScript.value = JSON.parse(JSON.stringify(script))
+  isCron.value = false
   runScript.value.scriptId = script.id
+  runScript.value.title = script.title
+  runScript.value.desc = script.desc
+  runScript.value.ms = await Host.getHosts()
+  runScript.value.mgs = await Host.getGroups()
+  showRunScript.value = true
+}
+
+const onClickCronRunScript = async (script: Script.ScriptItem) => {
+  currentScript.value = JSON.parse(JSON.stringify(script))
+  isCron.value = true
+  runScript.value.scriptId = script.id
+  runScript.value.title = script.title
+  runScript.value.desc = script.desc
   runScript.value.ms = await Host.getHosts()
   runScript.value.mgs = await Host.getGroups()
   showRunScript.value = true
@@ -187,9 +205,21 @@ const onSubmitRunScript = async () => {
     ElMessage.warning(t('script.noHost'))
     return
   }
-  await Script.execScript(runScript.value.scriptId, hostIds, params.value)
-  showRunScript.value = false
-  await router.push('/script/record')
+  if (isCron.value) {
+    await Script.cronExecScript({
+      cronString: runScript.value.cron,
+      desc: runScript.value.desc,
+      enabled: true,
+      executor: "script",
+      params: JSON.stringify({scriptId: runScript.value.scriptId, hostIds: hostIds, params: params.value}),
+      title: runScript.value.title
+    })
+    showRunScript.value = false
+  } else {
+    await Script.execScript(runScript.value.scriptId, hostIds, params.value)
+    showRunScript.value = false
+    await router.push('/script/record')
+  }
 }
 
 </script>
@@ -229,7 +259,7 @@ const onSubmitRunScript = async () => {
           <el-button size="small" text bg type="primary" @click="onClickRunScript(scope.row)">
             {{ $t('script.run') }}
           </el-button>
-          <el-button size="small" text bg type="primary" disabled @click="handleEdit(scope.row)">
+          <el-button size="small" text bg type="primary" @click="onClickCronRunScript(scope.row)">
             {{ $t('script.cron') }}
           </el-button>
         </template>
@@ -296,7 +326,13 @@ const onSubmitRunScript = async () => {
         size="small"
       >
         <el-form-item :label="$t('script.title')">
-          <el-input v-model="currentScript.title" disabled />
+          <el-input v-model="runScript.title" :disabled="!isCron" />
+        </el-form-item>
+        <el-form-item :label="$t('script.desc')" v-if="isCron">
+          <el-input v-model="runScript.desc" :disabled="!isCron" />
+        </el-form-item>
+        <el-form-item :label="$t('script.cronStr')" v-if="isCron">
+          <el-input v-model="runScript.cron" />
         </el-form-item>
         <el-form-item :label="$t('script.params')">
           <el-input v-model="params" />
