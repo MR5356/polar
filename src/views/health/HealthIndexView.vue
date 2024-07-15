@@ -128,8 +128,8 @@ init()
         </div>
         <div class="col-span-2 grid grid-cols-4 gap-4 bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">
           <div class="col-span-4 text-sm font-bold border-green-400 border-l-4 rounded pl-1">监控列表</div>
-          <div class="cursor-pointer text-slate-700 dark:text-slate-100 shadow-lg shadow-sky-100 bg-sky-50 dark:bg-slate-600 rounded-lg p-4 relative" @click="onClickAddHealth" >
-            <div class="absolute w-full h-full min-h-[100px] inset-0 m-auto flex justify-center items-center gap-2">
+          <div class="cursor-pointer min-h-[50px] text-slate-700 dark:text-slate-100 shadow-lg shadow-sky-100 bg-sky-50 dark:bg-slate-600 rounded-lg p-4 relative" @click="onClickAddHealth" >
+            <div class="absolute w-full h-full inset-0 m-auto flex justify-center items-center gap-2">
               <plus theme="outline" size="22" fill="#332" :strokeWidth="4" />
               <div class="text-sm font-bold">{{ $t('health.new') }}</div>
             </div>

@@ -37,7 +37,7 @@ const unbanUser = async (id: string) => {
           <a-tag :bordered="false" v-else color="warning">{{ $t('user.status.' + user.status) }}</a-tag>
         </div>
         <div class="text-xs text-gray-500">@{{ $t('user.type.' + user.type) }}</div>
-        <div class="text-sm font-medium text-slate-800">{{ user?.group }}</div>
+        <div class="text-sm font-medium text-slate-800">{{ user.group ? user.group : $t('user.noGroup') }}</div>
       </div>
     </div>
     <div>

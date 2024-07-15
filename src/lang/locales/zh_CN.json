@@ -57,9 +57,18 @@
     "type": "类型",
     "run": "运行",
     "cron": "定时运行",
+    "cronStr": "定时任务表达式",
     "editTitle": "编辑",
     "detailTitle": "详情",
-    "addTitle": "新增"
+    "addTitle": "新增",
+    "params": "参数",
+    "status": "状态",
+    "spend": "耗时",
+    "action": {
+      "stop": "停止",
+      "log": "日志"
+    },
+    "noHost": "主机为空"
   },
   "schedule": {
     "id": "ID",
@@ -180,6 +189,7 @@
       "ban": "禁用",
       "unban": "启用",
       "group": "分组"
-    }
+    },
+    "noGroup": ""
   }
 }

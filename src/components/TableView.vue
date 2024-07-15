@@ -66,7 +66,7 @@ const data = defineModel('data', { type: Array<any>, required: true })
                        :width="column.width" :show-overflow-tooltip="true" :align="column.align"
                        :formatter="column.formatter" :fixed="column.fixed" />
       <el-table-column
-        v-if="handlerDelete || handlerDetail || handlerEdit"
+        v-if="handlerDelete || handlerDetail || handlerEdit || operationsWidth"
         :label="$t('table.operations')"
         fixed="right"
         :width="operationsWidth ?? (((handlerEdit ? 1 : 0) + (handlerDetail ? 1 : 0) + (handlerDelete ? 1 : 0)) === 1 ? 84 : ((handlerEdit ? 1 : 0) + (handlerDetail ? 1 : 0) + (handlerDelete ? 1 : 0)) * 76)"
