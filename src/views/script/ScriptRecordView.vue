@@ -32,8 +32,9 @@ const formatData = () => {
   data.value = []
   rawData.value.data.forEach((item) => {
     let newItem = JSON.parse(JSON.stringify(item))
+    newItem.spend = (newItem.createdAt === newItem.updatedAt ? moment().diff(moment(newItem.createdAt), 'seconds') : moment(newItem.updatedAt).diff(moment(newItem.createdAt), 'seconds')).toLocaleString() + 's'
     newItem.createdAt = moment(newItem.createdAt).format('YYYY-MM-DD HH:mm:ss')
-    newItem.spend = formatTime(moment(newItem.updatedAt).diff(newItem.createdAt, 's'))
+    // newItem.spend = formatTime(moment(newItem.updatedAt).diff(newItem.createdAt, 's'))
     data.value.push(newItem)
   })
 }
