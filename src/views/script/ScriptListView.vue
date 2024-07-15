@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, h } from 'vue'
+import { ref, h, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Script } from '@/views/script/Script'
 import { Host } from '@/views/host/HostIndexView'
@@ -8,6 +8,9 @@ import moment from 'moment'
 import TableView, { type TableColumn } from '@/components/TableView.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import router from '@/router'
+import type { EditorConfiguration } from 'codemirror'
+import type { CmComponentRef } from 'codemirror-editor-vue3'
+import 'codemirror/mode/shell/shell'
 
 const { t } = useI18n()
 
@@ -30,10 +33,27 @@ const runScript = ref({
   machineGroupId: null,
   ms: [],
   mgs: [],
-  cron: "",
-  title: "",
-  desc: ""
+  cron: '',
+  title: '',
+  desc: ''
 })
+
+const cmOptions: EditorConfiguration = {
+  mode: 'text/x-sh',
+  lineNumbers: true,
+  autofocus: true
+}
+const intervalCodeMirror = ref()
+const cmRef = ref<CmComponentRef>()
+
+onMounted(() => {
+  intervalCodeMirror.value = setInterval(cmRef.value?.refresh, 500)
+})
+
+onBeforeUnmount(() => {
+  clearInterval(intervalCodeMirror.value)
+})
+
 
 function onRunScriptTabChange(e) {
   if (e === 'machine') {
@@ -78,8 +98,12 @@ const columns = ref<TableColumn[]>([
     align: 'left',
     width: 150,
     formatter(row, column, cellValue, index) {
-      return h('a', { class: 'text-blue-500 cursor-pointer capitalize', href: 'javascript:;', onClick: () => onShowScriptContent(row.id, row.title + (row.type === 'shell' ? '.sh' : '')) }, cellValue)
-    },
+      return h('a', {
+        class: 'text-blue-500 cursor-pointer capitalize',
+        href: 'javascript:;',
+        onClick: () => onShowScriptContent(row.id, row.title + (row.type === 'shell' ? '.sh' : ''))
+      }, cellValue)
+    }
   },
   {
     field: 'type',
@@ -138,7 +162,7 @@ const handleEdit = async (val: Script.ScriptItem) => {
 }
 
 const handleAdd = () => {
-  currentItem.value = {} as Script.ScriptItem
+  currentItem.value = { content: '#!/bin/bash' } as Script.ScriptItem
   currentItem.value.type = 'shell'
   showDrawer.value = true
   drawerMode.value = 'add'
@@ -213,8 +237,8 @@ const onSubmitRunScript = async () => {
       cronString: runScript.value.cron,
       desc: runScript.value.desc,
       enabled: true,
-      executor: "script",
-      params: JSON.stringify({scriptId: runScript.value.scriptId, hostIds: hostIds, params: params.value}),
+      executor: 'script',
+      params: JSON.stringify({ scriptId: runScript.value.scriptId, hostIds: hostIds, params: params.value }),
       title: runScript.value.title
     })
     showRunScript.value = false
@@ -226,7 +250,7 @@ const onSubmitRunScript = async () => {
 }
 
 const onShowScriptContent = (id: string, title: string) => {
-  window.open(`/api/v1/script/${id}/${title}`, "_blank")
+  window.open(`/api/v1/script/${id}/${title}`, '_blank')
 }
 
 </script>
@@ -301,7 +325,16 @@ const onShowScriptContent = (id: string, title: string) => {
           <el-input v-model="currentItem.desc" :disabled="drawerMode==='detail'" />
         </el-form-item>
         <el-form-item :label="$t('script.content')">
-          <el-input v-model="currentItem.content" type="textarea" :disabled="drawerMode==='detail'" />
+          <!--          <el-input v-model="currentItem.content" type="textarea" :disabled="drawerMode==='detail'" />-->
+          <Codemirror
+            v-model:value="currentItem.content"
+            :options="cmOptions"
+            border
+            ref="cmRef"
+            height="400"
+            width="100%"
+          >
+          </Codemirror>
         </el-form-item>
         <el-form-item :label="$t('script.type')">
           <el-input v-model="currentItem.type" disabled />
