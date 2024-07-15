@@ -39,9 +39,9 @@ const runScript = ref({
 })
 
 const cmOptions: EditorConfiguration = {
-  mode: "text/x-sh",
+  mode: 'text/x-sh',
   lineNumbers: true,
-  autofocus: true,
+  autofocus: true
 }
 const intervalCodeMirror = ref()
 const cmRef = ref<CmComponentRef>()
@@ -162,7 +162,7 @@ const handleEdit = async (val: Script.ScriptItem) => {
 }
 
 const handleAdd = () => {
-  currentItem.value = {content: '#!/bin/bash'} as Script.ScriptItem
+  currentItem.value = { content: '#!/bin/bash' } as Script.ScriptItem
   currentItem.value.type = 'shell'
   showDrawer.value = true
   drawerMode.value = 'add'
