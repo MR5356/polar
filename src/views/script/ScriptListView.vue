@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, h } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Script } from '@/views/script/Script'
 import { Host } from '@/views/host/HostIndexView'
@@ -76,7 +76,10 @@ const columns = ref<TableColumn[]>([
     label: 'script.title',
     fixed: true,
     align: 'left',
-    width: 150
+    width: 150,
+    formatter(row, column, cellValue, index) {
+      return h('a', { class: 'text-blue-500 cursor-pointer capitalize', href: 'javascript:;', onClick: () => onShowScriptContent(row.id, row.title + (row.type === 'shell' ? '.sh' : '')) }, cellValue)
+    },
   },
   {
     field: 'type',
@@ -220,6 +223,10 @@ const onSubmitRunScript = async () => {
     showRunScript.value = false
     await router.push('/script/record')
   }
+}
+
+const onShowScriptContent = (id: string, title: string) => {
+  window.open(`/api/v1/script/${id}/${title}`, "_blank")
 }
 
 </script>

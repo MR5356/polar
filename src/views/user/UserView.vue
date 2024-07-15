@@ -17,7 +17,7 @@ listUser()
     <div class="flex justify-between text-blue-600">
       <div class="text-lg font-bold">{{ $t('navigation.user') }}</div>
       <div class="flex gap-2">
-        <div class="text-sm font-medium border-[1px] border-blue-600 px-4 py-1 rounded-full cursor-not-allowed">{{ $t('user.new') }}</div>
+<!--        <div class="text-sm font-medium border-[1px] border-blue-600 px-4 py-1 rounded-full cursor-not-allowed">{{ $t('user.new') }}</div>-->
 <!--        <div class="text-sm font-medium border-[1px] border-blue-600 px-4 py-1 rounded-full cursor-pointer">{{ $t('user.newGroup') }}</div>-->
       </div>
     </div>
