@@ -36,7 +36,8 @@
     "script": "Script",
     "scriptList": "Script List",
     "scriptRecord": "Script Record",
-    "user": "User Management"
+    "user": "User Management",
+    "container":"Container Manager"
   },
   "loading": "Loading...",
   "tips": "Tips",
@@ -191,5 +192,33 @@
       "group": "Group"
     },
     "noGroup": ""
+  },
+  "container": {
+    "title": "Container Manager",
+    "navigation": {
+      "container": "Container",
+      "image": "Image",
+      "network": "Network"
+    },
+    "table": {
+      "state": "State",
+      "name": "Name",
+      "label": "Label",
+      "image": "Image",
+      "status": "Status",
+      "driver": "Driver",
+      "ipv6": "IPv6",
+      "scope": "Scope",
+      "internal": "Internal",
+      "size": "Size",
+      "created": "Created"
+    },
+    "actions": {
+      "start": "Start",
+      "stop": "Stop",
+      "delete": "Delete",
+      "log": "Log",
+      "exec": "Exec"
+    }
   }
 }

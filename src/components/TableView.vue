@@ -2,6 +2,7 @@
 
 import type { PropType, VNode } from 'vue'
 import EmptyImage from '@/assets/empty.svg'
+import type { TableColumnCtx, TableInstance } from 'element-plus'
 
 export interface TableColumn {
   field: string
@@ -9,6 +10,8 @@ export interface TableColumn {
   width?: string | number
   fixed?: boolean
   align?: 'left' | 'center' | 'right'
+  filters?: Array
+  filterMethod?: (value: string, row: any, column: TableColumnCtx<any>) => boolean
   formatter?: (row: any, column: any, cellValue: any, index: number) => VNode | string
 }
 
@@ -64,7 +67,7 @@ const data = defineModel('data', { type: Array<any>, required: true })
       <el-table-column v-if="selection" type="selection" width="30" />
       <el-table-column v-for="column in columns" :key="column.field" :property="column.field" :label="$t(column.label)"
                        :width="column.width" :show-overflow-tooltip="true" :align="column.align"
-                       :formatter="column.formatter" :fixed="column.fixed" />
+                       :formatter="column.formatter" :filters="column.filters" :filter-method="column.filterMethod" :fixed="column.fixed" />
       <el-table-column
         v-if="handlerDelete || handlerDetail || handlerEdit || operationsWidth"
         :label="$t('table.operations')"

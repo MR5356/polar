@@ -40,6 +40,14 @@ const router = createRouter({
           component: () => import('@/views/host/HostIndexView.vue')
         },
         {
+          path: '/container/:id',
+          name: 'container',
+          meta: {
+            tabbed: true
+          },
+          component: () => import('@/views/host/ContainerView.vue')
+        },
+        {
           path: '/health',
           name: 'health',
           meta: {

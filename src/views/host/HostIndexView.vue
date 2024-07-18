@@ -33,6 +33,10 @@ async function onClickEditMachine(host: Host.HostItem) {
   showAddMachine.value = true
 }
 
+async function onClickContainer(id: string) {
+  router.push(`/container/${id}`)
+}
+
 async function onClickAddMachine() {
   isEdit.value = false
   hostGroupsList.value = await withLoading(getGroups)
@@ -199,6 +203,13 @@ const openTerminal = (host: Host.HostItem) => {
                           @click="onDeleteMachine(host.id)"
                         >
                           删除
+                        </div>
+                        <div class="h-[1px] bg-slate-300 my-1"></div>
+                        <div
+                          class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
+                          @click="onClickContainer(host.id)"
+                        >
+                          容器管理
                         </div>
                       </div>
                     </template>
