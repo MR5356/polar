@@ -188,7 +188,10 @@ const containerColumns = ref<TableColumn[]>([
     field: 'status',
     label: 'container.table.status',
     align: 'left',
-    width: 300
+    width: 300,
+    formatter(row, column, cellValue, index) {
+      return cellValue ? cellValue : moment(Number(row.created) * 1000).format('YYYY-MM-DD HH:mm:ss')
+    }
   }
 ])
 

@@ -3,7 +3,7 @@ import { useRoute } from 'vue-router'
 import ContainerView from '@/components/ContainerView.vue'
 
 const route = useRoute()
-const id = route.params.id
+const id = route.params.id as string
 </script>
 
 <template>
