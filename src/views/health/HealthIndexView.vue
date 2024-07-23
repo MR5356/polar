@@ -9,6 +9,7 @@ import EmptyImage from '@/assets/surfing.svg'
 import { Plus } from '@icon-park/vue-next'
 import HealthStatisticsView from '@/views/health/HealthStatisticsChartsView.vue'
 import axios from '@/utils/request'
+import useTimer from '@/hooks/useTimer'
 
 const { t } = useI18n()
 
@@ -22,12 +23,12 @@ let svtSource: EventSource
 
 const interval = ref()
 
-onMounted(() => {
-  interval.value = setInterval(init, 1000)
-})
+// onMounted(() => {
+//   interval.value = setInterval(init, 1000)
+// })
 
 onBeforeUnmount(() => {
-  clearInterval(interval.value)
+  // clearInterval(interval.value)
   svtSource.close()
 })
 
@@ -70,6 +71,8 @@ const init = async () => {
     clearInterval(interval.value)
   })
 }
+
+const { result, isFirstLoading} = useTimer(init)
 
 const healthCheckTypes = ref<Health.HealthCheckType[]>([])
 
@@ -114,8 +117,6 @@ async function onSubmitHealth() {
 function onHealthTypeChange() {
   newHealthParams.value = healthCheckTypes.value.find((item) => item.type === newHealth.value.type).params
 }
-
-init()
 </script>
 
 <template>
@@ -126,7 +127,7 @@ init()
         <div class="col-span-2">
           <HealthStatisticsView />
         </div>
-        <div class="col-span-2 grid grid-cols-4 gap-4 bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">
+        <div v-loading="isFirstLoading" class="col-span-2 grid grid-cols-4 gap-4 bg-white bg-opacity-60 dark:bg-slate-600 rounded-lg p-4">
           <div class="col-span-4 text-sm font-bold border-green-400 border-l-4 rounded pl-1">监控列表</div>
           <div class="cursor-pointer min-h-[50px] text-slate-700 dark:text-slate-100 shadow-lg shadow-sky-100 bg-sky-50 dark:bg-slate-600 rounded-lg p-4 relative" @click="onClickAddHealth" >
             <div class="absolute w-full h-full inset-0 m-auto flex justify-center items-center gap-2">

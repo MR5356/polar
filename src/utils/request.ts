@@ -11,7 +11,7 @@ export declare interface Pager<T> {
   data?: T[]
 }
 
-enum RequestEnums {
+export enum RequestEnums {
   TIMEOUT = 60000,
   SUCCESS = '00000', // 请求成功
   NotLogin = 'B1001',  // 未登录

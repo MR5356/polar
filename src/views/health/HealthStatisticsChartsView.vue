@@ -5,9 +5,9 @@ import { PieChart } from 'echarts/charts'
 import { CanvasRenderer } from 'echarts/renderers'
 import { LabelLayout } from 'echarts/features'
 import { useI18n } from 'vue-i18n'
-import { onBeforeUnmount, ref } from 'vue'
+import { onBeforeUnmount, ref, watch } from 'vue'
 import { Health } from '@/views/health/HealthIndexView'
-import axios from '@/utils/request'
+import useSSE from '@/hooks/useSSE'
 
 echarts.use([TooltipComponent, LegendComponent, PieChart, CanvasRenderer, LabelLayout])
 
@@ -18,7 +18,6 @@ const mainCharts = ref()
 const statusChart = ref()
 const statusCharts = ref()
 const healthStatistics = ref<Health.Statistics>(null as Health.Statistics)
-let svtSource: EventSource
 
 window.addEventListener("resize", () => {
   if (mainCharts.value) {
@@ -29,33 +28,21 @@ window.addEventListener("resize", () => {
   }
 })
 
-onBeforeUnmount(() => {
-  svtSource.close()
+const {status, data, close} = useSSE<Health.Statistics>("/health/statistics/sse", [], {
+  autoReconnect: true
 })
 
-const createSSE = (n: number = 0) => {
-  if (n > 0) {
-    if (n > 10) {
-      svtSource.close()
-      return
-    }
-    console.log("/health/statistics/sse reconnect: ", n)
-  }
-  svtSource = axios.sse(
-    '/health/statistics/sse',
-    (event) => {
-      init(JSON.parse(event.data) as Health.Statistics)
-    },
-    (e) => {
-      console.log('/health/statistics/sse error: ', e)
-      setTimeout(() => {createSSE(n + 1)}, 1000)
-    }
-  )
-}
 
-createSSE()
+
+onBeforeUnmount(() => {
+  close()
+})
 
 const init = (res: Health.Statistics) => {
+  if (res === null) {
+    return
+  }
+  
   healthStatistics.value = res
   if (mainChart.value) {
     if (!mainCharts.value) {
@@ -80,6 +67,10 @@ const init = (res: Health.Statistics) => {
     ]))
   }
 }
+
+watch(data, (newData) => {  
+  init(newData)
+})
 
 function getPieOption(data: any): any {
   return {
