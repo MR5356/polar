@@ -5,7 +5,8 @@ import { RequestEnums } from '@/utils/request'
 function useSSE<T>(
   url: string,
   events?: Array<string>,
-  options?: UseEventSourceOptions
+  options?: UseEventSourceOptions,
+  json: boolean = true
 ): {
   eventSource: Ref<EventSource | null>
   event: Ref<string | null>
@@ -17,13 +18,19 @@ function useSSE<T>(
   url = `${location.protocol}//${window.location.hostname}:${window.location.port}${RequestEnums.BASEURL}${url.startsWith('/') ? url : `/${url}`}`
   const { eventSource, event, data, status, error, close } = useEventSource(url, events, options)
 
-  const parsedData = ref<T | null>(data.value === null ? null : (JSON.parse(data.value) as T))
   let previousData: string | null = data.value
+
+  const parseData = (str: string): string | T | null => {
+    const parsed = str === null ? null : (json ? (JSON.parse(str) as T) : str);
+    return parsed
+  }
+
+  const parsedData = ref<T | null>(parseData(data.value))
 
   watch(data, (newData) => {
     if (newData !== previousData) {
         previousData = newData
-        parsedData.value = newData === null ? null : JSON.parse(newData) as UnwrapRef<T>
+        parsedData.value = parseData(newData)
     }
   })
 

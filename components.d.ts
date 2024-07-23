@@ -51,6 +51,7 @@ declare module 'vue' {
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     GithubIcon: typeof import('./src/components/icons/GithubIcon.vue')['default']
     GitlabIcon: typeof import('./src/components/icons/GitlabIcon.vue')['default']
+    LogView: typeof import('./src/components/LogView.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TableView: typeof import('./src/components/TableView.vue')['default']

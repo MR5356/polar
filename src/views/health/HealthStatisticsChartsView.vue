@@ -68,7 +68,7 @@ const init = (res: Health.Statistics) => {
   }
 }
 
-watch(data, (newData) => {  
+watch(data, (newData) => {
   init(newData)
 })
 
