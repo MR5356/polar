@@ -10,7 +10,7 @@ function useSSE<T>(
 ): {
   eventSource: Ref<EventSource | null>
   event: Ref<string | null>
-  data: Ref<UnwrapRef<T | null>>
+  data: Ref<UnwrapRef<string | T | null>>
   status: Ref<'OPEN' | 'CONNECTING' | 'CLOSED'>
   error: Ref<Event | null>
   close: () => void
@@ -20,12 +20,13 @@ function useSSE<T>(
 
   let previousData: string | null = data.value
 
-  const parseData = (str: string): string | T | null => {
-    const parsed = str === null ? null : (json ? (JSON.parse(str) as T) : str);
+  const parseData = (str: string | null): string | UnwrapRef<T> | null => {
+    const parsed = str === null ? null : (json ? (JSON.parse(str) as UnwrapRef<T>) : str);
     return parsed
   }
 
-  const parsedData = ref<T | null>(parseData(data.value))
+  const parsedData = ref<string | T | null>(null)
+  parsedData.value = parseData(data.value)
 
   watch(data, (newData) => {
     if (newData !== previousData) {
