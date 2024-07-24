@@ -14,6 +14,11 @@ const props = defineProps({
   hostId: {
     type: String,
     required: true
+  },
+
+  driver: {
+    type: String,
+    required: true
   }
 })
 
@@ -49,16 +54,16 @@ interface NetworkItem {
   scope: string
 }
 
-const getNetwork = async (id: string): Promise<NetworkItem[]> => {
-  return axios.get<NetworkItem[]>(`/host/container/${id}/network`)
+const getNetwork = async (id: string, driver: string): Promise<NetworkItem[]> => {
+  return axios.get<NetworkItem[]>(`/host/container/${id}/${driver}/network`)
 }
 
-const getImage = async (id: string): Promise<ImageItem[]> => {
-  return axios.get<ImageItem[]>(`/host/container/${id}/image`)
+const getImage = async (id: string, driver: string): Promise<ImageItem[]> => {
+  return axios.get<ImageItem[]>(`/host/container/${id}/${driver}/image`)
 }
 
-const getContainer = async (id: string): Promise<ContainerItem[]> => {
-  return axios.get<ContainerItem[]>(`/host/container/${id}/container`)
+const getContainer = async (id: string, driver: string): Promise<ContainerItem[]> => {
+  return axios.get<ContainerItem[]>(`/host/container/${id}/${driver}/container`)
 }
 
 const onTabChange = async (key: string) => {
@@ -83,19 +88,19 @@ const networks = ref<NetworkItem[]>()
 
 async function listContainer() {
   loading.value = true
-  containers.value = await getContainer(props.hostId)
+  containers.value = await getContainer(props.hostId, props.driver)
   loading.value = false
 }
 
 async function listImage() {
   loading.value = true
-  images.value = await getImage(props.hostId)
+  images.value = await getImage(props.hostId, props.driver)
   loading.value = false
 }
 
 async function listNetwork() {
   loading.value = true
-  networks.value = await getNetwork(props.hostId)
+  networks.value = await getNetwork(props.hostId, props.driver)
   loading.value = false
 }
 
@@ -305,22 +310,10 @@ const imageColumns = ref<TableColumn[]>([
                     <el-button size="small" text bg type="danger">
                       {{ $t('container.actions.delete') }}
                     </el-button> -->
-                    <el-button
-                      size="small"
-                      text
-                      bg
-                      type="primary"
-                      disabled
-                    >
+                    <el-button size="small" text bg type="primary" disabled>
                       {{ $t('container.actions.log') }}
                     </el-button>
-                    <el-button
-                      size="small"
-                      text
-                      bg
-                      type="primary"
-                      disabled
-                    >
+                    <el-button size="small" text bg type="primary" disabled>
                       {{ $t('container.actions.exec') }}
                     </el-button>
                   </template>

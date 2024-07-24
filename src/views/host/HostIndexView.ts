@@ -15,6 +15,8 @@ export namespace Host {
     arch: string;
     cpu: string;
     mem: string;
+    containerd: string;
+    docker: string;
   }
 
   export interface HostItem {

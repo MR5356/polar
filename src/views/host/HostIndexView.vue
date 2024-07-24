@@ -33,8 +33,8 @@ async function onClickEditMachine(host: Host.HostItem) {
   showAddMachine.value = true
 }
 
-async function onClickContainer(id: string) {
-  router.push(`/container/${id}`)
+async function onClickContainer(id: string, driver: string) {
+  router.push(`/container/${id}/${driver}`)
 }
 
 async function onClickAddMachine() {
@@ -120,17 +120,28 @@ const openTerminal = (host: Host.HostItem) => {
     <div class="flex flex-col gap-4">
       <div class="flex justify-between items-center px-4 py-2 bg-white bg-opacity-80 rounded-lg">
         <div class="uppercase font-bold flex items-center justify-between">
-          <el-button @click="onClickAddMachine" type="info" size="small">{{ $t('host.new') }}</el-button>
-          <el-button @click="openTerminal({id: ''} as Host.HostItem)" type="success" size="small">{{ $t('navigation.terminal') }}</el-button>
+          <el-button @click="onClickAddMachine" type="info" size="small">{{
+            $t('host.new')
+          }}</el-button>
+          <el-button
+            @click="openTerminal({ id: '' } as Host.HostItem)"
+            type="success"
+            size="small"
+            >{{ $t('navigation.terminal') }}</el-button
+          >
         </div>
-        <div>
-        </div>
+        <div></div>
       </div>
       <template v-for="group in hostGroupsList" :key="group.id">
-        <div class="bg-white bg-opacity-80 dark:bg-slate-600 p-4 rounded-lg" v-if="group.hosts.length > 0">
+        <div
+          class="bg-white bg-opacity-80 dark:bg-slate-600 p-4 rounded-lg"
+          v-if="group.hosts.length > 0"
+        >
           <el-popover :width="88" trigger="contextmenu" placement="right-start" class="p-0">
             <template #reference>
-              <div class="w-fit text-sm font-bold capitalize mb-3 select-none">{{ group.title }}</div>
+              <div class="w-fit text-sm font-bold capitalize mb-3 select-none">
+                {{ group.title }}
+              </div>
             </template>
             <template #default>
               <div class="flex flex-col gap-0 text-sm">
@@ -150,40 +161,56 @@ const openTerminal = (host: Host.HostItem) => {
             </template>
           </el-popover>
           <div class="grid grid-cols-4 gap-4">
-            <div class="bg-white dark:bg-slate-700 shadow-lg shadow-sky-100 p-4 rounded-lg" v-for="host in group.hosts" :key="host.id">
+            <div
+              class="bg-white dark:bg-slate-700 shadow-lg shadow-sky-100 p-4 rounded-lg"
+              v-for="host in group.hosts"
+              :key="host.id"
+            >
               <div class="flex items-center justify-between">
                 <el-popover trigger="hover" class="p-0" placement="bottom-start" :width="300">
                   <template #reference>
                     <div class="flex items-center gap-3">
                       <div>
-                        <img :src="Host.getOsIcon(host.metaInfo.os)"
-                             class="w-10 h-10 min-w-10 min-h-10 bg-slate-500 bg-opacity-30 dark:bg-slate-400 rounded-lg p-1"
-                             alt="logo">
+                        <img
+                          :src="Host.getOsIcon(host.metaInfo.os)"
+                          class="w-10 h-10 min-w-10 min-h-10 bg-slate-500 bg-opacity-30 dark:bg-slate-400 rounded-lg p-1"
+                          alt="logo"
+                        />
                       </div>
                       <div class="flex flex-col flex-grow">
                         <div class="text-sm">{{ host.title }}</div>
-                        <div class="text-xs text-slate-500 dark:text-slate-300 break-all">{{ host.desc }}
+                        <div class="text-xs text-slate-500 dark:text-slate-300 break-all">
+                          {{ host.desc }}
                         </div>
                       </div>
                     </div>
                   </template>
                   <template #default>
                     <div class="grid grid-cols-3 gap-1">
-                      <div class="col-span-3">{{ $t('host.metaInfo.os') }}: {{ host?.metaInfo.os }}</div>
-                      <div class="col-span-3">{{ $t('host.metaInfo.cpu') }}: {{ host?.metaInfo.cpu }}</div>
-                      <div class="col-span-3">{{ $t('host.metaInfo.mem') }}: {{ host?.metaInfo.mem }}</div>
-                      <div class="col-span-3">{{ $t('host.metaInfo.arch') }}: {{ host?.metaInfo.arch }}</div>
-                      <div class="col-span-3">{{ $t('host.metaInfo.kernel') }}: {{ host?.metaInfo.kernel }}</div>
-                      <div class="col-span-3">{{ $t('host.metaInfo.hostname') }}: {{ host?.metaInfo.hostname }}</div>
+                      <div class="col-span-3">
+                        {{ $t('host.metaInfo.os') }}: {{ host?.metaInfo.os }}
+                      </div>
+                      <div class="col-span-3">
+                        {{ $t('host.metaInfo.cpu') }}: {{ host?.metaInfo.cpu }}
+                      </div>
+                      <div class="col-span-3">
+                        {{ $t('host.metaInfo.mem') }}: {{ host?.metaInfo.mem }}
+                      </div>
+                      <div class="col-span-3">
+                        {{ $t('host.metaInfo.arch') }}: {{ host?.metaInfo.arch }}
+                      </div>
+                      <div class="col-span-3">
+                        {{ $t('host.metaInfo.kernel') }}: {{ host?.metaInfo.kernel }}
+                      </div>
+                      <div class="col-span-3">
+                        {{ $t('host.metaInfo.hostname') }}: {{ host?.metaInfo.hostname }}
+                      </div>
                     </div>
                   </template>
                 </el-popover>
 
                 <div class="flex gap-2 items-center opacity-50">
-                  <el-tooltip
-                    placement="top"
-                    content="在线终端"
-                  >
+                  <el-tooltip placement="top" content="在线终端">
                     <Terminal size="20" @click="() => openTerminal(host)" />
                   </el-tooltip>
                   <el-popover :width="88" trigger="hover" placement="right-start" class="p-0">
@@ -207,9 +234,17 @@ const openTerminal = (host: Host.HostItem) => {
                         <div class="h-[1px] bg-slate-300 my-1"></div>
                         <div
                           class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
-                          @click="onClickContainer(host.id)"
+                          @click="onClickContainer(host.id, 'containerd')"
+                          v-if="host.metaInfo.containerd"
                         >
-                          容器管理
+                          Containerd管理
+                        </div>
+                        <div
+                          class="w-full hover:bg-gray-50 p-1.5 rounded cursor-pointer"
+                          @click="onClickContainer(host.id, 'docker')"
+                          v-if="host.metaInfo.docker"
+                        >
+                          Docker管理
                         </div>
                       </div>
                     </template>
@@ -244,10 +279,7 @@ const openTerminal = (host: Host.HostItem) => {
         <el-input v-model="newHost.hostInfo.username" />
       </el-form-item>
       <el-form-item label="主机密码">
-        <el-input
-          type="password"
-          v-model="newHost.hostInfo.password"
-        />
+        <el-input type="password" v-model="newHost.hostInfo.password" />
       </el-form-item>
       <el-form-item label="主机简介">
         <el-input v-model="newHost.desc" />
@@ -278,6 +310,4 @@ const openTerminal = (host: Host.HostItem) => {
   </el-dialog>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
