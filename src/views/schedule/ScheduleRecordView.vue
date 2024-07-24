@@ -173,7 +173,7 @@ const onPageChange = async (e) => {
 </script>
 
 <template>
-  <div class="flex gap-0 absolute inset-0">
+  <div class="flex gap-0 absolute inset-0" v-loading="isFirstLoading">
     <div
       class="w-full h-full flex flex-col rounded-none shadow-2xl shadow-fuchsia-50 dark:shadow-slate-900 overflow-hidden"
     >
