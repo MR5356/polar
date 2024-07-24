@@ -2,6 +2,7 @@
 import { ref, shallowReactive } from 'vue'
 import LogView from '@/components/LogView.vue';
 import useTimer from '@/hooks/useTimer';
+import Terminal from '@/components/TerminalView.vue'
 
 function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -26,7 +27,8 @@ const {result, isFirstLoading} = useTimer(async ()=> {
 </script>
 
 <template>
-  <div class="w-[800px] h-[300px]">
+  <Terminal class="w-full h-full" uri="/api/v1/host/container/271bb15e-cae7-4a5d-a28b-2da7a75ac3bf/docker/container/bc1ae10c8eb603f9205d220ebfe5657a3b89eb3291b7594220b023746815efea/terminal?user=root"  />
+  <!-- <div class="w-[800px] h-[300px]">
     <LogView :logs="logs" />
-  </div>
+  </div> -->
 </template>
