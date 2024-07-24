@@ -1,23 +1,12 @@
 <script setup lang="ts">
-import { ref, h, onMounted, onBeforeUnmount } from 'vue'
+import { ref, h } from 'vue'
 import TableView, { type TableColumn } from '@/components/TableView.vue'
 import { Schedule } from '@/views/schedule/ScheduleView'
 import type { Pager } from '@/utils/request'
-import withLoading from '@/utils/loading'
 import moment from 'moment/moment'
 import { useI18n } from 'vue-i18n'
 import { Loading } from '@icon-park/vue-next'
-
-const recordInterval = ref()
-onMounted(() => {
-  recordInterval.value = setInterval(async () => {
-    await listScheduleRecord(false)
-  }, 1000)
-})
-
-onBeforeUnmount(() => {
-  clearInterval(recordInterval.value)
-})
+import useTimer from '@/hooks/useTimer'
 
 const { t } = useI18n()
 
@@ -49,47 +38,67 @@ const columns = ref<TableColumn[]>([
     width: 150,
     formatter(row, column, cellValue, index) {
       if (row.status === 'success') {
-        return h('div', {
-          class: 'flex gap-2 items-center'
-        }, [
-          h('span', {
-            class: 'relative flex h-3 w-3 items-center justify-center'
-          }, [
-            h('span', {
-              class: 'absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75'
-            }),
-            h('span', {
-              class: 'relative inline-flex rounded-full h-3 w-3 bg-green-500'
-            })
-          ]),
-          h('span', { class: 'text-sm' }, t('schedule.statusSuccess'))
-        ])
+        return h(
+          'div',
+          {
+            class: 'flex gap-2 items-center'
+          },
+          [
+            h(
+              'span',
+              {
+                class: 'relative flex h-3 w-3 items-center justify-center'
+              },
+              [
+                h('span', {
+                  class: 'absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75'
+                }),
+                h('span', {
+                  class: 'relative inline-flex rounded-full h-3 w-3 bg-green-500'
+                })
+              ]
+            ),
+            h('span', { class: 'text-sm' }, t('schedule.statusSuccess'))
+          ]
+        )
       } else if (row.status === 'running') {
-        return h('div', {
-          class: 'flex gap-2 items-center'
-        }, [
-          h(Loading, {
-            class: 'animate-spin',
-            fill: '#2e99e5'
-          }),
-          h('span', { class: 'text-sm' }, t('schedule.statusRunning'))
-        ])
-      } else {
-        return h('div', {
-          class: 'flex gap-2 items-center'
-        }, [
-          h('span', {
-            class: 'relative flex h-3 w-3'
-          }, [
-            h('span', {
-              class: 'absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75'
+        return h(
+          'div',
+          {
+            class: 'flex gap-2 items-center'
+          },
+          [
+            h(Loading, {
+              class: 'animate-spin',
+              fill: '#2e99e5'
             }),
-            h('span', {
-              class: 'relative inline-flex rounded-full h-3 w-3 bg-red-500'
-            })
-          ]),
-          h('span', { class: 'text-sm' }, t('schedule.statusError'))
-        ])
+            h('span', { class: 'text-sm' }, t('schedule.statusRunning'))
+          ]
+        )
+      } else {
+        return h(
+          'div',
+          {
+            class: 'flex gap-2 items-center'
+          },
+          [
+            h(
+              'span',
+              {
+                class: 'relative flex h-3 w-3'
+              },
+              [
+                h('span', {
+                  class: 'absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75'
+                }),
+                h('span', {
+                  class: 'relative inline-flex rounded-full h-3 w-3 bg-red-500'
+                })
+              ]
+            ),
+            h('span', { class: 'text-sm' }, t('schedule.statusError'))
+          ]
+        )
       }
     }
   },
@@ -131,30 +140,31 @@ const formatData = () => {
     let newItem = JSON.parse(JSON.stringify(item))
 
     // newItem.enabled = t('schedule.' + newItem.enabled)
-    newItem.costTime = (newItem.createdAt === newItem.updatedAt ? moment().diff(moment(newItem.createdAt), 'seconds') : moment(newItem.updatedAt).diff(moment(newItem.createdAt), 'seconds')).toLocaleString() + 's'
+    newItem.costTime =
+      (newItem.createdAt === newItem.updatedAt
+        ? moment().diff(moment(newItem.createdAt), 'seconds')
+        : moment(newItem.updatedAt).diff(moment(newItem.createdAt), 'seconds')
+      ).toLocaleString() + 's'
     newItem.createdAt = moment(newItem.createdAt).format('YYYY-MM-DD HH:mm:ss')
     newItem.updatedAt = moment(newItem.updatedAt).format('YYYY-MM-DD HH:mm:ss')
     // newItem.costTime = (moment(newItem.updatedAt).diff(moment(newItem.createdAt), 'seconds')).toLocaleString() + 's'
-    newItem.executor = executors.value.find((item) => item.name === newItem.executor)?.displayName ?? t('unknown')
+    newItem.executor =
+      executors.value.find((item) => item.name === newItem.executor)?.displayName ?? t('unknown')
     data.value.push(newItem)
   })
 }
 
 const listScheduleRecord = async (loading: boolean = true) => {
-  if (loading) {
-    await withLoading(async () => {
-      executors.value = await Schedule.getExecutors()
-      rawData.value = await Schedule.pageScheduleRecord(rawData.value.current, rawData.value.size)
-      formatData()
-    })
-  } else {
-    executors.value = await Schedule.getExecutors()
-    rawData.value = await Schedule.pageScheduleRecord(rawData.value.current, rawData.value.size)
-    formatData()
-  }
+  executors.value = await Schedule.getExecutors()
+  rawData.value = await Schedule.pageScheduleRecord(rawData.value.current, rawData.value.size)
+  formatData()
 }
 
-listScheduleRecord()
+const { result, isFirstLoading } = useTimer(async () => {
+  executors.value = await Schedule.getExecutors()
+  rawData.value = await Schedule.pageScheduleRecord(rawData.value.current, rawData.value.size)
+  formatData()
+})
 
 const onPageChange = async (e) => {
   rawData.value.current = e
@@ -163,13 +173,11 @@ const onPageChange = async (e) => {
 </script>
 
 <template>
-  <div class="flex gap-0 h-[100vh]">
+  <div class="flex gap-0 absolute inset-0">
     <div
-      class="w-full h-full flex flex-col rounded-none shadow-2xl shadow-fuchsia-50 dark:shadow-slate-900 overflow-hidden">
-      <TableView
-        :data="data"
-        :columns="columns"
-      >
+      class="w-full h-full flex flex-col rounded-none shadow-2xl shadow-fuchsia-50 dark:shadow-slate-900 overflow-hidden"
+    >
+      <TableView :data="data" :columns="columns">
         <template #footer>
           <el-pagination
             layout="prev, pager, next"
@@ -184,6 +192,4 @@ const onPageChange = async (e) => {
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

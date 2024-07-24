@@ -49,7 +49,7 @@ const data = defineModel('data', { type: Array<any>, required: true })
 </script>
 
 <template>
-  <div class="flex flex-col h-full bg-white dark:bg-transparent">
+  <div class="flex flex-col absolute inset-0 bg-white dark:bg-transparent">
     <slot name="header" />
     <el-table
       class="bg-red-200"
