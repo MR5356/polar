@@ -5,6 +5,8 @@ import useTimer from '@/hooks/useTimer'
 import Terminal from '@/components/TerminalView.vue'
 import CPUCard from '@/views/host/components/CPUCard.vue'
 import MEMCard from '@/views/host/components/MEMCard.vue'
+import ColoredProgressBar from '@/components/ColoredProgressBar.vue'
+import DiskCard from '@/views/host/components/DiskCard.vue'
 
 function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms))
@@ -56,6 +58,40 @@ const data = ref({
   uptime: '10 Day',
   load: '2.02 1.03 3.2'
 })
+
+const diskData = ref([
+  {
+    "partition": "/dev/mmcblk0p1",
+    "size_bytes": 534763520,
+    "used_size_bytes": 67063808,
+    "mount_point": "/boot/firmware",
+    "fs_type": "vfat",
+    "read_speed_Bps": 0,
+    "write_speed_Bps": 0,
+    "read_iops": 0,
+    "write_iops": 0,
+    "read_latency_ms": 0,
+    "write_latency_ms": 0,
+    "total_read_bytes": 9305600,
+    "total_write_bytes": 1536
+  }
+  ,
+  {
+    "partition": "/dev/mmcblk0p2",
+    "size_bytes": 125348007936,
+    "used_size_bytes": 7057309696,
+    "mount_point": "/",
+    "fs_type": "ext4",
+    "read_speed_Bps": 0,
+    "write_speed_Bps": 299008,
+    "read_iops": 0,
+    "write_iops": 30,
+    "read_latency_ms": 0,
+    "write_latency_ms": 0,
+    "total_read_bytes": 1635037184,
+    "total_write_bytes": 231020683264
+  }
+])
 
 const { result, isFirstLoading } = useTimer(async () => {
   memData.value = {
@@ -121,6 +157,7 @@ const { result, isFirstLoading } = useTimer(async () => {
   <div class="w-[30%] flex flex-col gap-4 p-4">
     <CPUCard :data="data" />
     <MEMCard :data="memData" />
+    <DiskCard :data="diskData" />
   </div>
   <!--  <Terminal class="w-full h-full" uri="/api/v1/host/container/271bb15e-cae7-4a5d-a28b-2da7a75ac3bf/docker/container/bc1ae10c8eb603f9205d220ebfe5657a3b89eb3291b7594220b023746815efea/terminal?user=root"  />-->
   <!-- <div class="w-[800px] h-[300px]">

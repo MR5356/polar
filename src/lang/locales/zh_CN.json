@@ -67,6 +67,14 @@
       "shared": "共享",
       "buffcache": "缓存",
       "available": "可用"
+    },
+    "diskCard": {
+      "read": "读",
+      "write": "写",
+      "speed": "速率",
+      "bytes": "字节",
+      "iops": "IOPS",
+      "latency": "延迟"
     }
   },
   "script": {

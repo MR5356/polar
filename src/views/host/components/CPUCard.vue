@@ -27,7 +27,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="bg-white p-4 rounded-lg flex flex-col gap-2 min-w-[500px]">
+  <div class="bg-white p-4 rounded-lg flex flex-col gap-2 min-w-[500px] select-none">
     <div class="flex items-center justify-between gap-8">
       <div class="w-[50px]"><span class="text-4xl font-medium">{{ (data.percent * 100).toFixed(0) }}</span>&nbsp;<span
         class="text-slate-500">%</span></div>
@@ -37,7 +37,7 @@ defineProps({
             <div class="w-1 h-3 rounded-full" :class="colors[0]"></div>
             <div class="text-sm text-slate-500">{{ $t('component.cpuCard.system') }}</div>
           </div>
-          <div class="text-sm"><span class="font-medium">{{ (data.system * 100).toFixed(0) }}</span>&nbsp;<span
+          <div class="text-xs"><span class="font-medium">{{ (data.system * 100).toFixed(0) }}</span>&nbsp;<span
             class="text-slate-500">%</span></div>
         </div>
         <div class="flex flex-col gap-0 p-2">
@@ -45,7 +45,7 @@ defineProps({
             <div class="w-1 h-3 rounded-full" :class="colors[1]"></div>
             <div class="text-sm text-slate-500">{{ $t('component.cpuCard.user') }}</div>
           </div>
-          <div class="text-sm"><span class="font-medium">{{ (data.user * 100).toFixed(0) }}</span>&nbsp;<span
+          <div class="text-xs"><span class="font-medium">{{ (data.user * 100).toFixed(0) }}</span>&nbsp;<span
             class="text-slate-500">%</span></div>
         </div>
         <div class="flex flex-col gap-0 p-2">
@@ -53,7 +53,7 @@ defineProps({
             <div class="w-1 h-3 rounded-full" :class="colors[2]"></div>
             <div class="text-sm text-slate-500">{{ $t('component.cpuCard.iowait') }}</div>
           </div>
-          <div class="text-sm"><span class="font-medium">{{ (data.iowait * 100).toFixed(0) }}</span>&nbsp;<span
+          <div class="text-xs"><span class="font-medium">{{ (data.iowait * 100).toFixed(0) }}</span>&nbsp;<span
             class="text-slate-500">%</span></div>
         </div>
         <div class="flex flex-col gap-0 p-2">
@@ -61,7 +61,7 @@ defineProps({
             <div class="w-1 h-3 rounded-full" :class="colors[3]"></div>
             <div class="text-sm text-slate-500">{{ $t('component.cpuCard.steal') }}</div>
           </div>
-          <div class="text-sm"><span class="font-medium">{{ (data.steal * 100).toFixed(0) }}</span>&nbsp;<span
+          <div class="text-xs"><span class="font-medium">{{ (data.steal * 100).toFixed(0) }}</span>&nbsp;<span
             class="text-slate-500">%</span></div>
         </div>
       </div>
@@ -77,19 +77,19 @@ defineProps({
       <div class="flex items-center justify-between">
         <div class="flex flex-col flex-1 gap-0">
           <div class="text-sm text-slate-500">{{ $t('component.cpuCard.core') }}</div>
-          <div class="font-medium text-sm">{{ data.children.length }}</div>
+          <div class="font-medium text-xs">{{ data.children.length }}</div>
         </div>
         <div class="flex flex-col flex-1 gap-0">
           <div class="text-sm text-slate-500">{{ $t('component.cpuCard.idle') }}</div>
-          <div class="font-medium text-sm">{{ (data.idle * 100).toFixed(0) }}&nbsp;<span class="text-slate-500">%</span></div>
+          <div class="font-medium text-xs">{{ (data.idle * 100).toFixed(0) }}&nbsp;<span class="text-slate-500">%</span></div>
         </div>
         <div class="flex flex-col flex-1 gap-0">
           <div class="text-sm text-slate-500">{{ $t('component.cpuCard.uptime') }}</div>
-          <div class="font-medium text-sm">{{ data.uptime }}</div>
+          <div class="font-medium text-xs">{{ data.uptime }}</div>
         </div>
         <div class="flex flex-col flex-1 gap-0">
           <div class="text-sm text-slate-500">{{ $t('component.cpuCard.load') }}</div>
-          <div class="font-medium"><span class="text-sm">{{ data.load }}</span></div>
+          <div class="font-medium"><span class="text-xs">{{ data.load }}</span></div>
         </div>
       </div>
     </div>

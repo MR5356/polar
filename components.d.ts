@@ -25,6 +25,7 @@ declare module 'vue' {
     ATree: typeof import('ant-design-vue/es')['Tree']
     ColoredProgressBar: typeof import('./src/components/ColoredProgressBar.vue')['default']
     ColorView: typeof import('./src/components/ColorView.vue')['default']
+    ColumnarProgressBar: typeof import('./src/components/ColumnarProgressBar.vue')['default']
     ContainerView: typeof import('./src/components/ContainerView.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
@@ -58,6 +59,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     TableView: typeof import('./src/components/TableView.vue')['default']
     TerminalView: typeof import('./src/components/TerminalView.vue')['default']
+    TestA: typeof import('./src/components/TestA.vue')['default']
     TimeClock: typeof import('./src/components/TimeClock.vue')['default']
   }
   export interface ComponentCustomProperties {

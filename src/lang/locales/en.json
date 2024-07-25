@@ -67,6 +67,14 @@
       "shared": "Shared",
       "buffcache": "BuffCache",
       "available": "Available"
+    },
+    "diskCard": {
+      "read": "Read",
+      "write": "Write",
+      "speed": "Speed",
+      "bytes": "Bytes",
+      "iops": "IOPS",
+      "latency": "Latency"
     }
   },
   "script": {
