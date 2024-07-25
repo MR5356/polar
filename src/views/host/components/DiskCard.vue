@@ -40,7 +40,7 @@ defineProps({
             <div class="text-xs font-medium">{{ numeral(item.used_size_bytes).format('0b') }}&nbsp;/&nbsp;<span class="text-slate-500 font-normal">{{ numeral(item.size_bytes).format('0b') }}</span></div>
           </div>
           <div>
-            <ColumnarProgressBar :scale="Number((item.used_size_bytes / item.size_bytes).toFixed(0))" label="" />
+            <ColumnarProgressBar :scale="Number((item.used_size_bytes / item.size_bytes * 100).toFixed(0))" label="" />
           </div>
         </div>
       </div>

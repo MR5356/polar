@@ -8,6 +8,7 @@ import EmptyImage from '@/assets/coding.svg'
 import TimeClock from '@/components/TimeClock.vue'
 import HealthStatisticsView from '@/views/health/HealthStatisticsChartsView.vue'
 import VersionView from '@/views/dashboard/VersionView.vue'
+import YearlyCountdown from '@/components/YearlyCountdown.vue'
 
 const statistics = ref<Dashboard.StatisticItem[]>([])
 
@@ -89,6 +90,7 @@ init()
         <div class="w-1/4 h-fit">
           <div class="grid grid-cols-1 gap-4">
             <TimeClock />
+            <YearlyCountdown />
             <div class="bg-white dark:bg-slate-900 rounded-2xl p-2">
               <el-empty :description="$t('welcome')" :image-size="240" :image="EmptyImage" />
             </div>

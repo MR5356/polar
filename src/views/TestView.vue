@@ -7,6 +7,7 @@ import CPUCard from '@/views/host/components/CPUCard.vue'
 import MEMCard from '@/views/host/components/MEMCard.vue'
 import ColoredProgressBar from '@/components/ColoredProgressBar.vue'
 import DiskCard from '@/views/host/components/DiskCard.vue'
+import YearlyCountdown from '@/components/YearlyCountdown.vue'
 
 function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms))
@@ -94,6 +95,39 @@ const diskData = ref([
 ])
 
 const { result, isFirstLoading } = useTimer(async () => {
+  diskData.value = [
+    {
+      "partition": "/dev/mmcblk0p1",
+      "size_bytes": 534763520,
+      "used_size_bytes": Math.random() *534763520,
+      "mount_point": "/boot/firmware",
+      "fs_type": "vfat",
+      "read_speed_Bps": 0,
+      "write_speed_Bps": 0,
+      "read_iops": 0,
+      "write_iops": 0,
+      "read_latency_ms": 0,
+      "write_latency_ms": 0,
+      "total_read_bytes": Math.random() *9305600,
+      "total_write_bytes": Math.random() *1536
+    }
+    ,
+    {
+      "partition": "/dev/mmcblk0p2",
+      "size_bytes": 125348007936,
+      "used_size_bytes": Math.random() *125348007936,
+      "mount_point": "/",
+      "fs_type": "ext4",
+      "read_speed_Bps": 0,
+      "write_speed_Bps": Math.random() *299008,
+      "read_iops": 0,
+      "write_iops": 30,
+      "read_latency_ms": 0,
+      "write_latency_ms": 0,
+      "total_read_bytes": Math.random() *1635037184,
+      "total_write_bytes": Math.random() *231020683264
+    }
+  ]
   memData.value = {
     total: 8443543552,
     used: Math.random() * 1412431872,
@@ -155,6 +189,7 @@ const { result, isFirstLoading } = useTimer(async () => {
 
 <template>
   <div class="w-[30%] flex flex-col gap-4 p-4">
+    <YearlyCountdown />
     <CPUCard :data="data" />
     <MEMCard :data="memData" />
     <DiskCard :data="diskData" />

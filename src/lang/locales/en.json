@@ -75,6 +75,14 @@
       "bytes": "Bytes",
       "iops": "IOPS",
       "latency": "Latency"
+    },
+    "yearlyCountdown": {
+      "passed": "The time you've passed this year",
+      "current": "You are here",
+      "work": "If you work an average of 8 hours a day, that's how much time your job will take up for the rest of the year",
+      "sleep": "If you sleep an average of 8 hours a day, that's how much sleep you'll take up for the rest of the year",
+      "commute": "If you commute an average of 2 hours a day, that's how much time your commute will take up for the rest of the year",
+      "self": "This is free time for self-improvement throughout the rest of the year"
     }
   },
   "script": {
