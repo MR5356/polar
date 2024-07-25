@@ -49,6 +49,26 @@
   "confirmDelete": "Are you sure you want to delete?",
   "confirmDeleteGroup": "Are you sure you want to delete this group? All children in this group will be deleted.",
   "unknown": "Unknown",
+  "component": {
+    "cpuCard": {
+      "system": "System",
+      "user": "User",
+      "iowait": "IOWait",
+      "steal": "STEAL",
+      "core": "Core",
+      "idle": "Idle",
+      "uptime": "Uptime",
+      "load": "Load"
+    },
+    "memCard": {
+      "total": "Total",
+      "used": "Used",
+      "free": "Free",
+      "shared": "Shared",
+      "buffcache": "BuffCache",
+      "available": "Available"
+    }
+  },
   "script": {
     "id": "ID",
     "title": "Title",

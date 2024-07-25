@@ -49,6 +49,26 @@
   "confirmDelete": "确定删除吗?",
   "confirmDeleteGroup": "确定删除该组吗？该组及其下级组将被删除。",
   "unknown": "未知",
+  "component": {
+    "cpuCard": {
+      "system": "系统",
+      "user": "用户",
+      "iowait": "IO等待",
+      "steal": "STEAL",
+      "core": "核数",
+      "idle": "空闲",
+      "uptime": "运行时间",
+      "load": "负载"
+    },
+    "memCard": {
+      "total": "总共",
+      "used": "已用",
+      "free": "空闲",
+      "shared": "共享",
+      "buffcache": "缓存",
+      "available": "可用"
+    }
+  },
   "script": {
     "id": "ID",
     "title": "名称",
