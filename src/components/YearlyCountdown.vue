@@ -72,27 +72,27 @@ useTimer(normalization, {interval: 1000 * 60})
     </template>
     <div class="flex flex-col gap-2">
       <div class="flex gap-2">
-        <div class="w-4 aspect-square" :class="Status.PASSED"></div>
+        <div class="w-4 min-w-4 aspect-square" :class="Status.PASSED"></div>
         <div>{{ $t('component.yearlyCountdown.passed') }}</div>
       </div>
       <div class="flex gap-2">
-        <div class="w-4 aspect-square" :class="Status.CURRENT"></div>
+        <div class="w-4 min-w-4 aspect-square" :class="Status.CURRENT"></div>
         <div>{{ $t('component.yearlyCountdown.current') }}</div>
       </div>
       <div class="flex gap-2">
-        <div class="w-4 aspect-square" :class="Status.WORK"></div>
+        <div class="w-4 min-w-4 aspect-square" :class="Status.WORK"></div>
         <div>{{ $t('component.yearlyCountdown.work') }}</div>
       </div>
       <div class="flex gap-2">
-        <div class="w-4 aspect-square" :class="Status.COMMUTE"></div>
+        <div class="w-4 min-w-4 aspect-square" :class="Status.COMMUTE"></div>
         <div>{{ $t('component.yearlyCountdown.commute') }}</div>
       </div>
       <div class="flex gap-2">
-        <div class="w-4 aspect-square" :class="Status.SLEEP"></div>
+        <div class="w-4 min-w-4 aspect-square" :class="Status.SLEEP"></div>
         <div>{{ $t('component.yearlyCountdown.sleep') }}</div>
       </div>
       <div class="flex gap-2">
-        <div class="w-4 aspect-square" :class="Status.SELF"></div>
+        <div class="w-4 min-w-4 aspect-square" :class="Status.SELF"></div>
         <div>{{ $t('component.yearlyCountdown.self') }}</div>
       </div>
     </div>
