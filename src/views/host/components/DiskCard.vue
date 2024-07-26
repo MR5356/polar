@@ -27,7 +27,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="rounded-lg flex flex-col gap-4 min-w-[500px] text-sm select-none">
+  <div class="rounded-lg flex flex-col gap-4 min-w-[420px] text-sm select-none">
     <div v-for="item in data" :key="item.partition" class="bg-white p-4 rounded-lg flex flex-col">
       <div class="grid grid-cols-2 items-center">
         <div class="flex flex-col gap-1">

@@ -189,7 +189,7 @@ const { result, isFirstLoading } = useTimer(async () => {
 
 <template>
   <div class="w-[30%] flex flex-col gap-4 p-4">
-    <YearlyCountdown />
+    <!-- <YearlyCountdown /> -->
     <CPUCard :data="data" />
     <MEMCard :data="memData" />
     <DiskCard :data="diskData" />

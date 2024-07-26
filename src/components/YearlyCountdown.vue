@@ -15,7 +15,7 @@ enum Status {
 const colors = ref([])
 
 function normalization() {
-  const totalSlots = 400
+  const totalSlots = 100
   const colorArray = new Array(totalSlots).fill(Status.SELF)
 
   const now = moment()
@@ -38,15 +38,17 @@ function normalization() {
 
   let currentIndex = 0
   for (let i = 0; i < 400; i++) {
-    if (currentIndex < Number((dayOfYear / totalDaysInYear * 400).toFixed(0))) {
+    if (currentIndex < Number((dayOfYear / totalDaysInYear * totalSlots).toFixed(0))) {
       colorArray[currentIndex] = Status.PASSED
-    } else if (currentIndex === Number((dayOfYear / totalDaysInYear * 400).toFixed(0))) {
+    } else if (currentIndex === Number((dayOfYear / totalDaysInYear * totalSlots).toFixed(0))) {
       colorArray[currentIndex] = Status.CURRENT
-    } else if (currentIndex < (dayOfYear + weekDaysOfHours) / totalDaysInYear * 400) {
+    } else if (currentIndex < (dayOfYear + weekDaysOfHours) / totalDaysInYear * totalSlots) {
       colorArray[currentIndex] = Status.WORK
-    } else if (currentIndex < (dayOfYear + weekDaysOfHours + commutingDaysOfHours) / totalDaysInYear * 400) {
-      colorArray[currentIndex] = Status.COMMUTE
-    } else if (currentIndex < (dayOfYear + weekDaysOfHours + commutingDaysOfHours + sleepDaysOfHours) / totalDaysInYear * 400) {
+    } 
+    // else if (currentIndex < (dayOfYear + weekDaysOfHours + commutingDaysOfHours) / totalDaysInYear * totalSlots) {
+    //   colorArray[currentIndex] = Status.COMMUTE
+    // } 
+    else if (currentIndex < (dayOfYear + weekDaysOfHours + commutingDaysOfHours + sleepDaysOfHours) / totalDaysInYear * totalSlots) {
       colorArray[currentIndex] = Status.SLEEP
     }
     currentIndex++
@@ -83,10 +85,10 @@ useTimer(normalization, {interval: 1000 * 60})
         <div class="w-4 min-w-4 aspect-square" :class="Status.WORK"></div>
         <div>{{ $t('component.yearlyCountdown.work') }}</div>
       </div>
-      <div class="flex gap-2">
+      <!-- <div class="flex gap-2">
         <div class="w-4 min-w-4 aspect-square" :class="Status.COMMUTE"></div>
         <div>{{ $t('component.yearlyCountdown.commute') }}</div>
-      </div>
+      </div> -->
       <div class="flex gap-2">
         <div class="w-4 min-w-4 aspect-square" :class="Status.SLEEP"></div>
         <div>{{ $t('component.yearlyCountdown.sleep') }}</div>
