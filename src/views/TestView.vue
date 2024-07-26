@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, shallowReactive } from 'vue'
+import { h, ref, shallowReactive } from 'vue'
 import LogView from '@/components/LogView.vue'
 import useTimer from '@/hooks/useTimer'
 import Terminal from '@/components/TerminalView.vue'
@@ -220,16 +220,39 @@ const { result, isFirstLoading } = useTimer(async () => {
   // i++
   // logs.value = [...logs.value]
 })
+
+const nodes = ref([
+  h(CPUCard, {
+    data: data.value
+  }),
+  h('div', {
+    class: 'w-[30%] h-[80px] bg-yellow-200'
+  }),
+  h('div', {
+    class: 'w-[30%] h-[30px] bg-green-200'
+  }),
+  h('div', {
+    class: 'w-[30%] h-[60px] bg-slate-200'
+  }),
+  h('div', {
+    class: 'w-[30%] h-[20px] bg-red-400'
+  }),
+  h('div', {
+    class: 'w-[30%] h-[40px] bg-sky-200'
+  })
+])
 </script>
 
 <template>
-  <div class="w-[30%] flex flex-col gap-4 p-4">
-    <!-- <YearlyCountdown /> -->
+  <div class="w-[800px] h-[600px]">
+    <WaterfallFlowLayout :nodes="nodes" />
+  </div>
+  <!-- <div class="w-[30%] flex flex-col gap-4 p-4">
     <CPUCard :data="data" />
     <MEMCard :data="memData" />
     <NetworkCard :data="networkData" />
     <DiskCard :data="diskData" />
-  </div>
+  </div> -->
   <!--  <Terminal class="w-full h-full" uri="/api/v1/host/container/271bb15e-cae7-4a5d-a28b-2da7a75ac3bf/docker/container/bc1ae10c8eb603f9205d220ebfe5657a3b89eb3291b7594220b023746815efea/terminal?user=root"  />-->
   <!-- <div class="w-[800px] h-[300px]">
     <LogView :logs="logs" />

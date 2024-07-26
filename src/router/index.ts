@@ -40,6 +40,14 @@ const router = createRouter({
           component: () => import('@/views/host/HostIndexView.vue')
         },
         {
+          path: '/host/:id',
+          name: 'hostDetail',
+          meta: {
+            tabbed: true
+          },
+          component: () => import('@/views/host/detail/HostDetailView.vue')
+        },
+        {
           path: '/container/:id/:driver',
           name: 'container',
           meta: {

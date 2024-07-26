@@ -21,7 +21,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="bg-white p-4 rounded-lg flex items-center justify-between min-w-[420px] select-none">
+  <div class="bg-white p-4 rounded-lg flex items-center justify-between min-w-[420px] h-fit select-none">
     <div class="flex-grow grid grid-cols-3">
       <div class="flex flex-col gap-1 p-2">
         <div class="text-sm text-slate-500">{{ $t('component.memCard.total') }}</div>
@@ -49,7 +49,7 @@ defineProps({
       </div>
     </div>
 
-    <div class="w-fit h-full text-center px-4">
+    <div class="w-fit h-full text-center flex items-center px-4">
       <a-progress
         :stroke-color="{
         '0%': '#5ec269',

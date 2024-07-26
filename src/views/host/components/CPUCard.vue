@@ -27,7 +27,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="bg-white p-4 rounded-lg flex flex-col gap-2 min-w-[420px] select-none">
+  <div class="bg-white p-4 rounded-lg flex flex-col gap-2 min-w-[420px] h-fit select-none">
     <div class="flex items-center justify-between gap-8">
       <div class="w-[50px]"><span class="text-4xl font-medium">{{ (data.percent * 100).toFixed(0) }}</span>&nbsp;<span
         class="text-slate-500">%</span></div>

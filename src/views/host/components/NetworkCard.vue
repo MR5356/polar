@@ -20,7 +20,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="bg-white rounded-lg flex flex-col gap-2 min-w-[420px] text-sm select-none">
+  <div class="bg-white rounded-lg flex flex-col gap-2 min-w-[420px] h-fit text-sm select-none">
     <template v-for="(item, index) in data" :key="index">
       <div class="flex flex-col p-4 gap-2">
         <div class="text-xs font-medium flex items-center gap-2">
