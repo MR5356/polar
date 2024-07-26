@@ -76,6 +76,10 @@
       "iops": "IOPS",
       "latency": "Latency"
     },
+    "networkCard": {
+      "upload": "Upload",
+      "download": "Download"
+    },
     "yearlyCountdown": {
       "passed": "The time you've passed this year",
       "current": "You are here",

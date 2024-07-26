@@ -8,9 +8,10 @@ import MEMCard from '@/views/host/components/MEMCard.vue'
 import ColoredProgressBar from '@/components/ColoredProgressBar.vue'
 import DiskCard from '@/views/host/components/DiskCard.vue'
 import YearlyCountdown from '@/components/YearlyCountdown.vue'
+import NetworkCard from './host/components/NetworkCard.vue'
 
 function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms))
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 const logs = ref([])
@@ -62,70 +63,105 @@ const data = ref({
 
 const diskData = ref([
   {
-    "partition": "/dev/mmcblk0p1",
-    "size_bytes": 534763520,
-    "used_size_bytes": 67063808,
-    "mount_point": "/boot/firmware",
-    "fs_type": "vfat",
-    "read_speed_Bps": 0,
-    "write_speed_Bps": 0,
-    "read_iops": 0,
-    "write_iops": 0,
-    "read_latency_ms": 0,
-    "write_latency_ms": 0,
-    "total_read_bytes": 9305600,
-    "total_write_bytes": 1536
-  }
-  ,
+    partition: '/dev/mmcblk0p1',
+    size_bytes: 534763520,
+    used_size_bytes: 67063808,
+    mount_point: '/boot/firmware',
+    fs_type: 'vfat',
+    read_speed_Bps: 0,
+    write_speed_Bps: 0,
+    read_iops: 0,
+    write_iops: 0,
+    read_latency_ms: 0,
+    write_latency_ms: 0,
+    total_read_bytes: 9305600,
+    total_write_bytes: 1536
+  },
   {
-    "partition": "/dev/mmcblk0p2",
-    "size_bytes": 125348007936,
-    "used_size_bytes": 7057309696,
-    "mount_point": "/",
-    "fs_type": "ext4",
-    "read_speed_Bps": 0,
-    "write_speed_Bps": 299008,
-    "read_iops": 0,
-    "write_iops": 30,
-    "read_latency_ms": 0,
-    "write_latency_ms": 0,
-    "total_read_bytes": 1635037184,
-    "total_write_bytes": 231020683264
+    partition: '/dev/mmcblk0p2',
+    size_bytes: 125348007936,
+    used_size_bytes: 7057309696,
+    mount_point: '/',
+    fs_type: 'ext4',
+    read_speed_Bps: 0,
+    write_speed_Bps: 299008,
+    read_iops: 0,
+    write_iops: 30,
+    read_latency_ms: 0,
+    write_latency_ms: 0,
+    total_read_bytes: 1635037184,
+    total_write_bytes: 231020683264
+  }
+])
+
+const networkData = ref([
+  {
+    name: 'eth0',
+    type: 'ethernet',
+    bytes_rec: 299008,
+    bytes_sent: 1635037184,
+    speed_rec: 231020683264,
+    speed_sent: 163037184
+  },
+  {
+    name: 'wlp3s0',
+    type: 'wifi',
+    bytes_rec: 231020683264,
+    bytes_sent: 163500037184,
+    speed_rec: 231020683264,
+    speed_sent: 163037184
   }
 ])
 
 const { result, isFirstLoading } = useTimer(async () => {
+  networkData.value = [
+    {
+      name: 'eth0',
+      type: 'ethernet',
+      bytes_rec: Math.random() * 20000555508,
+      bytes_sent: Math.random() * 163500037184,
+      speed_rec: Math.random() * 20683264,
+      speed_sent: Math.random() * 163037184
+    },
+    {
+      name: 'wlp3s0',
+      type: 'wifi',
+      bytes_rec: Math.random() * 29000009008,
+      bytes_sent: Math.random() * 163005037184,
+      speed_rec: Math.random() * 23103264,
+      speed_sent: Math.random() * 163037184
+    }
+  ]
   diskData.value = [
     {
-      "partition": "/dev/mmcblk0p1",
-      "size_bytes": 534763520,
-      "used_size_bytes": Math.random() *534763520,
-      "mount_point": "/boot/firmware",
-      "fs_type": "vfat",
-      "read_speed_Bps": 0,
-      "write_speed_Bps": 0,
-      "read_iops": 0,
-      "write_iops": 0,
-      "read_latency_ms": 0,
-      "write_latency_ms": 0,
-      "total_read_bytes": Math.random() *9305600,
-      "total_write_bytes": Math.random() *1536
-    }
-    ,
+      partition: '/dev/mmcblk0p1',
+      size_bytes: 534763520,
+      used_size_bytes: Math.random() * 534763520,
+      mount_point: '/boot/firmware',
+      fs_type: 'vfat',
+      read_speed_Bps: 0,
+      write_speed_Bps: 0,
+      read_iops: 0,
+      write_iops: 0,
+      read_latency_ms: 0,
+      write_latency_ms: 0,
+      total_read_bytes: Math.random() * 9305600,
+      total_write_bytes: Math.random() * 1536
+    },
     {
-      "partition": "/dev/mmcblk0p2",
-      "size_bytes": 125348007936,
-      "used_size_bytes": Math.random() *125348007936,
-      "mount_point": "/",
-      "fs_type": "ext4",
-      "read_speed_Bps": 0,
-      "write_speed_Bps": Math.random() *299008,
-      "read_iops": 0,
-      "write_iops": 30,
-      "read_latency_ms": 0,
-      "write_latency_ms": 0,
-      "total_read_bytes": Math.random() *1635037184,
-      "total_write_bytes": Math.random() *231020683264
+      partition: '/dev/mmcblk0p2',
+      size_bytes: 125348007936,
+      used_size_bytes: Math.random() * 125348007936,
+      mount_point: '/',
+      fs_type: 'ext4',
+      read_speed_Bps: 0,
+      write_speed_Bps: Math.random() * 299008,
+      read_iops: 0,
+      write_iops: 30,
+      read_latency_ms: 0,
+      write_latency_ms: 0,
+      total_read_bytes: Math.random() * 1635037184,
+      total_write_bytes: Math.random() * 231020683264
     }
   ]
   memData.value = {
@@ -184,7 +220,6 @@ const { result, isFirstLoading } = useTimer(async () => {
   // i++
   // logs.value = [...logs.value]
 })
-
 </script>
 
 <template>
@@ -192,6 +227,7 @@ const { result, isFirstLoading } = useTimer(async () => {
     <!-- <YearlyCountdown /> -->
     <CPUCard :data="data" />
     <MEMCard :data="memData" />
+    <NetworkCard :data="networkData" />
     <DiskCard :data="diskData" />
   </div>
   <!--  <Terminal class="w-full h-full" uri="/api/v1/host/container/271bb15e-cae7-4a5d-a28b-2da7a75ac3bf/docker/container/bc1ae10c8eb603f9205d220ebfe5657a3b89eb3291b7594220b023746815efea/terminal?user=root"  />-->

@@ -76,6 +76,10 @@
       "iops": "IOPS",
       "latency": "延迟"
     },
+    "networkCard": {
+      "upload": "上传",
+      "download": "下载"
+    },
     "yearlyCountdown": {
       "passed": "你今年已经度过的时光",
       "current": "你当前在这里",
