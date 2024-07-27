@@ -37,7 +37,8 @@
     "scriptList": "代码片段列表",
     "scriptRecord": "代码片段记录",
     "user": "用户管理",
-    "container": "容器管理"
+    "container": "容器管理",
+    "hostDetail": "主机详情"
   },
   "loading": "加载中...",
   "tips": "提示",

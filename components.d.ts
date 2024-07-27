@@ -61,6 +61,7 @@ declare module 'vue' {
     TerminalView: typeof import('./src/components/TerminalView.vue')['default']
     TestA: typeof import('./src/components/TestA.vue')['default']
     TimeClock: typeof import('./src/components/TimeClock.vue')['default']
+    WaterfallFlowLayout: typeof import('./src/components/WaterfallFlowLayout.vue')['default']
     YearlyCountdown: typeof import('./src/components/YearlyCountdown.vue')['default']
   }
   export interface ComponentCustomProperties {

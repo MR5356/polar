@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import CPUCard from '../components/CPUCard.vue';
-import MEMCard from '../components/MEMCard.vue';
-import NetworkCard from '../components/NetworkCard.vue';
-import DiskCard from '../components/DiskCard.vue';
+import MasonryWall from '@yeger/vue-masonry-wall'
+import CPUCard from '../components/CPUCard.vue'
+import MEMCard from '../components/MEMCard.vue'
+import NetworkCard from '../components/NetworkCard.vue'
+import DiskCard from '../components/DiskCard.vue'
+import ProcessCard from '@/views/host/components/ProcessCard.vue'
+
 const cpuData = ref({
   percent: 0.5,
   system: 0.02,
@@ -90,16 +93,85 @@ const networkData = ref([
     speed_sent: 163037184
   }
 ])
+const processDate = ref([
+  {
+    cpu: Math.random(),
+    mem: Math.random(),
+    command: '/usr/lib/systemd/systemd --switched-root --system --deserialize 22'
+  },
+  {
+    cpu: Math.random(),
+    mem: Math.random(),
+    command: '[kthreadd]'
+  },
+  {
+    cpu: Math.random(),
+    mem: Math.random(),
+    command: '[kworker/0:0H]'
+  },
+  {
+    cpu: Math.random(),
+    mem: Math.random(),
+    command: '[rcu_bh]'
+  },
+  {
+    cpu: Math.random(),
+    mem: Math.random(),
+    command: '[kthreadd]'
+  },
+  {
+    cpu: Math.random(),
+    mem: Math.random(),
+    command: '[kworker/0:0H]'
+  },
+  {
+    cpu: Math.random(),
+    mem: Math.random(),
+    command: '[rcu_bh]'
+  },
+  {
+    cpu: Math.random(),
+    mem: Math.random(),
+    command: '[kthreadd]'
+  },
+  {
+    cpu: Math.random(),
+    mem: Math.random(),
+    command: '[kworker/0:0H]'
+  },
+  {
+    cpu: Math.random(),
+    mem: Math.random(),
+    command: '[rcu_bh]'
+  },
+  {
+    cpu: Math.random(),
+    mem: Math.random(),
+    command: '[kthreadd]'
+  },
+])
+const items = ['cpu', 'mem', 'network', 'disk']
 </script>
 
 <template>
-    <div class="p-4 grid grid-cols-3 gap-4">
-        <CPUCard :data="cpuData" />
-        <MEMCard :data="memData" />
-        <div></div>
-        <NetworkCard :data="networkData" />
-        <DiskCard :data="diskData" />
+  <div class="p-4 flex flex-row gap-4 absolute inset-0 overflow-hidden">
+    <masonry-wall class="basis-2/3 overflow-y-auto scroll-none" :items="items" :min-columns="1" :max-columns="3"
+                  :gap="16">
+      <template #default="{ item }">
+        <CPUCard v-if="item==='cpu'" :data="cpuData" />
+        <DiskCard v-if="item==='disk'" :data="diskData" />
+        <NetworkCard v-if="item==='network'" :data="networkData" />
+        <MEMCard v-if="item==='mem'" :data="memData" />
+      </template>
+    </masonry-wall>
+    <div class="basis-1/3 overflow-y-auto scroll-none">
+      <ProcessCard :data="processDate" />
     </div>
+  </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.scroll-none::-webkit-scrollbar {
+  display: none;
+}
+</style>

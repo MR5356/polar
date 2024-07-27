@@ -121,13 +121,15 @@ const openTerminal = (host: Host.HostItem) => {
       <div class="flex justify-between items-center px-4 py-2 bg-white bg-opacity-80 rounded-lg">
         <div class="uppercase font-bold flex items-center justify-between">
           <el-button @click="onClickAddMachine" type="info" size="small">{{
-            $t('host.new')
-          }}</el-button>
+              $t('host.new')
+            }}
+          </el-button>
           <el-button
             @click="openTerminal({ id: '' } as Host.HostItem)"
             type="success"
             size="small"
-            >{{ $t('navigation.terminal') }}</el-button
+          >{{ $t('navigation.terminal') }}
+          </el-button
           >
         </div>
         <div></div>
@@ -169,21 +171,23 @@ const openTerminal = (host: Host.HostItem) => {
               <div class="flex items-center justify-between">
                 <el-popover trigger="hover" class="p-0" placement="bottom-start" :width="300">
                   <template #reference>
-                    <div class="flex items-center gap-3">
-                      <div>
-                        <img
-                          :src="Host.getOsIcon(host.metaInfo.os)"
-                          class="w-10 h-10 min-w-10 min-h-10 bg-slate-500 bg-opacity-30 dark:bg-slate-400 rounded-lg p-1"
-                          alt="logo"
-                        />
-                      </div>
-                      <div class="flex flex-col flex-grow">
-                        <div class="text-sm">{{ host.title }}</div>
-                        <div class="text-xs text-slate-500 dark:text-slate-300 break-all">
-                          {{ host.desc }}
+                    <router-link :to="`/host/${host.id}`">
+                      <div class="flex items-center gap-3">
+                        <div>
+                          <img
+                            :src="Host.getOsIcon(host.metaInfo.os)"
+                            class="w-10 h-10 min-w-10 min-h-10 bg-slate-500 bg-opacity-30 dark:bg-slate-400 rounded-lg p-1"
+                            alt="logo"
+                          />
+                        </div>
+                        <div class="flex flex-col flex-grow">
+                          <div class="text-sm">{{ host.title }}</div>
+                          <div class="text-xs text-slate-500 dark:text-slate-300 break-all">
+                            {{ host.desc }}
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    </router-link>
                   </template>
                   <template #default>
                     <div class="grid grid-cols-3 gap-1">

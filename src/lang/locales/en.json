@@ -37,7 +37,8 @@
     "scriptList": "Script List",
     "scriptRecord": "Script Record",
     "user": "User Management",
-    "container":"Container Manager"
+    "container":"Container Manager",
+    "hostDetail": "Host Detail"
   },
   "loading": "Loading...",
   "tips": "Tips",

@@ -1671,6 +1671,31 @@
     ua-parser-js "^1.0.38"
     vue "^3.4.31"
 
+"@yeger/debounce@2.0.9":
+  version "2.0.9"
+  resolved "https://registry.npmmirror.com/@yeger/debounce/-/debounce-2.0.9.tgz#6a193f74b422b4d3c7c24bf04f60686d5980129a"
+  integrity sha512-yapSa71O56W0zotDlgv7z/equgK61Ozb8rSEWsNX7oN543oUMucWVWIlDp73/Jg7D08xAkw+E23OVLe1xIBS7A==
+
+"@yeger/vue-lib-adapter@2.0.9":
+  version "2.0.9"
+  resolved "https://registry.npmmirror.com/@yeger/vue-lib-adapter/-/vue-lib-adapter-2.0.9.tgz#a4d4ede410bbb837521d77de50314542e4eed6c0"
+  integrity sha512-FIaKvP596mg8J9bsphng4Ulr+EMghBG2RNrBrJCFvz9uV7YI6X0vNJ0vV/8SqL6Boe92VpRjG+puKe/HYKsnTg==
+
+"@yeger/vue-masonry-wall-core@5.0.10":
+  version "5.0.10"
+  resolved "https://registry.npmmirror.com/@yeger/vue-masonry-wall-core/-/vue-masonry-wall-core-5.0.10.tgz#19ac52725c5b43c1b7401d60aa8f78f8a572fe9d"
+  integrity sha512-s4dwP4/mvcwNqa1/2uSSXU8bSaKS1nHb+JmF17fFLFNvacZTk6b3mcW8yjM38sxzhQ+tv7rthMTrF3W+6abRgw==
+  dependencies:
+    "@yeger/debounce" "2.0.9"
+    "@yeger/vue-lib-adapter" "2.0.9"
+
+"@yeger/vue-masonry-wall@^5.0.12":
+  version "5.0.12"
+  resolved "https://registry.npmmirror.com/@yeger/vue-masonry-wall/-/vue-masonry-wall-5.0.12.tgz#4922edcd8f81c6ab6bf141a3871055bf11c65409"
+  integrity sha512-KpGurtFYZdjWZmSPt7V1RhQS2G1SsLxat6l6RwenC1Rj4RKBGCLIEErd7wEGAyaGHQ0EBODK1ZsaJpmOqebszA==
+  dependencies:
+    "@yeger/vue-masonry-wall-core" "5.0.10"
+
 JSV@^4.0.2:
   version "4.0.2"
   resolved "https://registry.npmmirror.com/JSV/-/JSV-4.0.2.tgz#d077f6825571f82132f9dffaed587b4029feff57"
