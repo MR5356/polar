@@ -19,7 +19,7 @@ defineProps({
       <div class="col-span-5 mt-2 h-[1px] bg-slate-300"></div>
     </div>
     <div class="grid grid-cols-5" v-for="(item, index) in data" :key="index">
-      <div class="col-span-3 text-sm break-all truncate">{{ item.command }}</div>
+      <div class="col-span-3 text-sm break-all truncate" :title="item.command">{{ item.command }}</div>
       <div class="text-sm tabular-nums">{{ numeral(item.cpu).format('0.00') }}%</div>
       <div class="text-sm tabular-nums">{{ numeral(item.mem).format('0.00') }}%</div>
     </div>
