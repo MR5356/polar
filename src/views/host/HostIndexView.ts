@@ -39,6 +39,68 @@ export namespace Host {
     updatedAt: string;
   }
 
+  export interface HostStats {
+    cpuInfo: CpuInfo
+    memInfo: MemInfo
+    diskInfo: DiskInfo[]
+    networkInfo: NetworkInfo[]
+    processInfo: ProcessInfo[]
+    rtt: number
+  }
+
+  export interface CpuInfo {
+    percent: number
+    system: number
+    user: number
+    iowait: number
+    steal: number
+    idle: number
+    children?: CpuInfo[]
+    uptime?: number
+    load?: string
+  }
+
+  export interface MemInfo {
+    total: number
+    used: number
+    free: number
+    shared: number
+    buffcache: number
+    available: number
+  }
+
+  export interface DiskInfo {
+    partition: string
+    size_bytes: number
+    used_size_bytes: number
+    mount_point: string
+    fs_type: string
+    read_speed_Bps: number
+    write_speed_Bps: number
+    read_iops: number
+    write_iops: number
+    read_latency_ms: number
+    write_latency_ms: number
+    total_read_bytes: number
+    total_write_bytes: number
+  }
+
+  export interface NetworkInfo {
+    name: string
+    type: string
+    bytes_rec: number
+    bytes_sent: number
+    speed_rec: number
+    speed_sent: number
+  }
+
+  export interface ProcessInfo {
+    cpu: number
+    mem: number
+    command: string
+  }
+
+
   export const getHosts = function(groupId: string = ''): Promise<HostItem[]> {
     return axios.get('/host/list?groupId=' + groupId)
   }
@@ -69,6 +131,10 @@ export namespace Host {
 
   export const getOsIcon = function(os: string): string {
     return metaInfos.os[os] ?? metaInfos.os.unknown
+  }
+
+  export const getHostStats = function(id: string): Promise<HostStats> {
+    return axios.get(`/host/${id}/stats`)
   }
 
   export const metaInfos = {

@@ -1,20 +1,12 @@
 <script setup lang="ts">
 import numeral from 'numeral'
 import { Wifi, UpTwo, DownTwo } from '@icon-park/vue-next'
-
-interface NetworkInfo {
-  name: string
-  type: string
-  bytes_rec: number
-  bytes_sent: number
-  speed_rec: number
-  speed_sent: number
-}
+import { Host } from '@/views/host/HostIndexView'
 
 defineProps({
   data: {
-    type: Array<NetworkInfo>,
-    required: true
+    type: Array<Host.NetworkInfo | null>,
+    // required: true
   }
 })
 </script>

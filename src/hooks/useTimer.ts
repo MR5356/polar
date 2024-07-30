@@ -9,7 +9,7 @@ interface UseTimerOptions {
 }
 
 function useTimer<T>(
-    callback: () => T,
+    callback: () => Promise<T>,
     options: UseTimerOptions = {}
 ): {
     result: Ref<T | null>

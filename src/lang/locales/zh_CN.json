@@ -58,7 +58,7 @@
       "steal": "STEAL",
       "core": "核数",
       "idle": "空闲",
-      "uptime": "运行时间",
+      "uptime": "开机时间",
       "load": "负载"
     },
     "memCard": {

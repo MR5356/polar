@@ -1,20 +1,12 @@
 <script setup lang="ts">
 import numeral from 'numeral'
 import type { PropType } from 'vue'
-
-interface MEMInfo {
-  total: number
-  used: number
-  free: number
-  shared: number
-  buffcache: number
-  available: number
-}
+import { Host } from '@/views/host/HostIndexView'
 
 defineProps({
   data: {
-    type: Object as PropType<MEMInfo>,
-    required: true
+    type: Object as PropType<Host.MemInfo | null>,
+    // required: true
   }
 })
 
@@ -25,27 +17,27 @@ defineProps({
     <div class="flex-grow grid grid-cols-3">
       <div class="flex flex-col gap-1 p-2">
         <div class="text-sm text-slate-500">{{ $t('component.memCard.total') }}</div>
-        <div class="text-xs font-medium">{{ numeral(data.total).format('0.0b') }}</div>
+        <div class="text-xs font-medium">{{ numeral(data?.total).format('0.0b') }}</div>
       </div>
       <div class="flex flex-col gap-1 p-2">
         <div class="text-sm text-slate-500">{{ $t('component.memCard.used') }}</div>
-        <div class="text-xs font-medium">{{ numeral(data.used).format('0.0b') }}</div>
+        <div class="text-xs font-medium">{{ numeral(data?.used).format('0.0b') }}</div>
       </div>
       <div class="flex flex-col gap-1 p-2">
         <div class="text-sm text-slate-500">{{ $t('component.memCard.free') }}</div>
-        <div class="text-xs font-medium">{{ numeral(data.free).format('0.0b') }}</div>
+        <div class="text-xs font-medium">{{ numeral(data?.free).format('0.0b') }}</div>
       </div>
       <div class="flex flex-col gap-1 p-2">
         <div class="text-sm text-slate-500">{{ $t('component.memCard.shared') }}</div>
-        <div class="text-xs font-medium">{{ numeral(data.shared).format('0.0b') }}</div>
+        <div class="text-xs font-medium">{{ numeral(data?.shared).format('0.0b') }}</div>
       </div>
       <div class="flex flex-col gap-1 p-2">
         <div class="text-sm text-slate-500">{{ $t('component.memCard.buffcache') }}</div>
-        <div class="text-xs font-medium">{{ numeral(data.buffcache).format('0.0b') }}</div>
+        <div class="text-xs font-medium">{{ numeral(data?.buffcache).format('0.0b') }}</div>
       </div>
       <div class="flex flex-col gap-1 p-2">
         <div class="text-sm text-slate-500">{{ $t('component.memCard.available') }}</div>
-        <div class="text-xs font-medium">{{ numeral(data.available).format('0.0b') }}</div>
+        <div class="text-xs font-medium">{{ numeral(data?.available).format('0.0b') }}</div>
       </div>
     </div>
 
@@ -57,7 +49,7 @@ defineProps({
         '100%': '#dd524c',
       }"
         type="circle"
-        :percent="Number(((data.used + data.shared) / data.total * 100).toFixed(0))"
+        :percent="Number(((data?.used + data?.shared) / data?.total * 100).toFixed(0))"
         :size="88"
       />
     </div>
