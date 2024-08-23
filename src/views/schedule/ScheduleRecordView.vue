@@ -126,7 +126,7 @@ const columns = ref<TableColumn[]>([
     width: 200,
     formatter(row, column, cellValue, index) {
       if (row.status === 'success') {
-        return t(cellValue)
+        return cellValue
       } else {
         return '-'
       }

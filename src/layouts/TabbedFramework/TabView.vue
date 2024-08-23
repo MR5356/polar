@@ -6,7 +6,6 @@ import { useSystemStore } from '@/stores/system'
 const systemStore = useSystemStore()
 const route = useRoute()
 const router = useRouter()
-const activeKey = ref<string>(route.path)
 
 const onEdit = (targetKey: string | MouseEvent, action: string) => {
   systemStore.removeTab(targetKey as string)
@@ -20,7 +19,6 @@ const onClick = (targetKey: string) => {
   const tab = systemStore.tabs.find(pane => pane.key === targetKey)
 
   if (tab) {
-    activeKey.value = tab.key
     router.push(tab.key)
   }
 }
@@ -28,7 +26,7 @@ const onClick = (targetKey: string) => {
 </script>
 
 <template>
-  <a-tabs class="select-none bg-indigo-100 bg-opacity-60 dark:bg-slate-900" v-model:activeKey="$route.path"
+  <a-tabs class="select-none bg-indigo-100 bg-opacity-60 dark:bg-slate-900" v-model:activeKey="systemStore.activeTab"
           hide-add type="editable-card"
           @edit="onEdit" v-if="$route.meta.tabbed" @change="onClick">
     <a-tab-pane class="relative" v-for="pane in systemStore.tabs" :key="pane.key" :tab="$t('navigation.'+pane.title)"

@@ -6,6 +6,7 @@ export const useSystemStore = defineStore('system', () => {
     const website = ref<SystemModels.Website>(SystemModels.defaultWebsite)
     const navigation = ref<SystemModels.Navigation[]>(SystemModels.defaultNavigation)
     const tabs = ref<{ title: string; key: string; fixed?: boolean }[]>([])
+    const activeTab = ref<string>('')
     const language = ref<string>('en')
 
     function setWebsite(value: SystemModels.Website = SystemModels.defaultWebsite) {
@@ -22,6 +23,7 @@ export const useSystemStore = defineStore('system', () => {
     }
 
     function addTab(value: { title: string; key: string; fixed?: boolean }) {
+      activeTab.value = value.key
       if (tabs.value.some(tab => tab.key === value.key)) {
         return
       }
@@ -41,7 +43,7 @@ export const useSystemStore = defineStore('system', () => {
       })
     }
 
-    return { website, setWebsite, navigation, setNavigation, language, setLanguage, tabs, addTab, removeTab, setTabFixed }
+    return { website, setWebsite, navigation, setNavigation, language, setLanguage, tabs, addTab, removeTab, setTabFixed, activeTab }
   },
   {
     persist: true
