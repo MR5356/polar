@@ -31,6 +31,8 @@
     "pipeline": "Pipeline",
     "package": "Package Management",
     "host": "Host Management",
+    "hostList": "Host List",
+    "hostSecurity": "Host Security",
     "health": "Health Check",
     "terminal": "Terminal",
     "script": "Script",

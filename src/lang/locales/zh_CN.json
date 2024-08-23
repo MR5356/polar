@@ -31,6 +31,8 @@
     "pipeline": "流水线",
     "package": "制品仓库",
     "host": "主机管理",
+    "hostList": "主机列表",
+    "hostSecurity": "主机安全",
     "health": "健康检查",
     "terminal": "在线终端",
     "script": "代码片段",
