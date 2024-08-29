@@ -52,7 +52,7 @@ const onClickNavigation = (item: SystemModels.Navigation) => {
 <template>
   <div
     @click="onClickNavigation(item)"
-    :class="'p-2 item cursor-pointer ' + (currentPath === item.path && (!haveChildren(item)) ? 'item-selected dark:bg-opacity-20 font-bold text-black dark:text-white' : '')">
+    :class="'p-2 item select-none cursor-pointer ' + (currentPath === item.path && (!haveChildren(item)) ? 'item-selected dark:bg-opacity-20 font-bold text-black dark:text-white' : '')">
     <div class="flex gap-3 items-center p-1">
       <img :src="getIcon(item)" v-if="!isChildren" alt="icon" class="w-[1.125rem] h-[1.125rem]" />
       <div>
