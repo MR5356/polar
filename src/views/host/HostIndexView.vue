@@ -164,7 +164,7 @@ const openTerminal = (host: Host.HostItem) => {
           </el-popover>
           <div class="grid grid-cols-4 gap-4">
             <div
-              class="bg-white dark:bg-slate-700 shadow-lg shadow-sky-100 p-4 rounded-lg"
+              class="bg-white dark:bg-slate-700 shadow-lg shadow-sky-100 dark:shadow-slate-800 p-4 rounded-lg"
               v-for="host in group.hosts"
               :key="host.id"
             >

@@ -50,7 +50,7 @@ init()
       <div class="flex gap-4">
         <!-- statistics -->
         <div class="w-3/4 flex flex-col gap-4 select-none h-fit">
-          <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-lg shadow-sky-100">
+          <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-lg shadow-sky-100 dark:shadow-slate-900">
             <div class="p-4 font-bold">健康检查统计</div>
             <HealthStatisticsView />
           </div>

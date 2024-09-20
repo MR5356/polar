@@ -26,18 +26,18 @@ const unbanUser = async (id: string) => {
 </script>
 
 <template>
-  <div class="bg-white dark:bg-slate-700 shadow-lg shadow-sky-100 p-4 rounded-lg flex justify-between gap-4">
+  <div class="bg-white dark:bg-slate-700 shadow-lg shadow-sky-100 dark:shadow-slate-800 p-4 rounded-lg flex justify-between gap-4">
     <div class="flex items-center gap-4">
       <a-avatar :size="65" :src="user.avatar" />
       <div>
         <div class="flex items-center gap-2">
-          <div class="font-medium text-gray-600 text-nowrap">{{ user.nickname }}</div>
+          <div class="font-medium text-gray-600 dark:text-gray-50 text-nowrap">{{ user.nickname }}</div>
           <a-tag :bordered="false" v-if="user.status === 2" color="error">{{ $t('user.status.' + user.status) }}</a-tag>
           <a-tag :bordered="false" v-else-if="user.status === 1" color="success">{{ $t('user.status.' + user.status) }}</a-tag>
           <a-tag :bordered="false" v-else color="warning">{{ $t('user.status.' + user.status) }}</a-tag>
         </div>
-        <div class="text-xs text-gray-500">@{{ $t('user.type.' + user.type) }}</div>
-        <div class="text-sm font-medium text-slate-800">{{ user.group ? user.group : $t('user.noGroup') }}</div>
+        <div class="text-xs text-gray-500 dark:text-gray-400">@{{ $t('user.type.' + user.type) }}</div>
+        <div class="text-sm font-medium text-slate-800 dark:text-gray-50">{{ user.group ? user.group : $t('user.noGroup') }}</div>
       </div>
     </div>
     <div>
