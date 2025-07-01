@@ -266,6 +266,7 @@
     }
   },
   "repository": {
-    "title": "仓库管理"
+    "title": "仓库管理",
+    "bind:github": "绑定 Github"
   }
 }
