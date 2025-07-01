@@ -40,7 +40,8 @@
     "scriptRecord": "Script Record",
     "user": "User Management",
     "container":"Container Manager",
-    "hostDetail": "Host Detail"
+    "hostDetail": "Host Detail",
+    "repository": "Repository"
   },
   "loading": "Loading...",
   "tips": "Tips",
@@ -263,5 +264,8 @@
       "log": "Log",
       "exec": "Exec"
     }
+  },
+  "repository": {
+    "title": "Repository"
   }
 }

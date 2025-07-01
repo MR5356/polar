@@ -24,6 +24,14 @@ const router = createRouter({
           component: () => import('@/views/dashboard/DashboardView.vue')
         },
         {
+          path: '/repository',
+          name: 'repository',
+          meta: {
+            tabbed: true
+          },
+          component: () => import('@/views/repository/RepositoryListView.vue')
+        },
+        {
           path: '/application',
           name: 'application',
           meta: {
@@ -124,13 +132,13 @@ const router = createRouter({
             }
           ]
         },
-        {
-          path: '/notification',
-          name: 'notification',
-          meta: {
-            tabbed: true
-          },
-        },
+        // {
+        //   path: '/notification',
+        //   name: 'notification',
+        //   meta: {
+        //     tabbed: true
+        //   },
+        // },
         {
           path: '/user',
           name: 'user',

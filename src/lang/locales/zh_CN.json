@@ -40,7 +40,8 @@
     "scriptRecord": "代码片段记录",
     "user": "用户管理",
     "container": "容器管理",
-    "hostDetail": "主机详情"
+    "hostDetail": "主机详情",
+    "repository": "仓库管理"
   },
   "loading": "加载中...",
   "tips": "提示",
@@ -263,5 +264,8 @@
       "log": "日志",
       "exec": "进入容器"
     }
+  },
+  "repository": {
+    "title": "仓库管理"
   }
 }

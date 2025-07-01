@@ -1,4 +1,4 @@
-import axios, { Pager } from '@/utils/request'
+import axios from '@/utils/request'
 
 export namespace Pipeline {
   export interface PipelineItem {
